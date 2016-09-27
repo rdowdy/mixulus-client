@@ -1,3 +1,48 @@
-* {
-	box-sizing: border-box;
+/* CSS Resets */
+
+html {
+    box-sizing: border-box;
 }
+
+body {
+    width: 100%;
+    margin: 0 auto;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+
+/* Base Styles */
+
+header h1 {
+    text-align: center;
+}
+
+form input,
+form button {
+    width: 175px;
+    margin: 0 auto;
+}
+
+form input {
+    font-size: 2em;
+}
+
+form button {
+	display: block;
+}
+
+
+/* Custom Classes */
+

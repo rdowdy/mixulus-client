@@ -1,6 +1,33 @@
-<h1>LOGIN</h1>
-<form action="/login" method="post">
-	<input type="text" name="username" placeholder="email">
-	<input type="password" name="password" placeholder="password">
-	<button type="submit">Log In</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Music App</title>
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="css/main.css">
+    <!-- endinject -->
+</head>
+
+<body>
+    <header>
+        <h1>Music App</h1>
+    </header>
+    <div class="login">
+        <form action="/login" method="post">
+            <input type="text" name="username" placeholder="email">
+            <input type="password" name="password" placeholder="password">
+            <button type="submit">Log In</button>
+        </form>
+    </div>
+    <!-- bower:js -->
+    <script src="bower_components/angular/angular.js"></script>
+    <!-- endbower -->
+    <!-- inject:js -->
+    <script src="features/app.module.js"></script>
+    <!-- endinject -->
+</body>
+
+</html>
