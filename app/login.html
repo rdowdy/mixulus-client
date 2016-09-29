@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
 
 <head>
     <meta charset="UTF-8">
@@ -20,6 +20,15 @@
             <input type="text" name="username" placeholder="email">
             <input type="password" name="password" placeholder="password">
             <button type="submit">Log In</button>
+        </form>
+    </div>
+
+    <button>Sign Up</button>
+    <div class="registrationModal">
+        <form action="/signup" method="post">
+            <input type="text" name="username" placeholder="email">
+            <input type="password" name="passwod" placeholder="password">
+            <input type="password" placeholder="confirm password">
         </form>
     </div>
     <!-- bower:js -->
