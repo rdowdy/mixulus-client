@@ -29,20 +29,33 @@ header h1 {
     text-align: center;
 }
 
-form input,
-form button {
-    width: 175px;
+/************************/
+/* Form Elements Styles */
+/************************/
+.form {
+    width: 30%;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.form button {
+    width: 100%;
+    display: block;
     margin: 0 auto;
 }
 
-form input {
+.input-group {
+    text-align: center;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    text-align: left;
+}
+
+.input-group input {
+    margin: 10px 0;
+    width: 100%;
     font-size: 2em;
 }
-
-form button {
-	display: block;
-}
-
-
-/* Custom Classes */
-
