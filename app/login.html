@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
 
 <head>
     <meta charset="UTF-8">
     <title>Music App</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald" rel="stylesheet">
     <!-- bower:css -->
     <!-- endbower -->
     <!-- inject:css -->
@@ -15,11 +16,33 @@
     <header>
         <h1>Music App</h1>
     </header>
-    <div class="login">
-        <form action="/login" method="post">
-            <input type="text" name="username" placeholder="email">
-            <input type="password" name="password" placeholder="password">
-            <button type="submit">Log In</button>
+    <form action="/login" method="post" class="form">
+        <div class="input-group">
+            <label for="username">email</label>
+            <input type="text" id="username" name="username">
+        </div>
+        <div class="input-group">
+            <label>password</label>
+            <input type="password" id="password" name="password">
+        </div>
+        <button type="submit" class="button" >Log In</button>
+    </form>
+
+    <div class="registrationModal">
+        <form action="/signup" method="post" class="form">
+            <div class="input-group">
+                <label for="username">username</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div class="input-group">
+                <label for="password">password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div class="input-group">
+                <label for="confirmPassword">confirm password</label>
+                <input type="password" id="confirmPassword">
+            </div>
+            <button class="button" >Sign Up</button>
         </form>
     </div>
     <!-- bower:js -->

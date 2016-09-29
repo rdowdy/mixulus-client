@@ -7,6 +7,7 @@ html {
 body {
     width: 100%;
     margin: 0 auto;
+    font-family: 'Open Sans';
 }
 
 *,
@@ -27,22 +28,57 @@ button:focus {
 
 header h1 {
     text-align: center;
+    font-family: 'Oswald';
 }
 
-form input,
-form button {
-    width: 175px;
+/************************/
+/*    Button Styles     */
+/************************/
+.button {
+    font-size: 1.2em;
+    padding: .4em;
+    margin: 10px 0;
+    background: none;
+    border: 1px solid black;
+}
+
+.button:hover {
+    opacity: 0.7;
+}
+
+/************************/
+/* Form Elements Styles */
+/************************/
+.form {
+    width: 30%;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.form button {
+    width: 100%;
+    display: block;
     margin: 0 auto;
 }
 
-form input {
-    font-size: 2em;
+.input-group {
+    text-align: center;
 }
 
-form button {
-	display: block;
+.input-group label {
+    display: block;
+    font-weight: bold;
+    text-align: left;
 }
 
+.input-group input {
+    margin: 10px 0;
+    width: 100%;
+    font-size: 1.3em;
+    border: 1px solid #aaa;
+    padding: .5em;
+}
 
-/* Custom Classes */
-
+.input-group input:focus {
+    outline: 1px solid #aaa;
+}
