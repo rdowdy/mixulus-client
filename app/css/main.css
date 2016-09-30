@@ -59,7 +59,7 @@ header h1 {
     margin: 0;
 }
 
-.button-group .button:nth-child(2) {
+.button-group .button:nth-child(n + 2) {
     margin-left: -6px;
 }
 
