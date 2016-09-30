@@ -2,5 +2,6 @@
     'use strict';
 
     angular
-        .module('app', []);
+        .module('app', [])
+        .value('apiUrl', '');
 })();
