@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Music App | Home</title>
-    <base href="/home">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald" rel="stylesheet">
     <script src="https://use.fontawesome.com/965f3ecbfc.js"></script>
     <!-- bower:css -->
@@ -26,7 +25,6 @@
             <div class="collab" ng-repeat="collab in home.collabs" ng-click="home.goToWorkspace(collab._id)" >
                 <div class="metainfo">
                 	<!-- TODO!!!!! change collab model and route to include collab name -->
-                	<!-- TODO!!!!! Figure out how to disable embed-code-stats -->
                     <h3>collab.name goes here</h3>
                     <p>
                         <span ng-repeat="user in collab.userIds">
@@ -42,6 +40,7 @@
         </div>
     </div>
     <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
     <script src="features/app.module.js"></script>
     <script src="features/core/collab.factory.js"></script>
     <script src="features/home/home.controller.js"></script>

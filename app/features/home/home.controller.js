@@ -5,14 +5,14 @@
         .module('app')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['CollabFactory', '$window'];
+    HomeController.$inject = ['CollabFactory', '$window', 'localStorageService'];
 
     /* @ngInject */
-    function HomeController(CollabFactory, $window) {
+    function HomeController(CollabFactory, $window, localStorageService) {
         var vm = this;
         
         vm.goToWorkspace = goToWorkspace;
-        
+
         /////////////////////
         getCollabs();
         /////////////////////
@@ -24,6 +24,7 @@
         }
 
         function goToWorkspace(collabId) {
+        	localStorageService.set('collabId', collabId);
         	$window.location.href = "/workspace";
         }
     }

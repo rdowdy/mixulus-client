@@ -2,6 +2,6 @@
     'use strict';
 
     angular
-        .module('app', [])
+        .module('app', ['LocalStorageModule'])
         .value('apiUrl', '');
 })();
