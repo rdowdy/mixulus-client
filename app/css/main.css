@@ -25,6 +25,10 @@ button:focus {
 
 
 /* Base Styles */
+.container {
+    width: 100%;
+    padding: 2% 7%;
+}
 
 header h1 {
     text-align: center;
@@ -39,7 +43,7 @@ header h1 {
     padding: .4em;
     margin: 10px 0;
     background: none;
-    border: 1px solid black;
+    border: 2px solid black;
 }
 
 .button:hover {
@@ -81,4 +85,33 @@ header h1 {
 
 .input-group input:focus {
     outline: 1px solid #aaa;
+}
+
+/************************/
+/*  Collab List Styles  */
+/************************/
+#collabList {
+    width: 40%;
+}
+
+.collab {
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.collab:hover {
+    background: black;
+    color: white;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.collab h3,
+.collab p {
+    margin: 10px 15px;
+}
+
+.collab p {
+    font-size: 0.75em;
+    text-overflow: ellipsis;
 }
