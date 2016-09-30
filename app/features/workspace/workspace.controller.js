@@ -5,14 +5,22 @@
         .module('app')
         .controller('WorkspaceController', WorkspaceController);
 
-    WorkspaceController.$inject = ['localStorageService'];
+    WorkspaceController.$inject = ['localStorageService', 'CollabFactory'];
 
     /* @ngInject */
-    function WorkspaceController(localStorageService) {
+    function WorkspaceController(localStorageService, CollabFactory) {
         var vm = this;
         
         ////////////////
+        getCollab();
 
-        console.log(localStorageService.get('collabId'));
+        function getCollab() {
+            var collabId = localStorageService.get('collabId');
+            
+            CollabFactory.getCollabById(collabId).then(function(response) {
+                vm.collabMeta = response.data;
+            });
+        }
+        
     }
 })();
