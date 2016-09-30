@@ -1,0 +1,38 @@
+/************************/
+/*    Top Nav Styles    */
+/************************/
+.topNav {
+	position: fixed;
+	width: 100%;
+	height: 60px;
+	border-bottom: 3px solid black;
+	z-index: 1000;
+	background: white;
+}
+
+/************************/
+/*  Track List Styles   */
+/************************/
+.tracks {
+	position: fixed;
+	width: 200px;
+	height: 100%;
+	padding-top: 60px;
+	border-right: 2px solid black;
+	z-index: 800;
+	background: white;
+}
+
+/************************/
+/*  Bottom Nav Styles   */
+/************************/
+.bottomNav {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 60px;
+	padding-left: 200px;
+	border-top: 1px solid black;
+	z-index: 600;
+	background: white;
+}
