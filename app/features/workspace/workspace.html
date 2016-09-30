@@ -15,32 +15,41 @@
 </head>
 
 <body ng-controller="WorkspaceController as workspace">
-	<div class="topNav">
-		
-	</div>
-	<div class="tracks">
-		<div class="track">
-			<h3 class="trackName">Track Name</h3>
-			<div class="button-group">
-				<button class="button mutesolo">M</button>
-				<button class="button mutesolo">S</button>
-			</div>
-			<div class="arm-group button-group">
-				<button class="button arm">Arm</button>
-				<select name="inputSelect" id="inputSelect">
-					<option value="">Mic</option>
-					<option value="">Audio Interface</option>
-				</select>
-			</div>
-		</div>
-	</div>
-	<div class="grid">
-		
-	</div>
-	<div class="bottomNav">
-		
-	</div>
-	
+    <div class="topNav">
+    	<h1 class="collabHeader">Collab Name</h1>
+    </div>
+
+    <!-- beginning of tracks listing -->
+    <div class="tracks">
+        <div class="track">
+            <h3 class="trackName">Track Name</h3>
+            <div class="button-group">
+                <button class="button mutesolo">M</button>
+                <button class="button mutesolo">S</button>
+            </div>
+            <div class="arm-group button-group">
+                <button class="button arm">Arm</button>
+                <select name="inputSelect" id="inputSelect">
+                    <option value="">Mic</option>
+                    <option value="">Audio Interface</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!-- end of tracks listing -->
+    <div class="grid">
+		<div class="gridRuler"></div>
+    </div>
+    <div class="bottomNav">
+		<h3>Shows location in song</h3>
+    	<div class="button-group">
+    		<button class="button">Metronome</button>
+    		<button class="button">Play/Pause</button>
+    		<button class="button">Record</button>
+    		<button class="button">Skip Home</button>
+    		<button class="button">Skip End</button>
+    	</div>
+    </div>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
     <script src="features/app.module.js"></script>
