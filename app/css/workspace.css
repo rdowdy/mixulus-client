@@ -10,16 +10,20 @@
 	background: white;
 }
 
+.topNav .collabHeader {
+	margin: 5px 15px;
+}
+
 /************************/
 /*  Track List Styles   */
 /************************/
 .tracks {
-	position: fixed;
+	position: absolute;
 	width: 215px;
 	height: 100%;
-	padding-top: 60px;
-	border-right: 2px solid black;
-	z-index: 800;
+	padding-top: 75px;
+	border-right: 1px solid black;
+	z-index: 600;
 	background: white;
 }
 /************************/
@@ -65,8 +69,26 @@
 .track select {
   	height: 25px;
   	margin: 0;
-  	margin-left: -6px;
+  	margin-left: -7px;
   	line-height: 12px;
+}
+
+/************************/
+/*     Grid Styles      */
+/************************/
+.grid {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #eee;
+}
+
+.gridRuler {
+	position: fixed;
+	border-bottom: 1px solid #bbb;
+	width: 100%;
+	height: 15px;
+	top: 60px;
 }
 
 /************************/
@@ -77,8 +99,16 @@
 	bottom: 0;
 	width: 100%;
 	height: 60px;
-	padding-left: 215px;
-	border-top: 1px solid black;
-	z-index: 600;
+	border-top: 2px solid black;
+	z-index: 800;
 	background: white;
+	padding-top: 5px;
+}
+
+.bottomNav h3 {
+	display: inline;
+}
+
+.bottomNav .button-group {
+	display: inline;
 }
