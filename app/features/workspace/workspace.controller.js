@@ -10,6 +10,7 @@
     /* @ngInject */
     function WorkspaceController(localStorageService, CollabFactory) {
         var vm = this;
+        vm.recording = false;
         
         ////////////////
         getCollab();

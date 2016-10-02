@@ -41,20 +41,36 @@
 		<div class="gridRuler"></div>
     </div>
     <div class="bottomNav">
-		<h3>Shows location in song</h3>
-    	<div class="button-group">
-    		<button class="button">Metronome</button>
-    		<button class="button">Play/Pause</button>
-    		<button class="button">Record</button>
-    		<button class="button">Skip Home</button>
-    		<button class="button">Skip End</button>
+		<div class="locationDisplay">
+			01:04:45
+		</div>
+    	<div class="button-group" ng-controller="ControlsController as controls">
+    		<button class="button" ng-click="controls.pauseBlob(controls.audioBlob)">
+				<i class="fa fa-money" aria-hidden="true"></i>
+    		</button>
+    		<button class="button" id="save" ng-click="controls.playBlob(controls.audioBlob)">
+				<i class="fa fa-play" aria-hidden="true"></i>
+    		</button>
+    		<button class="button" ng-click="workspace.recording = !workspace.recording; controls.toggleRecord(workspace.recording)">
+				<i class="fa fa-circle" aria-hidden="true" ng-show="!workspace.recording"></i>
+                <i class="fa fa-square" aria-hidden="true" ng-show="workspace.recording"></i>
+    		</button>
+    		<button class="button">
+    			<i class="fa fa-fast-backward" aria-hidden="true"></i>
+    		</button>
+    		<button class="button">
+    			<i class="fa fa-fast-forward" aria-hidden="true"></i>
+    		</button>
     	</div>
     </div>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
+    <script src="features/workspace/recorder/recorder.js"></script>
+    <script src="features/workspace/recorder/main.js"></script>
     <script src="features/app.module.js"></script>
     <script src="features/core/collab.factory.js"></script>
     <script src="features/workspace/workspace.controller.js"></script>
+    <script src="features/workspace/controls.controller.js"></script>
 </body>
 
 </html>
