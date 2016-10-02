@@ -67,6 +67,11 @@
 	margin-left: 10px;
 }
 
+.arm.armed {
+	background-color: #cc0000;
+	color: #eee;
+}
+
 .track select {
   	height: 25px;
   	margin: 0;

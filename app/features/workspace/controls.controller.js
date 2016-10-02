@@ -5,15 +5,14 @@
         .module('app')
         .controller('ControlsController', ControlsController);
 
-    ControlsController.$inject = ['$window'];
+    ControlsController.$inject = ['$window', '$rootScope'];
 
     /* @ngInject */
-    function ControlsController($window) {
+    function ControlsController($window, $rootScope) {
         var vm = this;
 
         vm.toggleRecord = toggleRecording;
-        vm.playBlob = playBlob;
-        vm.pauseBlob = pauseBlob;
+        vm.toggleBlob = toggleBlob;
 
         vm.audioBlob = null;
 
@@ -23,6 +22,26 @@
             vm.audioBlob = {
             	href: url
             };
+
+            var player = new $window.Audio();
+            player.src = url;
+            var blob = {
+                player: player,
+                time: 0
+            }
+
+            vm.armedTrack.sounds.push({
+                startMarker: 0,
+                blob: blob
+            });
+        }
+
+        function toggleBlob(playing, blobject) {
+        	if(playing) {
+        		pauseBlob(blobject);
+        	} else {
+        		playBlob(blobject);
+        	}
         }
 
         function playBlob(blobject) {
@@ -32,6 +51,10 @@
 	        	blobject.player = player;
 	        	player.load();
 	        	player.play();
+
+	        	player.onended = function() {
+	        		$rootScope.$broadcast('onended');
+	        	}
         	} else {
         		if(blobject.player.currentTime == blobject.player.seekable.end(0)) {
         			blobject.time = 0;
@@ -106,7 +129,7 @@
             recIndex++;
         }
 
-        function toggleRecording(recordBool) {
+        function toggleRecording(recordBool, track) {
             if (!recordBool) {
                 console.log("done recording");
                 // stop recording
@@ -115,6 +138,7 @@
             } else {
                 // start recording
                 console.log("recording");
+                vm.armedTrack = track;
                 if (!audioRecorder)
                     return;
                 audioRecorder.clear();
