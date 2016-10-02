@@ -5,10 +5,10 @@
         .module('app')
         .controller('ControlsController', ControlsController);
 
-    ControlsController.$inject = ['$window', '$rootScope'];
+    ControlsController.$inject = ['$window', '$rootScope', 'RecorderFactory'];
 
     /* @ngInject */
-    function ControlsController($window, $rootScope) {
+    function ControlsController($window, $rootScope, RecorderFactory) {
         var vm = this;
 
         vm.toggleRecord = toggleRecording;
@@ -114,10 +114,34 @@
             // audioRecorder.exportMonoWAV( doneEncoding );
         }
 
-        function gotBuffers(buffers) {
-            var canvas = document.getElementById("wavedisplay");
+        /* CANVAS DRAWING STUFF */
+        function drawBuffer( width, height, context, data ) {
+            console.log('drawn');
+            var step = Math.ceil( data.length / width );
+            var amp = (height) / 2;
+            context.fillStyle = "white";
+            context.clearRect(0,0,width,height);
+            for(var i=0; i < width; i++){
+                var min = 1.0;
+                var max = -1.0;
+                for (var j=0; j<step; j++) {
+                    var datum = data[(i*step)+j]; 
+                    if (datum < min)
+                        min = datum;
+                    if (datum > max)
+                        max = datum;
+                }
+                context.fillRect(i,(1+min)*amp,1,Math.max(1,(max-min)*amp));
+            }
+        }
 
-            //drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffers[0]);
+        /************************/
+
+        function gotBuffers(buffers) {
+            console.log("gotBuffers");
+            var canvas = document.getElementById("clipCanvas");
+
+            drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffers[0]);
 
             // the ONLY time gotBuffers is called is right after a new recording is completed - 
             // so here's where we should set up the download.
@@ -183,7 +207,7 @@
             analyserNode.fftSize = 2048;
             inputPoint.connect(analyserNode);
 
-            audioRecorder = new $window.Recorder(inputPoint);
+            audioRecorder = new RecorderFactory.Recorder(inputPoint);
 
             zeroGain = audioContext.createGain();
             zeroGain.gain.value = 0.0;

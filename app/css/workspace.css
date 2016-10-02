@@ -87,6 +87,8 @@
 	width: 100%;
 	height: 100%;
 	background: #eee;
+	padding-left: 215px;
+	padding-top: 60px;
 }
 
 .gridRuler {
@@ -95,6 +97,21 @@
 	width: 100%;
 	height: 15px;
 	top: 60px;
+}
+
+/* FOR TESTING ONLY */
+#audioClip {
+	position: relative;
+	top: 15px;
+	border: 1px solid black;
+	width: 200px;
+	height: 100px;
+}
+
+.clipCanvas {
+	width: 100%;
+	height: 100%;
+	background: black;
 }
 
 /************************/

@@ -21,15 +21,15 @@
 
     <!-- beginning of tracks listing -->
     <div class="tracks">
-        <div class="track">
-            <h3 class="trackName">Track Name</h3>
+        <div class="track" ng-repeat="track in workspace.tracks">
+            <h3 class="trackName">Track Name {{$index}}</h3>
             <div class="button-group">
                 <button class="button mutesolo">M</button>
                 <button class="button mutesolo">S</button>
             </div>
             <div class="arm-group button-group">
-                <button class="button arm" ng-click="workspace.toggleTrackArmed(0)"
-                ng-class="{ 'armed': workspace.armedTrack == 0 }">Arm</button>
+                <button class="button arm" ng-click="workspace.toggleTrackArmed($index)"
+                ng-class="{ 'armed': workspace.armedTrack == $index }">Arm</button>
                 <select name="inputSelect" id="inputSelect">
                     <option value="">Mic</option>
                     <option value="">Audio Interface</option>
@@ -38,13 +38,13 @@
         </div>
     </div>
     <!-- end of tracks listing -->
-    <div class="grid">
+    <div class="grid" ng-controller="GridController as grid">
 		<div class="gridRuler"></div>
-<!--         <div class="locationMarker"></div>
- -->        
-        <div class="trackAudios">
-            
+        <div class="locationMarker"></div>
+        <div id="audioClip">
+            <canvas id="clipCanvas"></canvas>
         </div>
+        <div class="trackAudio" ng-repeat="track in workspace.tracks"></div>
     </div>
     <div class="bottomNav">
 		<div class="locationDisplay">
@@ -72,11 +72,13 @@
     </div>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
-    <script src="features/workspace/recorder/recorder.js"></script>
-    <script src="features/app.module.js"></script>
+<!--     <script src="features/workspace/recorder/recorder.js"></script>
+ -->    <script src="features/app.module.js"></script>
+    <script src="features/core/recorder.factory.js"></script>
     <script src="features/core/collab.factory.js"></script>
     <script src="features/workspace/workspace.controller.js"></script>
     <script src="features/workspace/controls.controller.js"></script>
+    <script src="features/workspace/grid.controller.js"></script>
 </body>
 
 </html>
