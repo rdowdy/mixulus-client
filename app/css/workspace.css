@@ -6,7 +6,7 @@
 	width: 100%;
 	height: 60px;
 	border-bottom: 3px solid black;
-	z-index: 1000;
+	z-index: 2000;
 	background: white;
 }
 
@@ -94,20 +94,34 @@
 .gridRuler {
 	position: fixed;
 	border-bottom: 1px solid #bbb;
+	background: #eee;
 	width: 100%;
 	height: 15px;
 	top: 60px;
+	z-index: 1000;
+}
+
+#locationMarker {
+	position: absolute;
+	width: 1px;
+	height: 100%;
+	border-left: 3px solid #cc0000;
+	z-index: 1001;
 }
 
 /* FOR TESTING ONLY */
 #audioClip {
 	position: relative;
 	top: 15px;
-	border: 1px solid black;
 	width: 200px;
 	height: 100px;
 }
 
+.audioClip {
+	border: 1px solid black;
+}
+
+#clipCanvas,
 .clipCanvas {
 	width: 100%;
 	height: 100%;
@@ -123,7 +137,7 @@
 	width: 100%;
 	height: 70px;
 	border-top: 2px solid black;
-	z-index: 800;
+	z-index: 2000;
 	background: white;
 	padding-top: 12px;
 	text-align: center;

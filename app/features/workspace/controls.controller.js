@@ -140,6 +140,8 @@
         function gotBuffers(buffers) {
             console.log("gotBuffers");
             var canvas = document.getElementById("clipCanvas");
+            //var canvas = document.createElement('canvas');
+            //canvas.
 
             drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffers[0]);
 

@@ -21,7 +21,7 @@
 
     <!-- beginning of tracks listing -->
     <div class="tracks">
-        <div class="track" ng-repeat="track in workspace.tracks">
+        <div class="track" ng-repeat="track in workspace.tracks" id="track{{$index}}">
             <h3 class="trackName">Track Name {{$index}}</h3>
             <div class="button-group">
                 <button class="button mutesolo">M</button>
@@ -38,13 +38,13 @@
         </div>
     </div>
     <!-- end of tracks listing -->
-    <div class="grid" ng-controller="GridController as grid">
+    <div id="grid" class="grid" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
 		<div class="gridRuler"></div>
-        <div class="locationMarker"></div>
+        <div id="locationMarker" ng-style="{left: grid.markerLocation + 'px'}"></div>
         <div id="audioClip">
             <canvas id="clipCanvas"></canvas>
         </div>
-        <div class="trackAudio" ng-repeat="track in workspace.tracks"></div>
+        
     </div>
     <div class="bottomNav">
 		<div class="locationDisplay">
