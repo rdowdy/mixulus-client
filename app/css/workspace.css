@@ -105,7 +105,7 @@
 	position: absolute;
 	width: 1px;
 	height: 100%;
-	border-left: 3px solid #cc0000;
+	border-left: 1px solid #cc0000;
 	z-index: 1001;
 }
 

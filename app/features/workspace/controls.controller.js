@@ -13,8 +13,9 @@
 
         //////
         // marker location stuff
+        var fps = 35;
         var trackWidth = 215;
-        var markerCenterOffset = 2;
+        var markerCenterOffset = 0;
         var markerHomeLoc = trackWidth - markerCenterOffset;
         
         vm.markerLocation = markerHomeLoc;
@@ -26,6 +27,7 @@
         vm.playing = false;
 
         ////////////////
+        // Function defs
 
         $rootScope.$on("gridClick", function(event, args) {
             gridClickEvent(args.$event);
@@ -33,6 +35,7 @@
 
         vm.toggleRecord = toggleRecording;
         vm.togglePlay = togglePlay;
+        vm.skipHome = skipHome;
 
         ////////////////
 
@@ -49,27 +52,47 @@
             } else {
                 // start recording
                 console.log("recording");
-                vm.armedTrack = track;
-                // if (!audioRecorder)
-                //     return;
-                // audioRecorder.clear();
-                // audioRecorder.record();
+                
                 ContextFactory.record();
             }
         }
 
         function togglePlay() {
-
+            if(!vm.playing) {
+                //play();
+                vm.intervalId = setInterval(moveMarker, 1000 / fps);
+            } else {
+                pause();
+                clearInterval(vm.intervalId);
+            }
         }
 
         function play() {
             ContextFactory.playAt(vm.buffer, 0);
         }
 
+        function pause() {
+
+        }
+
+        function skipHome() {
+            vm.markerLocation = markerHomeLoc;
+            $rootScope.$broadcast('markerMove', {loc: vm.markerLocation});
+        }
+
+        function skipEnd() {
+
+        }
+
         function gridClickEvent($event) {
-            var x = $event.clientX - 2;             
+            var x = $event.clientX - markerCenterOffset;             
             vm.markerLocation = x;
             $rootScope.$broadcast('markerMove', {loc: vm.markerLocation});
+        }
+
+        function moveMarker() {
+            $rootScope.$broadcast('markerMove', {loc: ++vm.markerLocation});
+            $rootScope.$apply();
         }
 
     }
