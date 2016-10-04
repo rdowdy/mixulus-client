@@ -54,9 +54,9 @@
     		<button class="button">
 				<i class="fa fa-money" aria-hidden="true"></i>
     		</button>
-    		<button class="button" id="save" ng-click="controls.toggleBlob(workspace.playing, controls.audioBlob); workspace.playing = !workspace.playing">
-				<i class="fa fa-play" aria-hidden="true" ng-show="!workspace.playing"></i>
-                <i class="fa fa-pause" aria-hidden="true" ng-show="workspace.playing"></i>
+    		<button class="button" id="save" ng-click="controls.togglePlay(); controls.playing = !controls.playing">
+				<i class="fa fa-play" aria-hidden="true" ng-show="!controls.playing"></i>
+                <i class="fa fa-pause" aria-hidden="true" ng-show="controls.playing"></i>
     		</button>
     		<button class="button" ng-click="workspace.recording = !workspace.recording; controls.toggleRecord(workspace.recording, workspace.tracks[workspace.armedTrack])">
 				<i class="fa fa-circle" aria-hidden="true" ng-show="!workspace.recording"></i>
@@ -76,6 +76,8 @@
  -->    <script src="features/app.module.js"></script>
     <script src="features/core/recorder.factory.js"></script>
     <script src="features/core/collab.factory.js"></script>
+    <script src="features/core/context.factory.js"></script>
+    <script src="features/core/grid.factory.js"></script>
     <script src="features/workspace/workspace.controller.js"></script>
     <script src="features/workspace/controls.controller.js"></script>
     <script src="features/workspace/grid.controller.js"></script>

@@ -5,18 +5,17 @@
         .module('app')
         .controller('GridController', GridController);
 
-    GridController.$inject = [];
+    GridController.$inject = ['$rootScope'];
 
     /* @ngInject */
-    function GridController() {
+    function GridController($rootScope) {
         var vm = this;
- 		
-        var trackWidth = 215;
-        var markerCenterOffset = 2;
-      	var markerHomeLoc = trackWidth - markerCenterOffset;
 
- 		vm.markerLocation = markerHomeLoc;
  		////////////////
+        // marker location stuff
+        $rootScope.$on('markerMove', function(e, args) {
+            vm.markerLocation = args.loc;
+        })
  		vm.gridClickEvent = gridClickEvent;
  		////////////////
 
@@ -45,9 +44,8 @@
  			grid.appendChild(div);
  		}
 
- 		function gridClickEvent($event) {
- 			var x = $event.clientX - 2; 			
- 			vm.markerLocation = x;
- 		}       
+ 		function gridClickEvent(event) {
+            $rootScope.$broadcast('gridClick', {$event: event})
+        }       
     }
 })();
