@@ -1,0 +1,138 @@
+/* CSS Resets */
+
+html {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    margin: 0 auto;
+    font-family: 'Open Sans';
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+
+/* Base Styles */
+.container {
+    width: 100%;
+    padding: 2% 7%;
+}
+
+header h1 {
+    text-align: center;
+    font-family: 'Oswald';
+}
+
+/************************/
+/*    Button Styles     */
+/************************/
+.button {
+    font-size: 1.2em;
+    padding: .4em;
+    margin: 10px 0;
+    background: none;
+    border: 2px solid black;
+}
+
+.button:hover {
+    opacity: 0.7;
+}
+
+.button-group {
+    margin-top: 15px;
+    display: inline-block;
+}
+
+.button-group .button {
+    margin: 0;
+}
+
+.button-group .button:nth-child(n + 2) {
+    margin-left: -6px;
+}
+
+/************************/
+/* Form Elements Styles */
+/************************/
+.form {
+    width: 30%;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.form button {
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+.input-group {
+    text-align: center;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    text-align: left;
+}
+
+.input-group input {
+    margin: 10px 0;
+    width: 100%;
+    font-size: 1.3em;
+    border: 1px solid #aaa;
+    padding: .5em;
+}
+
+.input-group input:focus {
+    outline: 1px solid #aaa;
+}
+
+select {
+    border: 2px solid black;
+    background: white;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    padding: 5px;
+}
+
+/************************/
+/*  Collab List Styles  */
+/************************/
+#collabList {
+    width: 40%;
+}
+
+.collab {
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.collab:hover {
+    background: black;
+    color: white;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.collab h3,
+.collab p {
+    margin: 10px 15px;
+}
+
+.collab p {
+    font-size: 0.75em;
+    text-overflow: ellipsis;
+}
