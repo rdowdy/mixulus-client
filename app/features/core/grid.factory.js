@@ -24,7 +24,6 @@
             div.classList += " audioClip";
             div.style.width = length + 'px';
             div.style.left = gridLocation + 'px';
-            console.log(div);
 
             var canvas = document.createElement('canvas');
             canvas.classList += " clipCanvas";

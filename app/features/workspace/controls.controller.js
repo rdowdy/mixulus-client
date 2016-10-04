@@ -5,10 +5,10 @@
         .module('app')
         .controller('ControlsController', ControlsController);
 
-    ControlsController.$inject = ['$window', '$rootScope', 'ContextFactory', 'GridFactory'];
+    ControlsController.$inject = ['$window', '$rootScope', 'ContextFactory', 'GridFactory', 'TrackFactory'];
 
     /* @ngInject */
-    function ControlsController($window, $rootScope, ContextFactory, GridFactory) {
+    function ControlsController($window, $rootScope, ContextFactory, GridFactory, TrackFactory) {
         var vm = this;
 
         //////
@@ -16,7 +16,7 @@
         var fps = 35;
         var trackWidth = 215;
         var markerCenterOffset = 1;
-        var markerHomeLoc = trackWidth - markerCenterOffset;
+        var markerHomeLoc = trackWidth;
         
         vm.markerLocation = markerHomeLoc;
 
@@ -48,18 +48,19 @@
                 // stop recording
                 var buffer = ContextFactory.stop();
                 var startLoc = vm.recordMeta.startLoc;
-                // initiate waveform draw
-                //var framesPerSample = (fps * (1 / ContextFactory.getAudioContext().sampleRate))
-                //var canvasLen = framesPerSample * buffer.length;
-                //canvasLen = Math.round(canvasLen);
+                
+                // the visual length of the clip is based on the
+                // distance traversed by the marker
                 var canvasLen = vm.markerLocation - startLoc;
                 var canvas = GridFactory.createCanvas(0, startLoc, canvasLen);
                 GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
-                
-                // for testing
-                vm.buffer = buffer;
 
                 clearInterval(vm.intervalId);
+
+                //vm.buffer = buffer;
+                TrackFactory.addAudioToTrack(0, buffer, startLoc);
+
+                console.log(TrackFactory.getTracks());
             } else {
                 // start recording
                 console.log("recording");
