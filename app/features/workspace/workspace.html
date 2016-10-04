@@ -10,17 +10,77 @@
     <!-- endbower -->
     <!-- inject:css -->
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/workspace.css">
     <!-- endinject -->
 </head>
 
 <body ng-controller="WorkspaceController as workspace">
-	
-	
+    <div class="topNav">
+    	<h1 class="collabHeader">Collab Name</h1>
+    </div>
+
+    <!-- beginning of tracks listing -->
+    <div class="tracks">
+        <div class="track" ng-repeat="track in workspace.tracks" id="track{{$index}}">
+            <h3 class="trackName">Track Name {{$index}}</h3>
+            <div class="button-group">
+                <button class="button mutesolo">M</button>
+                <button class="button mutesolo">S</button>
+            </div>
+            <div class="arm-group button-group">
+                <button class="button arm" ng-click="workspace.toggleTrackArmed($index)"
+                ng-class="{ 'armed': workspace.armedTrack == $index }">Arm</button>
+                <select name="inputSelect" id="inputSelect">
+                    <option value="">Mic</option>
+                    <option value="">Audio Interface</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!-- end of tracks listing -->
+    <div id="grid" class="grid" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
+		<div class="gridRuler"></div>
+        <div id="locationMarker" ng-style="{left: grid.markerLocation + 'px'}"></div>
+        <div id="audioClip">
+            <canvas id="clipCanvas"></canvas>
+        </div>
+        
+    </div>
+    <div class="bottomNav">
+		<div class="locationDisplay">
+			01:04:45
+		</div>
+    	<div class="button-group" ng-controller="ControlsController as controls">
+    		<button class="button">
+				<i class="fa fa-money" aria-hidden="true"></i>
+    		</button>
+    		<button class="button" id="save" ng-click="controls.togglePlay(); controls.playing = !controls.playing">
+				<i class="fa fa-play" aria-hidden="true" ng-show="!controls.playing"></i>
+                <i class="fa fa-pause" aria-hidden="true" ng-show="controls.playing"></i>
+    		</button>
+    		<button class="button" ng-click="workspace.recording = !workspace.recording; controls.toggleRecord(workspace.recording, workspace.tracks[workspace.armedTrack])">
+				<i class="fa fa-circle" aria-hidden="true" ng-show="!workspace.recording"></i>
+                <i class="fa fa-square" aria-hidden="true" ng-show="workspace.recording"></i>
+    		</button>
+    		<button class="button" ng-click="controls.skipHome()">
+    			<i class="fa fa-fast-backward" aria-hidden="true"></i>
+    		</button>
+    		<button class="button">
+    			<i class="fa fa-fast-forward" aria-hidden="true"></i>
+    		</button>
+    	</div>
+    </div>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
-    <script src="features/app.module.js"></script>
+<!--     <script src="features/workspace/recorder/recorder.js"></script>
+ -->    <script src="features/app.module.js"></script>
+    <script src="features/core/recorder.factory.js"></script>
     <script src="features/core/collab.factory.js"></script>
+    <script src="features/core/context.factory.js"></script>
+    <script src="features/core/grid.factory.js"></script>
     <script src="features/workspace/workspace.controller.js"></script>
+    <script src="features/workspace/controls.controller.js"></script>
+    <script src="features/workspace/grid.controller.js"></script>
 </body>
 
 </html>
