@@ -9,57 +9,96 @@
 
     /* @ngInject */
     function TrackFactory(localStorageService, ContextFactory) {
-    	////////////////
-    	// variables 
+        ////////////////
+        // variables 
         var tracks = [];
 
         ////////////////
         // functions
         var service = {
-        	getTracks: getTracks,
+            getTracks: getTracks,
             addAudioToTrack: addAudioToTrack,
-            playAt: playAt
+            playAt: playAt,
+            stopAudio: stopAudio,
+            getEndMarker: getEndMarker
         };
         return service;
 
 
         ////////////////
         function getTracks() {
-        	return tracks;
+            return tracks;
         }
 
-        function addAudioToTrack(num, buffer, gridLocation) {
-        	if(tracks[num] == null) {
-        		tracks[num] = {};
-        	}
+        function addAudioToTrack(num, buffer, gridLocation, frameLength) {
+            if (tracks[num] == null) {
+                tracks[num] = {};
+            }
 
-        	if(tracks[num].sounds == null) {
-        		tracks[num].sounds = [];
-        	}
+            if (tracks[num].sounds == null) {
+                tracks[num].sounds = [];
+            }
 
-        	var track = tracks[num];
-        	track.sounds.push({
-        		track: num,
-        		gridLocation: gridLocation,
-        		collabId: localStorageService.get('collabId'),
-        		buffer: buffer
-        	})
+            var track = tracks[num];
+            track.sounds.push({
+                track: num,
+                gridLocation: gridLocation,
+                frameLength: frameLength,
+                collabId: localStorageService.get('collabId'),
+                buffer: buffer
+            })
+
+        }
+
+        function playAt(gridBaseOffset, markerOffset, fps) {
+            var context = ContextFactory.getAudioContext();
+            var track = tracks[0];
+            for (var i = 0; i < track.sounds.length; i++) {
+                var sound = track.sounds[i];
+                var audioStartLoc = sound.gridLocation;
+                var audioEndLoc = audioStartLoc + sound.frameLength;
+
+                if (markerOffset >= audioEndLoc) {
+                    continue;
+                } else if (markerOffset > audioStartLoc && markerOffset < audioEndLoc) {
+                    var frameOffset = markerOffset - audioStartLoc;
+                    // sampleOffset = (frames) * (seconds / frame) * (samples / second) = samples
+                    var sampleOffset = frameOffset * (1 / fps) * (context.sampleRate);
+                    var buffer = sound.buffer.slice(sampleOffset, sound.buffer.length);
+
+                    ContextFactory.playAt(buffer, 0);
+                } else {
+                    var soundStart = sound.gridLocation - markerOffset;
+                    soundStart /= fps;
+
+                    var startTime = soundStart + context.currentTime;
+                    ContextFactory.playAt(sound.buffer, startTime);
+                }
+            }
 
         }
 
-        function playAt(baseOffset, markerOffset, fps) {
-        	var context = ContextFactory.getAudioContext();
-        	var track = tracks[0];
-        	for(var i = 0; i < track.sounds.length; i++) {
-        		var sound = track.sounds[i];
+        function stopAudio() {
+        	ContextFactory.stopAudio();
+        }
 
-        		var soundStart = sound.gridLocation - baseOffset;
-        		soundStart /= fps;
+        // find the grid location of the end of the last sound
+        function getEndMarker() {
+        	var latestLoc = 0;
 
-        		var startTime = soundStart + context.currentTime;
-        		ContextFactory.playAt(sound.buffer, startTime);
+        	for(var i = 0; i < tracks.length; i++) {
+        		var track = tracks[i];
+        		for(var j = 0; j < track.sounds.length; j++) {
+        			var sound = track.sounds[j];
+        			var endOfSound = sound.gridLocation + sound.frameLength;
+        			if(endOfSound > latestLoc) {
+        				latestLoc = endOfSound;
+        			}
+        		}
         	}
 
+        	return latestLoc;
         }
+
     }
 })();
