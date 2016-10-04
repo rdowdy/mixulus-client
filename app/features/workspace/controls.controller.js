@@ -52,6 +52,7 @@
 
         function toggleRecording(recordBool, track) {
             if (!recordBool) {
+                vm.recording = false;
                 // stop recording
                 var buffer = ContextFactory.stop();
                 var startLoc = vm.recordMeta.startLoc;
@@ -71,6 +72,7 @@
             } else {
                 // start recording
                 console.log("recording");
+                vm.recording = true;
 
                 ContextFactory.record();
                 vm.recordMeta.startLoc = vm.markerLocation;
@@ -130,6 +132,10 @@
         }
 
         function gridClickEvent($event) {
+            if(vm.recording) {
+                return;
+            }
+            
             var unpause = false;
             if(vm.playing) {
                 pause();
