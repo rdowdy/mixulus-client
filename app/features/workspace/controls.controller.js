@@ -13,7 +13,7 @@
 
         //////
         // marker location stuff
-        var fps = 35;
+        var fps = 60;
         var trackWidth = 215;
         var markerCenterOffset = 1;
         var markerHomeLoc = trackWidth;
@@ -82,7 +82,7 @@
         }
 
         function play() {
-            ContextFactory.playAt(vm.buffer, 0);
+            TrackFactory.playAt(markerHomeLoc, vm.markerLocation, fps);
         }
 
         function pause() {

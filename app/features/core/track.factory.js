@@ -5,10 +5,10 @@
         .module('app')
         .factory('TrackFactory', TrackFactory);
 
-    TrackFactory.$inject = ['localStorageService'];
+    TrackFactory.$inject = ['localStorageService', 'ContextFactory'];
 
     /* @ngInject */
-    function TrackFactory(localStorageService) {
+    function TrackFactory(localStorageService, ContextFactory) {
     	////////////////
     	// variables 
         var tracks = [];
@@ -17,7 +17,8 @@
         // functions
         var service = {
         	getTracks: getTracks,
-            addAudioToTrack: addAudioToTrack
+            addAudioToTrack: addAudioToTrack,
+            playAt: playAt
         };
         return service;
 
@@ -43,6 +44,21 @@
         		collabId: localStorageService.get('collabId'),
         		buffer: buffer
         	})
+
+        }
+
+        function playAt(baseOffset, markerOffset, fps) {
+        	var context = ContextFactory.getAudioContext();
+        	var track = tracks[0];
+        	for(var i = 0; i < track.sounds.length; i++) {
+        		var sound = track.sounds[i];
+
+        		var soundStart = sound.gridLocation - baseOffset;
+        		soundStart /= fps;
+
+        		var startTime = soundStart + context.currentTime;
+        		ContextFactory.playAt(sound.buffer, startTime);
+        	}
 
         }
     }
