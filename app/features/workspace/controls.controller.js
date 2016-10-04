@@ -15,7 +15,7 @@
         // marker location stuff
         var fps = 35;
         var trackWidth = 215;
-        var markerCenterOffset = 0;
+        var markerCenterOffset = 1;
         var markerHomeLoc = trackWidth - markerCenterOffset;
         
         vm.markerLocation = markerHomeLoc;
@@ -25,6 +25,10 @@
 
         vm.buffer = null;
         vm.playing = false;
+
+        //////
+        // recording
+        vm.recordMeta = {};
 
         ////////////////
         // Function defs
@@ -43,23 +47,32 @@
             if (!recordBool) {
                 // stop recording
                 var buffer = ContextFactory.stop();
+                var startLoc = vm.recordMeta.startLoc;
                 // initiate waveform draw
-                var canvas = document.getElementById('clipCanvas');
+                //var framesPerSample = (fps * (1 / ContextFactory.getAudioContext().sampleRate))
+                //var canvasLen = framesPerSample * buffer.length;
+                //canvasLen = Math.round(canvasLen);
+                var canvasLen = vm.markerLocation - startLoc;
+                var canvas = GridFactory.createCanvas(0, startLoc, canvasLen);
                 GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
                 
                 // for testing
                 vm.buffer = buffer;
+
+                clearInterval(vm.intervalId);
             } else {
                 // start recording
                 console.log("recording");
                 
                 ContextFactory.record();
+                vm.recordMeta.startLoc = vm.markerLocation;
+                vm.intervalId = setInterval(moveMarker, 1000 / fps);
             }
         }
 
         function togglePlay() {
             if(!vm.playing) {
-                //play();
+                play();
                 vm.intervalId = setInterval(moveMarker, 1000 / fps);
             } else {
                 pause();

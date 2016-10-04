@@ -10,12 +10,30 @@
     /* @ngInject */
     function GridFactory() {
         var service = {
-            drawBuffer: drawAudioBuffer
+            drawBuffer: drawAudioBuffer,
+            createCanvas: createCanvas
         };
         return service;
 
 
         ////////////////
+
+        function createCanvas(trackNum, gridLocation, length) {
+            var grid = document.getElementById('grid');
+            var div = document.createElement('div');
+            div.classList += " audioClip";
+            div.style.width = length + 'px';
+            div.style.left = gridLocation + 'px';
+            console.log(div);
+
+            var canvas = document.createElement('canvas');
+            canvas.classList += " clipCanvas";
+
+            div.appendChild(canvas);
+            grid.appendChild(div);
+
+            return canvas;
+        }
 
         /* CANVAS DRAWING STUFF */
         function drawAudioBuffer( width, height, context, data ) {
