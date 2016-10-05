@@ -16,7 +16,7 @@
         
         ////////////////
         vm.toggleTrackArmed = toggleTrackArmed;
-
+        vm.addTrack = addTrack;
 
         ////////////////
         getCollab();
@@ -58,6 +58,10 @@
             } else {
                 vm.armedTrack = trackNum;
             }
+        }
+
+        function addTrack() {
+            vm.push(TrackFactory.addTrack());
         }
         
     }

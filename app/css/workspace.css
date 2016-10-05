@@ -22,10 +22,24 @@
 	position: absolute;
 	width: 215px;
 	height: 100%;
-	padding-top: 75px;
+	padding-top: 60px;
 	border-right: 1px solid black;
 	z-index: 600;
 	background: white;
+}
+
+.addNewTrack {
+	height: 15px;
+	width: 100%;
+	text-align: center;
+	font-size: 1em;
+	line-height: 15px;
+}
+
+.addNewTrack:hover {
+	background: black;
+	color: white;
+	cursor: pointer;
 }
 /************************/
 /*  Track Info Styles   */
@@ -34,6 +48,7 @@
 	width: 100%;
 	height: 100px;
 	border-bottom: 1px solid black;
+	border-top: 1px solid black;
 	padding: 5px;
 }
 
@@ -112,7 +127,7 @@
 /* FOR TESTING ONLY */
 .audioClip {
 	position: absolute;
-	top: 75px;
+	/*top: 75px;*/
 	height: 100px;
 	border: 1px solid white;
 }

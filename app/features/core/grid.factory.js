@@ -21,9 +21,16 @@
         function createCanvas(trackNum, gridLocation, length) {
             var grid = document.getElementById('grid');
             var div = document.createElement('div');
+            var gridRulerHeight = 15;
+            var topNavHeight = 60;
+            var borderHeight = 1;
+            var trackHeight = 100;
+
             div.classList += " audioClip";
             div.style.width = length + 'px';
             div.style.left = gridLocation + 'px';
+            
+            div.style.top = gridRulerHeight + topNavHeight + (trackNum * trackHeight) + 'px';
 
             var canvas = document.createElement('canvas');
             canvas.classList += " clipCanvas";
