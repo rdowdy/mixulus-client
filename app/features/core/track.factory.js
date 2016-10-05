@@ -82,7 +82,7 @@
         }
 
         function toggleSolo(trackNum) {
-            var idx = soloedTracks.indexOf(trackNum);
+            var idx = soloedTracks.indexOf(tracks[trackNum]);
             if(idx >= 0) {
                 soloedTracks.splice(idx, 1);
             } else {

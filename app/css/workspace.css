@@ -76,6 +76,11 @@
 	color: #eee;
 }
 
+.soloActive {
+	background-color: #0000cc;
+	color: #eee;
+}
+
 .arm-group {
 	margin-left: 15px;
 }
