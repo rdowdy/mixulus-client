@@ -94,9 +94,6 @@
 
             // set up audio buffer source for playback
             bufferSource = audioContext.createBufferSource();
-            //var gainNode = audioContext.createGain();
-            //gainNode.gain.value = 1.0;
-            //bufferSource.connect(gainNode);
             bufferSource.connect(audioContext.destination);
         }
 
@@ -108,7 +105,6 @@
         	// which will be linked to an input buffer
         	// and an output buffer. This allows for
         	// audio processing
-        	//var processorNode;
 
         	if(!audioContext.createScriptProcessor) {
         		processorNode = audioContext.createJavaScriptNode(bufferLen, 1, 1);
@@ -120,8 +116,6 @@
 
         	source.connect(processorNode);
         	processorNode.connect(audioContext.destination);
-
-        	console.log("dont initializing recorder")
 
         }
 
@@ -138,27 +132,22 @@
         }
 
         function record() {
-        	console.log('context factory record')
         	recBuffer = [];
         	recLen = 0;
         	recording = true;
         }
 
         function stop() {
-        	console.log('context factory done');
         	recording = false;
-        	//console.log(recBuffer);
         	return mergeBuffers(recBuffer);
         }
 
         function mergeBuffers(buf) {
-        	console.log("merging buffers");
         	var result = new Float32Array(recLen);
         	var offset = 0;
         	for(var i = 0; i < buf.length; i++) {
         		// put recBuffer[i] values into result
         		// at position {offset}
-        		//console.log(buf);
         		result.set(buf[i], offset);
         		offset += buf[i].length;
         	}
@@ -195,7 +184,6 @@
         ////////////////
         // Getters
         ////////////////
-
 		function getAudioContext() {
             return audioContext;
         }
