@@ -26,8 +26,8 @@
         <div class="track" ng-repeat="track in workspace.tracks" id="track{{$index}}">
             <h3 class="trackName">{{track.name}}</h3>
             <div class="button-group">
-                <button class="button mutesolo">M</button>
-                <button class="button mutesolo">S</button>
+                <button class="button mutesolo" ng-click="workspace.toggleMute($index); track.muted = !track.muted" ng-class="{'muteActive': track.muted}">M</button>
+                <button class="button mutesolo" ng-click="workspace.toggleSolo($index); track.solo = !track.solo" ng-class="{'soloActive': track.solo}">S</button>
             </div>
             <div class="arm-group button-group">
                 <button class="button arm" ng-click="workspace.toggleTrackArmed($index)" ng-class="{ 'armed': workspace.armedTrack == $index }">Arm</button>

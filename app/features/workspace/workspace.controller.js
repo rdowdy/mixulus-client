@@ -17,6 +17,8 @@
         ////////////////
         vm.toggleTrackArmed = toggleTrackArmed;
         vm.addTrack = addTrack;
+        vm.toggleMute = toggleMute;
+        vm.toggleSolo = toggleSolo;
 
         ////////////////
         getCollab();
@@ -50,6 +52,14 @@
                 vm.tracks = TrackFactory.getTracks();
                 console.log(vm.tracks);
             });
+        }
+
+        function toggleMute(trackNum) {
+            TrackFactory.toggleMute(trackNum);
+        }
+
+        function toggleSolo(trackNum) {
+            TrackFactory.toggleSolo(trackNum);
         }
 
         function toggleTrackArmed(trackNum) {

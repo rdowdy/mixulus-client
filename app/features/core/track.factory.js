@@ -12,6 +12,7 @@
         ////////////////
         // variables 
         var tracks = [];
+        var soloedTracks = [];
 
         ////////////////
         // functions
@@ -73,18 +74,38 @@
         }
 
         function toggleMute(trackNum) {
-
+            if(tracks[trackNum].mute == true) {
+                tracks[trackNum].mute = false;
+            } else {
+                tracks[trackNum].mute = true;
+            }
         }
 
         function toggleSolo(trackNum) {
-            
+            var idx = soloedTracks.indexOf(tracks[trackNum]);
+            if(idx >= 0) {
+                soloedTracks.splice(idx, 1);
+            } else {
+                soloedTracks.push(tracks[trackNum]);
+            }
         }
 
         function playAt(gridBaseOffset, markerOffset, fps) {
             var context = ContextFactory.getAudioContext();
+            
+            // if there are tracks on solo
+            // then play only those
+            var iterateOver;
+            if(soloedTracks.length > 0) {
+                iterateOver = soloedTracks;
+            } else {
+                iterateOver = tracks;
+            }
 
-            for (var trackNum = 0; trackNum < tracks.length; trackNum++) {
-                var track = tracks[trackNum];
+            for (var trackNum = 0; trackNum < iterateOver.length; trackNum++) {
+                var track = iterateOver[trackNum];
+                if(track.mute == true) continue;
+
                 for (var i = 0; i < track.sounds.length; i++) {
                     var sound = track.sounds[i];
                     var audioStartLoc = sound.gridLocation;
