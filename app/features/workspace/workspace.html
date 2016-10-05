@@ -22,7 +22,7 @@
     <!-- beginning of tracks listing -->
     <div class="tracks">
         <div class="track" ng-repeat="track in workspace.tracks" id="track{{$index}}">
-            <h3 class="trackName">Track Name {{$index}}</h3>
+            <h3 class="trackName">{{track.name}}</h3>
             <div class="button-group">
                 <button class="button mutesolo">M</button>
                 <button class="button mutesolo">S</button>
@@ -72,8 +72,7 @@
     </div>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
-<!--     <script src="features/workspace/recorder/recorder.js"></script>
- -->    <script src="features/app.module.js"></script>
+    <script src="features/app.module.js"></script>
     <script src="features/core/recorder.factory.js"></script>
     <script src="features/core/collab.factory.js"></script>
     <script src="features/core/context.factory.js"></script>

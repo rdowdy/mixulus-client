@@ -27,6 +27,17 @@
 
         ////////////////
         function getTracks() {
+        	if(tracks.length == 0) {
+	        	tracks[0] = {
+	        		name: "Track 0",
+	        		sounds: []
+	        	};
+
+	        	tracks[1] = {
+	        		name: "Track 1",
+	        		sounds: []
+	        	}
+        	}
             return tracks;
         }
 

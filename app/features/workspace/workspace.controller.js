@@ -5,10 +5,10 @@
         .module('app')
         .controller('WorkspaceController', WorkspaceController);
 
-    WorkspaceController.$inject = ['$rootScope', 'localStorageService', 'CollabFactory'];
+    WorkspaceController.$inject = ['$rootScope', 'localStorageService', 'CollabFactory', 'TrackFactory'];
 
     /* @ngInject */
-    function WorkspaceController($rootScope, localStorageService, CollabFactory) {
+    function WorkspaceController($rootScope, localStorageService, CollabFactory, TrackFactory) {
         var vm = this;
         vm.recording = false;
         vm.tracks = [];
@@ -33,18 +33,22 @@
                 vm.collabMeta = response.data;
                 
                 var sound;
-                for(var i = 0; i < vm.collabMeta.soundIds.length; i++) {
-                    sound = vm.collabMeta.soundIds[i];
+                // for(var i = 0; i < vm.collabMeta.soundIds.length; i++) {
+                //     sound = vm.collabMeta.soundIds[i];
 
-                    if(vm.tracks[sound.track] == null) {
-                        vm.tracks[sound.track] = {};
-                        vm.tracks[sound.track].sounds = [];
-                    }
+                //     if(vm.tracks[sound.track] == null) {
+                //         vm.tracks[sound.track] = {};
+                //         vm.tracks[sound.track].sounds = [];
+                //     }
                     
 
-                    vm.tracks[sound.track].sounds.push(sound);
-                    //TODO: set up blob for tracks coming in from the DB
-                }
+                //     vm.tracks[sound.track].sounds.push(sound);
+                //     //TODO: set up blob for tracks coming in from the DB
+                // }
+
+                // need to figure this out
+                vm.tracks = TrackFactory.getTracks();
+                console.log(vm.tracks);
             });
         }
 

@@ -13,7 +13,7 @@
 
         //////
         // animation
-        var fps = 35;
+        var fps = 30;
         var fpsInterval = 1000 / fps;
         var stop = false;
         var startTime, now, then, elapsed;
@@ -135,7 +135,7 @@
             if(vm.recording) {
                 return;
             }
-            
+
             var unpause = false;
             if(vm.playing) {
                 pause();
