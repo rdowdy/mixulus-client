@@ -21,7 +21,7 @@
 
     <!-- beginning of tracks listing -->
     <div class="tracks">
-        <div class="addNewTrack">
+        <div class="addNewTrack" ng-click="workspace.addTrack()">
             <i class="fa fa-plus" aria-hidden="true"></i>
         </div>
         <div class="track" ng-repeat="track in workspace.tracks" id="track{{$index}}">

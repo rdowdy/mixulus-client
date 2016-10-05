@@ -17,6 +17,7 @@
         // functions
         var service = {
             getTracks: getTracks,
+            addTrack: addTrack,
             addAudioToTrack: addAudioToTrack,
             playAt: playAt,
             stopAudio: stopAudio,
@@ -39,6 +40,14 @@
                 }
             }
             return tracks;
+        }
+
+        function addTrack() {
+            var newTrack = {};
+            newTrack.name = "Track " + tracks.length;
+            newTrack.sounds = [];
+            tracks.push(newTrack);
+            return newTrack;
         }
 
         function addAudioToTrack(num, buffer, gridLocation, frameLength) {
