@@ -21,7 +21,9 @@
             addAudioToTrack: addAudioToTrack,
             playAt: playAt,
             stopAudio: stopAudio,
-            getEndMarker: getEndMarker
+            getEndMarker: getEndMarker,
+            toggleMute: toggleMute,
+            toggleSolo: toggleSolo
         };
         return service;
 
@@ -68,6 +70,14 @@
                 buffer: buffer
             })
 
+        }
+
+        function toggleMute(trackNum) {
+
+        }
+
+        function toggleSolo(trackNum) {
+            
         }
 
         function playAt(gridBaseOffset, markerOffset, fps) {
