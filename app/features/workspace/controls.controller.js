@@ -65,7 +65,6 @@
 
                 clearInterval(vm.intervalId);
 
-                //vm.buffer = buffer;
                 TrackFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen);
 
                 console.log(TrackFactory.getTracks());

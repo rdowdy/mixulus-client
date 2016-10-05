@@ -29,27 +29,11 @@
         });
 
         function getCollab() {
-            var collabId = localStorageService.get('collabId');
+            vm.collabId = localStorageService.get('collabId');
             
-            CollabFactory.getCollabById(collabId).then(function(response) {
-                vm.collabMeta = response.data;
-                
-                var sound;
-                // for(var i = 0; i < vm.collabMeta.soundIds.length; i++) {
-                //     sound = vm.collabMeta.soundIds[i];
-
-                //     if(vm.tracks[sound.track] == null) {
-                //         vm.tracks[sound.track] = {};
-                //         vm.tracks[sound.track].sounds = [];
-                //     }
-                    
-
-                //     vm.tracks[sound.track].sounds.push(sound);
-                //     //TODO: set up blob for tracks coming in from the DB
-                // }
-
-                // need to figure this out
-                vm.tracks = TrackFactory.getTracks();
+            CollabFactory.getCollabById(vm.collabId).then(function(response) {
+                vm.collab = response.data;
+                vm.tracks = TrackFactory.initTracks(vm.collab);
                 console.log(vm.tracks);
             });
         }

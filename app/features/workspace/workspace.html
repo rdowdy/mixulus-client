@@ -16,7 +16,7 @@
 
 <body ng-controller="WorkspaceController as workspace">
     <div class="topNav">
-        <h1 class="collabHeader">Collab Name</h1>
+        <h1 class="collabHeader">{{workspace.collab.name}}</h1>
     </div>
     <!-- beginning of tracks listing -->
     <div class="tracks">
@@ -42,9 +42,6 @@
     <div id="grid" class="grid" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
         <div class="gridRuler"></div>
         <div id="locationMarker" ng-style="{left: grid.markerLocation + 'px'}"></div>
-        <!-- <div id="audioClip">
-            <canvas id="clipCanvas"></canvas>
-        </div> -->
     </div>
     <div class="bottomNav">
         <div class="locationDisplay">
@@ -73,7 +70,6 @@
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
     <script src="features/app.module.js"></script>
-    <script src="features/core/recorder.factory.js"></script>
     <script src="features/core/collab.factory.js"></script>
     <script src="features/core/context.factory.js"></script>
     <script src="features/core/grid.factory.js"></script>
