@@ -21,6 +21,9 @@
 
     <!-- beginning of tracks listing -->
     <div class="tracks">
+        <div class="addNewTrack">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </div>
         <div class="track" ng-repeat="track in workspace.tracks" id="track{{$index}}">
             <h3 class="trackName">{{track.name}}</h3>
             <div class="button-group">

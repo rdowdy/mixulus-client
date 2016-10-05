@@ -22,10 +22,24 @@
 	position: absolute;
 	width: 215px;
 	height: 100%;
-	padding-top: 75px;
+	padding-top: 60px;
 	border-right: 1px solid black;
 	z-index: 600;
 	background: white;
+}
+
+.addNewTrack {
+	height: 15px;
+	width: 100%;
+	text-align: center;
+	font-size: 1em;
+	line-height: 15px;
+}
+
+.addNewTrack:hover {
+	background: black;
+	color: white;
+	cursor: pointer;
 }
 /************************/
 /*  Track Info Styles   */
