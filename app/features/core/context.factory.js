@@ -23,6 +23,8 @@
       	var recLen = 0;
       	var recBuffer = new Float32Array();
 
+        var currentlyPlaying = [];
+
         init();
 
         ///////////////////////////////
@@ -31,7 +33,8 @@
             getSource: getBufferSource,
             record: record,
             stop: stop,
-            playAt: playAt
+            playAt: playAt,
+            stopAudio: stopAudio
         };
 
         return service;
@@ -175,8 +178,19 @@
 
             source.connect(audioContext.destination);
             source.start(offset);
-        }
 
+            currentlyPlaying.push(source);
+            source.onended = function() {
+                currentlyPlaying.splice(currentlyPlaying.indexOf(source), 1);
+            }
+        }
+        ////////////////
+        // Stop Audio
+        function stopAudio() {
+            for(var i = 0; i < currentlyPlaying.length; i++) {
+                currentlyPlaying[i].stop();
+            }
+        }
 
         ////////////////
         // Getters

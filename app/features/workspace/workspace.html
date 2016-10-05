@@ -22,7 +22,7 @@
     <!-- beginning of tracks listing -->
     <div class="tracks">
         <div class="track" ng-repeat="track in workspace.tracks" id="track{{$index}}">
-            <h3 class="trackName">Track Name {{$index}}</h3>
+            <h3 class="trackName">{{track.name}}</h3>
             <div class="button-group">
                 <button class="button mutesolo">M</button>
                 <button class="button mutesolo">S</button>
@@ -41,9 +41,9 @@
     <div id="grid" class="grid" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
 		<div class="gridRuler"></div>
         <div id="locationMarker" ng-style="{left: grid.markerLocation + 'px'}"></div>
-        <div id="audioClip">
+        <!-- <div id="audioClip">
             <canvas id="clipCanvas"></canvas>
-        </div>
+        </div> -->
         
     </div>
     <div class="bottomNav">
@@ -65,19 +65,19 @@
     		<button class="button" ng-click="controls.skipHome()">
     			<i class="fa fa-fast-backward" aria-hidden="true"></i>
     		</button>
-    		<button class="button">
+    		<button class="button" ng-click="controls.skipEnd()">
     			<i class="fa fa-fast-forward" aria-hidden="true"></i>
     		</button>
     	</div>
     </div>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
-<!--     <script src="features/workspace/recorder/recorder.js"></script>
- -->    <script src="features/app.module.js"></script>
+    <script src="features/app.module.js"></script>
     <script src="features/core/recorder.factory.js"></script>
     <script src="features/core/collab.factory.js"></script>
     <script src="features/core/context.factory.js"></script>
     <script src="features/core/grid.factory.js"></script>
+    <script src="features/core/track.factory.js"></script>
     <script src="features/workspace/workspace.controller.js"></script>
     <script src="features/workspace/controls.controller.js"></script>
     <script src="features/workspace/grid.controller.js"></script>
