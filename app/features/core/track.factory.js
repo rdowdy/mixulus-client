@@ -12,6 +12,7 @@
         ////////////////
         // variables 
         var tracks = [];
+        var soloedTracks = [];
 
         ////////////////
         // functions
@@ -73,7 +74,11 @@
         }
 
         function toggleMute(trackNum) {
-
+            if(tracks[trackNum].mute == true) {
+                tracks[trackNum].mute = false;
+            } else {
+                tracks[trackNum].mute = true;
+            }
         }
 
         function toggleSolo(trackNum) {
@@ -85,6 +90,8 @@
 
             for (var trackNum = 0; trackNum < tracks.length; trackNum++) {
                 var track = tracks[trackNum];
+                if(track.mute == true) continue;
+
                 for (var i = 0; i < track.sounds.length; i++) {
                     var sound = track.sounds[i];
                     var audioStartLoc = sound.gridLocation;
