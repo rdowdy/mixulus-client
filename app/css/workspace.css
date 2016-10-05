@@ -71,6 +71,11 @@
 	font-size: 0.8em;
 }
 
+.muteActive {
+	background-color: #cc0000;
+	color: #eee;
+}
+
 .arm-group {
 	margin-left: 15px;
 }
