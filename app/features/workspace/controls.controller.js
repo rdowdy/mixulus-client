@@ -50,7 +50,7 @@
 
         ////////////////
 
-        function toggleRecording(recordBool, track) {
+        function toggleRecording(recordBool, trackNum) {
             if (!recordBool) {
                 vm.recording = false;
                 // stop recording
@@ -60,13 +60,13 @@
                 // the visual length of the clip is based on the
                 // distance traversed by the marker
                 var canvasLen = vm.markerLocation - startLoc;
-                var canvas = GridFactory.createCanvas(0, startLoc, canvasLen);
+                var canvas = GridFactory.createCanvas(trackNum, startLoc, canvasLen);
                 GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
 
                 clearInterval(vm.intervalId);
 
                 //vm.buffer = buffer;
-                TrackFactory.addAudioToTrack(0, buffer, startLoc, canvasLen);
+                TrackFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen);
 
                 console.log(TrackFactory.getTracks());
             } else {
