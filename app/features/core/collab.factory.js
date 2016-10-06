@@ -11,7 +11,8 @@
     function CollabFactory(apiUrl, $http) {
         var service = {
             getAllCollabs: getAllCollabs,
-            getCollabById: getCollabById
+            getCollabById: getCollabById,
+            addTrackToCollab: addTrackToCollab
         };
         return service;
 
@@ -23,6 +24,10 @@
 
         function getCollabById(id) {
             return $http.get(apiUrl + "/collabs/" + id);
+        }
+
+        function addTrackToCollab(collabId, trackId) {
+            return $http.post(apiUrl + "/collabs/" + collabId + "/tracks/" + trackId);
         }
     }
 })();
