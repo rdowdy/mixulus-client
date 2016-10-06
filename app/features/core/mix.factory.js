@@ -160,6 +160,8 @@
         var tracks = [];
         var soloedTracks = [];
 
+        var dbGainUnity = 100;
+
         ////////////////
         // functions
         var service = {
@@ -186,17 +188,42 @@
 
         // add an empty track to the collab
         function addTrack() {
-            var track = {
-                name: "Track " + tracks.length,
-                gain: 1.0
-            }
+            var track = createEmptyTrack("Audio Track");
 
             TrackFactory.addTrack(track).then(function(res) {
-                var track = res.data;
+                var trackFromDB = res.data;
                 CollabFactory.addTrackToCollab(collabId, res.data._id).then(function(res) {
-                    tracks.push(track);
+                    tracks.push(trackFromDB);
                 });
             });
+        }
+
+        // generates an empty track with the fundamental
+        // gain nodes (one for volume and one for mute/solo)
+        function createEmptyTrack(name) {
+            // name
+            // initial gain of 1.0
+            // inital effects chain of
+            //   gainNode -> muteSoloGainNode -> destination
+            var context = ContextFactory.getAudioContext();
+            var volumeGainNode = context.createGain();
+            var muteSoloGainNode = context.createGain();
+            var initialGain = 100
+            volumeGainNode.gain.value = initialGain;
+            muteSoloGainNode.gain.value = initialGain / 100;
+
+            volumeGainNode.connect(muteSoloGainNode);
+            muteSoloGainNode.connect(context.destination);
+
+            var newTrack = {
+                name: name,
+                gain: initialGain,
+                volumeGainNode: volumeGainNode,
+                muteSoloGainNode: muteSoloGainNode,
+                effectsChainStart: volumeGainNode
+            }
+
+            return newTrack;
         }
     }
 })();
