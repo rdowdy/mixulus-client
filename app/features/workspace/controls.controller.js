@@ -5,10 +5,10 @@
         .module('app')
         .controller('ControlsController', ControlsController);
 
-    ControlsController.$inject = ['$window', '$rootScope', 'ContextFactory', 'GridFactory', 'TrackFactory'];
+    ControlsController.$inject = ['$window', '$rootScope', 'ContextFactory', 'GridFactory', 'MixFactory'];
 
     /* @ngInject */
-    function ControlsController($window, $rootScope, ContextFactory, GridFactory, TrackFactory) {
+    function ControlsController($window, $rootScope, ContextFactory, GridFactory, MixFactory) {
         var vm = this;
 
         //////
@@ -65,9 +65,8 @@
 
                 clearInterval(vm.intervalId);
 
-                TrackFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen);
+                MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen);
 
-                console.log(TrackFactory.getTracks());
             } else {
                 // start recording
                 console.log("recording");
@@ -98,11 +97,11 @@
         }
 
         function play() {
-            TrackFactory.playAt(markerHomeLoc, vm.markerLocation, fps);
+            MixFactory.playAt(markerHomeLoc, vm.markerLocation, fps);
         }
 
         function pause() {
-            TrackFactory.stopAudio();
+            MixFactory.stopAudio();
         }
 
         function skipHome() {
@@ -121,7 +120,7 @@
         }
 
         function skipEnd() {
-            vm.markerLocation = TrackFactory.getEndMarker();
+            vm.markerLocation = MixFactory.getEndMarker();
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
 
             if(vm.playing) {

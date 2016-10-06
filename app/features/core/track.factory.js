@@ -5,10 +5,10 @@
         .module('app')
         .factory('TrackFactory', TrackFactory);
 
-    TrackFactory.$inject = [];
+    TrackFactory.$inject = ['$http'];
 
     /* @ngInject */
-    function TrackFactory() {
+    function TrackFactory($http) {
         var service = {
             addTrack: addTrack
         };

@@ -3,12 +3,12 @@
 
     angular
         .module('app')
-        .factory('TrackFactory', TrackFactory);
+        .factory('MixFactory', MixFactory);
 
-    TrackFactory.$inject = ['localStorageService', 'ContextFactory', 'TrackFactory'];
+    MixFactory.$inject = ['$q', 'localStorageService', 'CollabFactory', 'ContextFactory', 'TrackFactory'];
 
     /* @ngInject */
-    function TrackFactory(localStorageService, ContextFactory, TrackFactory) {
+    function MixFactory($q, localStorageService, CollabFactory, ContextFactory, TrackFactory) {
         // ////////////////
         // // variables 
         // var tracks = [];
@@ -156,30 +156,46 @@
 
         ////////////////
         // variables
+        var collabId;
         var tracks = [];
         var soloedTracks = [];
 
         ////////////////
         // functions
         var service = {
-            initTracks: initTracks
+            initTracks: initTracks,
+            addTrack: addTrack
         };
 
         return service;
         ////////////////
 
+        // set an internal reference to the tracks
+        // if there are no tracks, create one
         function initTracks(collab) {
+            collabId = collab._id;
+
             if(collab.trackIds.length == 0) {
-                addTrack({
-                    name: "Track 0",
-                    gain: 1.0
-                });
-            }   
+                addTrack();
+            } else {
+                tracks = collab.trackIds;
+            }
+
+            return tracks;   
         }
 
-        function addTrack(track) {
+        // add an empty track to the collab
+        function addTrack() {
+            var track = {
+                name: "Track " + tracks.length,
+                gain: 1.0
+            }
+
             TrackFactory.addTrack(track).then(function(res) {
-                vm.tracks.push(res.data);
+                var track = res.data;
+                CollabFactory.addTrackToCollab(collabId, res.data._id).then(function(res) {
+                    tracks.push(track);
+                });
             });
         }
     }
