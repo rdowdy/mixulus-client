@@ -6,13 +6,21 @@
         .factory('MixFactory', MixFactory);
 
     MixFactory.$inject = [
-        '$q', 'localStorageService', 
-        'CollabFactory', 'ContextFactory', 
+        '$q', 'localStorageService',
+        'CollabFactory', 'ContextFactory',
         'TrackFactory', 'SoundFactory'
     ];
 
     /* @ngInject */
     function MixFactory($q, localStorageService, CollabFactory, ContextFactory, TrackFactory, SoundFactory) {
+        ////////////////
+        // Array diff
+        Array.prototype.diff = function(a) {
+            return this.filter(function(i) {
+                return a.indexOf(i) < 0;
+            });
+        };
+
         ////////////////
         // variables
         var collabId;
@@ -26,15 +34,15 @@
         ////////////////
         // functions
         var service = {
-            initTracks: initTracks,
-            addTrack: addTrack,
             addAudioToTrack: addAudioToTrack,
+            addTrack: addTrack,
+            getEndMarker: getEndMarker,
+            initTracks: initTracks,
             playAt: playAt,
-            toggleMute: toggleMute,
-            toggleSolo: toggleSolo,
             stopAudio: stopAudio,
-            getEndMarker: getEndMarker
-        };
+            toggleMute: toggleMute,
+            toggleSolo: toggleSolo
+        }
 
         return service;
         ////////////////
@@ -66,6 +74,7 @@
             TrackFactory.addTrack(track).then(function(res) {
                 var trackFromDB = res.data;
                 CollabFactory.addTrackToCollab(collabId, res.data._id).then(function(res) {
+                    TrackFactory.addInitialEffectsChainToTrack(trackFromDB);
                     tracks.push(trackFromDB);
                 });
             });
@@ -74,7 +83,7 @@
         function toggleMute(trackNum) {
             //console.log("toggle mute");
             var track = tracks[trackNum];
-            if(track.mute == true) {
+            if (track.mute == true) {
                 track.mute = false;
                 track.muteSoloGainNode.gain.value = 1.0;
             } else {
@@ -84,11 +93,34 @@
         }
 
         function toggleSolo(trackNum) {
-            if(tracks[trackNum].solo == false) {
-                tracks[trackNum].solo = true;
+            var idx = soloedTracks.indexOf(tracks[trackNum]);
+            if (idx >= 0) {
+                soloedTracks.splice(idx, 1);
+
+                if (soloedTracks.length > 0) {
+                    tracks[trackNum].muteSoloGainNode.gain.value = 0;
+                } else {
+                    console.log('yes');
+                    for (var i = 0; i < tracks.length; i++) {
+                        if (tracks[i].mute == false) {
+                            console.log('unmuting');
+                            tracks[i].muteSoloGainNode.gain.value = 1.0;
+                        }
+                    }
+                }
             } else {
-                tracks[trackNum].solo = false;
+                soloedTracks.push(tracks[trackNum]);
+
+                // do we check for a mute here?
+                tracks[trackNum].muteSoloGainNode.gain.value = 1.0;
+
+                // mute nonsoled tracks
+                var nonSoloed = tracks.diff(soloedTracks);
+                for (var i = 0; i < nonSoloed.length; i++) {
+                    nonSoloed[i].muteSoloGainNode.gain.value = 0;
+                }
             }
+
         }
 
         function addAudioToTrack(num, buffer, gridLocation, frameLength) {
@@ -112,7 +144,7 @@
 
             // check to see if this is the end of the song
             // for skipEnd functionality
-            if(gridLocation + frameLength > latestLoc) {
+            if (gridLocation + frameLength > latestLoc) {
                 latestLoc = gridLocation + frameLength;
             }
         }

@@ -37,7 +37,8 @@
 
             var newTrack = {
                 name: name,
-                gain: initialGain
+                gain: initialGain,
+                mute: false
             }
 
             return newTrack;
