@@ -121,6 +121,12 @@
 
         function skipEnd() {
             vm.markerLocation = MixFactory.getEndMarker();
+            
+            // edge case where MixFactory "end" is at 0
+            if(vm.markerLocation == 0) {
+                vm.markerLocation = markerHomeLoc;
+            }
+
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
 
             if(vm.playing) {

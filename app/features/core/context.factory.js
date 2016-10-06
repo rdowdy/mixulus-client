@@ -158,14 +158,19 @@
 
         ////////////////
         // Play
-        function playAt(buffer, offset) {
+        function playAt(buffer, effects, offset) {
             var source = audioContext.createBufferSource();
             source.buffer = audioContext.createBuffer(1, buffer.length, audioContext.sampleRate);
 
             var audioBufferArray = source.buffer.getChannelData(0);
             audioBufferArray.set(buffer);
 
-            source.connect(audioContext.destination);
+            if(effects == null) {
+                source.connect(audioContext.destination);
+            } else {
+                source.connect(effects);
+            }
+            
             source.start(offset);
 
             currentlyPlaying.push(source);
