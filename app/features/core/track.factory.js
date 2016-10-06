@@ -37,8 +37,7 @@
 
             var newTrack = {
                 name: name,
-                gain: initialGain,
-                mute: false
+                gain: initialGain
             }
 
             return newTrack;
@@ -60,6 +59,8 @@
             track.volumeGainNode = volumeGainNode;
             track.muteSoloGainNode = muteSoloGainNode;
             track.effectsChainStart = volumeGainNode;
+
+            track.mute = false;
         }
     }
 })();

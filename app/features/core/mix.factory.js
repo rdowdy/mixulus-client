@@ -81,7 +81,6 @@
         }
 
         function toggleMute(trackNum) {
-            //console.log("toggle mute");
             var track = tracks[trackNum];
             if (track.mute == true) {
                 track.mute = false;
@@ -111,8 +110,10 @@
             } else {
                 soloedTracks.push(tracks[trackNum]);
 
-                // do we check for a mute here?
-                tracks[trackNum].muteSoloGainNode.gain.value = 1.0;
+                // don't solo if track is already muted
+                if(tracks[trackNum].mute == false) {
+                    tracks[trackNum].muteSoloGainNode.gain.value = 1.0;
+                }
 
                 // mute nonsoled tracks
                 var nonSoloed = tracks.diff(soloedTracks);
@@ -156,15 +157,9 @@
             // if there are tracks on solo
             // then play only those
             var iterateOver = tracks;
-            // if(soloedTracks.length > 0) {
-            //     iterateOver = soloedTracks;
-            // } else {
-            //     iterateOver = tracks;
-            // }
 
             for (var trackNum = 0; trackNum < iterateOver.length; trackNum++) {
                 var track = iterateOver[trackNum];
-                //if(track.mute == true) continue;
 
                 for (var i = 0; i < track.soundIds.length; i++) {
                     var sound = track.soundIds[i];
