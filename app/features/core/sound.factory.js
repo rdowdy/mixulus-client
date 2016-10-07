@@ -5,10 +5,10 @@
         .module('app')
         .factory('SoundFactory', SoundFactory);
 
-    SoundFactory.$inject = [];
+    SoundFactory.$inject = ['$http'];
 
     /* @ngInject */
-    function SoundFactory() {
+    function SoundFactory($http) {
         var service = {
             addSound: addSound
         };
@@ -16,8 +16,8 @@
 
         ////////////////
 
-        function addSound() {
-        	// do stuff
+        function addSound(sound) {
+        	return $http.post("/sounds", sound);
         }
     }
 })();

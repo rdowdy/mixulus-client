@@ -5,10 +5,13 @@
         .module('app')
         .controller('ControlsController', ControlsController);
 
-    ControlsController.$inject = ['$window', '$rootScope', 'ContextFactory', 'GridFactory', 'MixFactory'];
+    ControlsController.$inject = [
+        '$window', '$rootScope', 'ContextFactory',
+        'GridFactory', 'MixFactory', 'SoundFactory', 'TrackFactory'
+    ];
 
     /* @ngInject */
-    function ControlsController($window, $rootScope, ContextFactory, GridFactory, MixFactory) {
+    function ControlsController($window, $rootScope, ContextFactory, GridFactory, MixFactory, SoundFactory, TrackFactory) {
         var vm = this;
 
         //////
@@ -54,31 +57,41 @@
             if (!recordBool) {
                 vm.recording = false;
                 // stop recording
-                var buffer = ContextFactory.stop();
-                var startLoc = vm.recordMeta.startLoc;
+                ContextFactory.stop(doneRecording, trackNum);
 
-                // the visual length of the clip is based on the
-                // distance traversed by the marker
-                var canvasLen = vm.markerLocation - startLoc;
-                var canvas = GridFactory.createCanvas(trackNum, startLoc, canvasLen);
-                GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
-
-                clearInterval(vm.intervalId);
-
-                MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen);
 
             } else {
-                // start recording
-                console.log("recording");
-                vm.recording = true;
+                SoundFactory.addSound({
+                    track: trackNum,
+                    gridLocation: vm.markerLocation,
+                    trackId: MixFactory.getTracks()[trackNum]._id
+                }).then(function(res) {
+                    // start recording
+                    vm.recording = true;
+                    vm.recordMeta.soundId = res.data._id;
 
-                ContextFactory.record();
-                vm.recordMeta.startLoc = vm.markerLocation;
+                    ContextFactory.record(vm.recordMeta.soundId);
+                    vm.recordMeta.startLoc = vm.markerLocation;
 
-                if(!vm.playing) {
-                    vm.intervalId = setInterval(moveMarker, 1000 / fps);
-                }
+                    if (!vm.playing) {
+                        vm.intervalId = setInterval(moveMarker, 1000 / fps);
+                    }
+                })
             }
+        }
+
+        function doneRecording(buffer, trackNum) {
+            var startLoc = vm.recordMeta.startLoc;
+
+            // the visual length of the clip is based on the
+            // distance traversed by the marker
+            var canvasLen = vm.markerLocation - startLoc;
+            var canvas = GridFactory.createCanvas(trackNum, startLoc, canvasLen);
+            GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
+
+            clearInterval(vm.intervalId);
+
+            MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen);
         }
 
         function togglePlay() {
@@ -106,49 +119,49 @@
 
         function skipHome() {
             var unpause = false;
-            if(vm.playing) {
+            if (vm.playing) {
                 pause();
                 unpause = true;
             }
 
             vm.markerLocation = markerHomeLoc;
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
-        
-            if(unpause) {
+
+            if (unpause) {
                 play();
             }
         }
 
         function skipEnd() {
             vm.markerLocation = MixFactory.getEndMarker();
-            
+
             // edge case where MixFactory "end" is at 0
-            if(vm.markerLocation == 0) {
+            if (vm.markerLocation == 0) {
                 vm.markerLocation = markerHomeLoc;
             }
 
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
 
-            if(vm.playing) {
+            if (vm.playing) {
                 pause();
                 stop = true;
             }
         }
 
         function gridClickEvent($event) {
-            if(vm.recording) {
+            if (vm.recording) {
                 return;
             }
 
             var unpause = false;
-            if(vm.playing) {
+            if (vm.playing) {
                 pause();
                 unpause = true;
             }
             var x = $event.clientX - markerCenterOffset;
             vm.markerLocation = x;
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
-            if(unpause) {
+            if (unpause) {
                 play();
             }
         }

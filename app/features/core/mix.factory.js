@@ -37,6 +37,7 @@
             addAudioToTrack: addAudioToTrack,
             addTrack: addTrack,
             getEndMarker: getEndMarker,
+            getTracks: getTracks,
             initTracks: initTracks,
             playAt: playAt,
             stopAudio: stopAudio,
@@ -64,6 +65,10 @@
                 TrackFactory.addInitialEffectsChainToTrack(tracks[i]);
             }
 
+            return tracks;
+        }
+
+        function getTracks() {
             return tracks;
         }
 
@@ -131,17 +136,20 @@
 
             var track = tracks[num];
 
-            // db add sound to track
-            // then add returned sound to tracks[num].soundIds
-            SoundFactory.addSound();
-
-            track.soundIds.push({
+            var sound = {
+                track: num,
                 trackId: track._id,
                 gridLocation: gridLocation,
                 frameLength: frameLength,
                 collabId: collabId,
                 buffer: buffer
-            })
+            }
+
+            // db add sound to track
+            // then add returned sound to tracks[num].soundIds
+            //SoundFactory.addSound(sound);
+
+            track.soundIds.push(sound)
 
             // check to see if this is the end of the song
             // for skipEnd functionality
