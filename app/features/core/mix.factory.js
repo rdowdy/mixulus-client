@@ -8,11 +8,12 @@
     MixFactory.$inject = [
         '$q', 'localStorageService',
         'CollabFactory', 'ContextFactory',
-        'TrackFactory', 'SoundFactory'
+        'TrackFactory', 'SoundFactory',
+        'GridFactory'
     ];
 
     /* @ngInject */
-    function MixFactory($q, localStorageService, CollabFactory, ContextFactory, TrackFactory, SoundFactory) {
+    function MixFactory($q, localStorageService, CollabFactory, ContextFactory, TrackFactory, SoundFactory, GridFactory) {
         ////////////////
         // Array diff
         Array.prototype.diff = function(a) {
@@ -62,8 +63,31 @@
             // set up volume gain node
             // and mutesolo gain node
             for (var i = 0; i < tracks.length; i++) {
-                TrackFactory.addInitialEffectsChainToTrack(tracks[i]);
+                var track = tracks[i];
+                TrackFactory.addInitialEffectsChainToTrack(track);
+
+                if (track.soundIds.length > 0) {
+                    // get the sounds!
+                    for (var j = track.soundIds.length - 1; j >= 0; j--) {
+                        var soundId = track.soundIds[j];
+
+                        track.soundIds.splice(j, 1);
+                        SoundFactory.getSoundById(soundId).then(function(res) {
+                            console.log("got");
+                            var sound = res.data.sound;
+                            sound.buffer = res.data.buffer;
+
+                            tracks[sound.track].soundIds.push(sound);
+
+                            var canvas = GridFactory.createCanvas(sound.track, sound.gridLocation, sound.frameLength);
+                            GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), sound.buffer);
+                        });
+                    }
+                }
             }
+
+            // load sounds
+            console.log(tracks);
 
             return tracks;
         }
@@ -116,7 +140,7 @@
                 soloedTracks.push(tracks[trackNum]);
 
                 // don't solo if track is already muted
-                if(tracks[trackNum].mute == false) {
+                if (tracks[trackNum].mute == false) {
                     tracks[trackNum].muteSoloGainNode.gain.value = 1.0;
                 }
 
@@ -129,33 +153,26 @@
 
         }
 
-        function addAudioToTrack(num, buffer, gridLocation, frameLength) {
+        function addAudioToTrack(num, buffer, gridLocation, frameLength, fps, soundModel) {
             if (tracks[num].soundIds == null) {
                 tracks[num].soundIds = [];
             }
 
             var track = tracks[num];
 
-            var sound = {
-                track: num,
-                trackId: track._id,
-                gridLocation: gridLocation,
-                frameLength: frameLength,
-                collabId: collabId,
-                buffer: buffer
-            }
+            soundModel.frameLength = frameLength;
 
-            // db add sound to track
-            // then add returned sound to tracks[num].soundIds
-            //SoundFactory.addSound(sound);
+            // update DB entry
+            SoundFactory.updateSound(soundModel).then(function(res) {
+                res.data.buffer = buffer;
+                track.soundIds.push(res.data);
 
-            track.soundIds.push(sound)
-
-            // check to see if this is the end of the song
-            // for skipEnd functionality
-            if (gridLocation + frameLength > latestLoc) {
-                latestLoc = gridLocation + frameLength;
-            }
+                // check to see if this is the end of the song
+                // for skipEnd functionality
+                if (gridLocation + frameLength > latestLoc) {
+                    latestLoc = gridLocation + frameLength;
+                }
+            });
         }
 
         // play all audio tracks from the marker onward

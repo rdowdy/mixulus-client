@@ -10,7 +10,9 @@
     /* @ngInject */
     function SoundFactory($http) {
         var service = {
-            addSound: addSound
+            addSound: addSound,
+            getSoundById: getSoundById,
+            updateSound: updateSound
         };
         return service;
 
@@ -18,6 +20,14 @@
 
         function addSound(sound) {
         	return $http.post("/sounds", sound);
+        }
+
+        function getSoundById(soundId) {
+            return $http.get("/sounds/" + soundId);
+        }
+
+        function updateSound(sound) {
+            return $http.put("/sounds/" + sound._id, sound);
         }
     }
 })();
