@@ -64,11 +64,13 @@
                 SoundFactory.addSound({
                     track: trackNum,
                     gridLocation: vm.markerLocation,
-                    trackId: MixFactory.getTracks()[trackNum]._id
+                    trackId: MixFactory.getTracks()[trackNum]._id,
+                    fps: fps
                 }).then(function(res) {
                     // start recording
                     vm.recording = true;
                     vm.recordMeta.soundId = res.data._id;
+                    vm.recordMeta.soundModel = res.data;
 
                     ContextFactory.record(vm.recordMeta.soundId);
                     vm.recordMeta.startLoc = vm.markerLocation;
@@ -91,7 +93,7 @@
 
             clearInterval(vm.intervalId);
 
-            MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen);
+            MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen, fps, vm.recordMeta.soundModel);
         }
 
         function togglePlay() {
