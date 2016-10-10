@@ -12,24 +12,24 @@
     <!-- endinject -->
 </head>
 
-<body>
+<body ng-controller="AuthController as auth">
     <header>
         <h1>Music App</h1>
     </header>
-    <form action="/login" method="post" class="form">
+    <form ng-submit="auth.login()" class="form">
         <div class="input-group">
             <label for="username">email</label>
-            <input type="text" id="username" name="username">
+            <input type="text" ng-model="auth.loginUsername" id="username">
         </div>
         <div class="input-group">
             <label>password</label>
-            <input type="password" id="password" name="password">
+            <input type="password" ng-model="auth.loginPassword" id="password">
         </div>
         <button type="submit" class="button" >Log In</button>
     </form>
 
     <div class="registrationModal">
-        <form action="/signup" method="post" class="form">
+        <form class="form">
             <div class="input-group">
                 <label for="username">username</label>
                 <input type="text" id="username" name="username">
@@ -51,6 +51,8 @@
     <!-- endbower -->
     <!-- inject:js -->
     <script src="features/app.module.js"></script>
+    <script src="features/auth/auth.interceptor.js"></script>
+    <script src="features/auth/auth.controller.js"></script>
     <!-- endinject -->
 </body>
 
