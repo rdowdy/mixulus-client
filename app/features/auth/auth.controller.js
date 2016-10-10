@@ -25,6 +25,7 @@
         		if(res.data.success == true) {
         			console.log(res.data.token);
         			localStorageService.set('token', res.data.token);
+        			$window.location.href = "/home";
         		} else {
         			// some sort of error
         		}
