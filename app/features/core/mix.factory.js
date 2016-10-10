@@ -67,13 +67,12 @@
                 TrackFactory.addInitialEffectsChainToTrack(track);
 
                 if (track.soundIds.length > 0) {
-                    // get the sounds!
+                    // get the sound buffers from the DB!
                     for (var j = track.soundIds.length - 1; j >= 0; j--) {
                         var soundId = track.soundIds[j];
 
                         track.soundIds.splice(j, 1);
                         SoundFactory.getSoundById(soundId).then(function(res) {
-                            console.log("got");
                             var sound = res.data.sound;
                             sound.buffer = res.data.buffer;
 
@@ -128,7 +127,6 @@
                 if (soloedTracks.length > 0) {
                     tracks[trackNum].muteSoloGainNode.gain.value = 0;
                 } else {
-                    console.log('yes');
                     for (var i = 0; i < tracks.length; i++) {
                         if (tracks[i].mute == false) {
                             console.log('unmuting');
@@ -164,6 +162,8 @@
 
             // update DB entry
             SoundFactory.updateSound(soundModel).then(function(res) {
+                // attach the buffer to the object after
+                // the DB call, then save to the track
                 res.data.buffer = buffer;
                 track.soundIds.push(res.data);
 
@@ -192,6 +192,8 @@
                     var audioEndLoc = audioStartLoc + sound.frameLength;
 
                     if (markerOffset >= audioEndLoc) {
+                        // we can ignore the clip if the marker 
+                        // is already past it
                         continue;
                     } else if (markerOffset > audioStartLoc && markerOffset < audioEndLoc) {
                         var frameOffset = markerOffset - audioStartLoc;

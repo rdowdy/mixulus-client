@@ -25,7 +25,7 @@
             <div class="collab" ng-repeat="collab in home.collabs" ng-click="home.goToWorkspace(collab._id)" >
                 <div class="metainfo">
                 	<!-- TODO!!!!! change collab model and route to include collab name -->
-                    <h3>collab.name goes here</h3>
+                    <h3>{{collab.name}}</h3>
                     <p>
                         <span ng-repeat="user in collab.userIds">
 						{{user.username}}{{$last ? '' : ', '}}
