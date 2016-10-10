@@ -17,19 +17,20 @@
 
         function login() {
         	var user = {
-        		"email": vm.loginUsername,
+        		"username": vm.loginUsername,
         		"password": vm.loginPassword
         	};
 
-        	$http.post("/authenticate", user).then(function(res) {
+        	$http.post("/login", user).then(function(res) {
         		if(res.data.success == true) {
-        			console.log(res.data.token);
-        			localStorageService.set('token', res.data.token);
+                    localStorageService.set('userId', res.data.user._id);
         			$window.location.href = "/home";
         		} else {
         			// some sort of error
         		}
         	});
+
+            //$http.post("/login", user);
         }
 
         function signup() {
