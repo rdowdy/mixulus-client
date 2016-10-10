@@ -11,6 +11,7 @@
     function AuthController($http, $window, localStorageService) {
         var vm = this;
         vm.login = login;
+        vm.signup = signup;
 
         ////////////////
 
