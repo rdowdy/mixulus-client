@@ -29,5 +29,9 @@
         function updateSound(sound) {
             return $http.put("/sounds/" + sound._id, sound);
         }
+
+        function deleteSound(sound) {
+            return $http.delete("/sounds/" + sound._id);
+        }
     }
 })();

@@ -17,7 +17,8 @@
         var service = {
             getTrackNumFromY: getTrackNumFromY,
             drawBuffer: drawAudioBuffer,
-            createCanvas: createCanvas
+            createCanvas: createCanvas,
+            removeSound: removeSound
         };
         return service;
 
@@ -49,6 +50,13 @@
             grid.appendChild(div);
 
             return canvas;
+        }
+
+        function removeSound(canvas) {
+            var div = canvas.parentNode;
+            var grid = div.parentNode;
+
+            grid.removeChild(div);
         }
 
         /* CANVAS DRAWING STUFF */

@@ -14,7 +14,7 @@
         vm.recording = false;
         vm.tracks = [];
         vm.armedTrack = 0;
-        vm.selectedSound = null;
+        vm.selectedSound = {};
         
         ////////////////
         vm.toggleTrackArmed = toggleTrackArmed;
@@ -79,19 +79,22 @@
             var trackNum = GridFactory.getTrackNumFromY($event.clientY);
 
             // set selectedSound reference to sound object
-            vm.selectedSound = MixFactory.getSoundFromX(trackNum, $event.clientX);
+            vm.selectedSound.sound = MixFactory.getSoundFromX(trackNum, $event.clientX);
+            vm.selectedSound.canvas = $event.target;
 
-            if(vm.selectedSound != null) {
+            if(vm.selectedSound.sound != null) {
                 // add 'selected' class to it
                 // remove 'selected' class from others
             }
         }
 
         function keydown($event){
-            console.log($event);
             // handle delete keypress
             if($event.keyCode == 8) {
-                MixFactory.deleteSound(vm.selectedSound);
+                if(vm.selectedSound.sound != null) {
+                    MixFactory.deleteSound(vm.selectedSound.sound);
+                    GridFactory.removeSound(vm.selectedSound.canvas);
+                }
             }
         }
         
