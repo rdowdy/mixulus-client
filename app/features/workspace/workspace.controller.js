@@ -60,11 +60,11 @@
         }
 
         function updateCollabName() {
-
+            CollabFactory.updateCollab(vm.collab);
         }
 
-        function updateTrackName(trackNum) {
-            
+        function updateTrackName(track) {
+            TrackFactory.updateTrack(track);
         }
         
     }
