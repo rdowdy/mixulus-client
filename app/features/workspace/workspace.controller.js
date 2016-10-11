@@ -86,9 +86,18 @@
             vm.selectedSound.sound = MixFactory.getSoundFromX(trackNum, $event.clientX);
             vm.selectedSound.canvas = $event.target;
 
-            if(vm.selectedSound.sound != null) {
-                // add 'selected' class to it
+            if(vm.selectedSound.sound != null) {                
                 // remove 'selected' class from others
+                var elems = document.getElementsByClassName("selected");
+                for(var i = 0; i < elems.length; i++) {
+                    var elem = elems[i];
+
+                    elem.className =
+                    elem.className.replace(/\bselected\b/,'');
+                }
+
+                // add 'selected' class to selected sound canvas
+                vm.selectedSound.canvas.classList += " selected";
             }
         }
 

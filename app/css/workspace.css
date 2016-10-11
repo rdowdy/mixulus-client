@@ -159,7 +159,7 @@
 }
 
 .clipCanvas:hover,
-.audioClip.selected {
+.clipCanvas.selected {
 	background: #555;
 }
 
