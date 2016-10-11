@@ -27,6 +27,7 @@
         vm.toggleSolo = toggleSolo;
         vm.updateCollabName = updateCollabName;
         vm.updateTrackName = updateTrackName;
+        vm.commit = commit;
 
         ////////////////
         getCollab();
@@ -113,6 +114,10 @@
                     GridFactory.removeSound(vm.selectedSound.canvas);
                 }
             }
+        }
+
+        function commit() {
+            
         }
 
     }
