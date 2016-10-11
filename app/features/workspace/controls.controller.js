@@ -14,6 +14,19 @@
     function ControlsController($window, $rootScope, ContextFactory, GridFactory, MixFactory, SoundFactory, TrackFactory) {
         var vm = this;
 
+        ////////////////
+        // Functions
+
+        vm.toggleRecord = toggleRecording;
+        vm.togglePlay = togglePlay;
+        vm.skipHome = skipHome;
+        vm.skipEnd = skipEnd;
+
+        ////////////////
+
+        ////////////////
+        // Variables
+
         //////
         // animation
         var fps = 30;
@@ -30,6 +43,11 @@
         vm.markerLocation = markerHomeLoc;
 
         $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
+        
+        $rootScope.$on("gridClick", function(event, args) {
+            gridClickEvent(args.$event);
+        })
+
         //////
 
         vm.buffer = null;
@@ -39,42 +57,40 @@
         // recording
         vm.recordMeta = {};
 
-        ////////////////
-        // Function defs
-
-        $rootScope.$on("gridClick", function(event, args) {
-            gridClickEvent(args.$event);
-        })
-
-        vm.toggleRecord = toggleRecording;
-        vm.togglePlay = togglePlay;
-        vm.skipHome = skipHome;
-        vm.skipEnd = skipEnd;
 
         ////////////////
+        // Function Definitions
+        ////////////////
 
+        // record if recordBool is true, stop recording otherwise
+        // this is the recording entry point
         function toggleRecording(recordBool, trackNum) {
             if (!recordBool) {
                 vm.recording = false;
                 // stop recording
                 ContextFactory.stop(doneRecording, trackNum);
-
-
             } else {
+                // before we start recording, create a new
+                // sound entry in the DB
                 SoundFactory.addSound({
                     track: trackNum,
                     gridLocation: vm.markerLocation,
                     trackId: MixFactory.getTracks()[trackNum]._id,
                     fps: fps
                 }).then(function(res) {
-                    // start recording
                     vm.recording = true;
+
+                    // some meta information about the current recording session
                     vm.recordMeta.soundId = res.data._id;
                     vm.recordMeta.soundModel = res.data;
-
-                    ContextFactory.record(vm.recordMeta.soundId);
                     vm.recordMeta.startLoc = vm.markerLocation;
 
+
+                    // start recording
+                    ContextFactory.record(vm.recordMeta.soundId);
+
+                    // only initiate moveMarker animation if the collab was paused
+                    // aka the marker wasnt moving
                     if (!vm.playing) {
                         vm.intervalId = setInterval(moveMarker, 1000 / fps);
                     }
@@ -82,12 +98,17 @@
             }
         }
 
+        // callback for when the buffers are retrieved after the recording is done
+        // this function will: 
+        // 1. create a new canvas element and place it on the grid
+        // 2. draw the audio bufer onto that canvas
+        // 3. add the sound to the track in the MixFactory 
         function doneRecording(buffer, trackNum) {
-            var startLoc = vm.recordMeta.startLoc;
-
             // the visual length of the clip is based on the
             // distance traversed by the marker
+            var startLoc = vm.recordMeta.startLoc;
             var canvasLen = vm.markerLocation - startLoc;
+
             var canvas = GridFactory.createCanvas(trackNum, startLoc, canvasLen);
             GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
 
@@ -96,6 +117,7 @@
             MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen, fps, vm.recordMeta.soundModel);
         }
 
+        // play the audio and trigger marker move animation
         function togglePlay() {
             if (!vm.playing) {
                 play();
@@ -135,6 +157,7 @@
         }
 
         function skipEnd() {
+            // MixFactory will provide the end loc based on all the tracks
             vm.markerLocation = MixFactory.getEndMarker();
 
             // edge case where MixFactory "end" is at 0
