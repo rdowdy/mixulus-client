@@ -5,10 +5,10 @@
         .module('app')
         .controller('WorkspaceController', WorkspaceController);
 
-    WorkspaceController.$inject = ['$rootScope', 'localStorageService', 'CollabFactory', 'MixFactory'];
+    WorkspaceController.$inject = ['$rootScope', 'localStorageService', 'CollabFactory', 'MixFactory', 'TrackFactory'];
 
     /* @ngInject */
-    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory) {
+    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory) {
         var vm = this;
         vm.recording = false;
         vm.tracks = [];
