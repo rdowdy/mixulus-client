@@ -12,7 +12,8 @@
         var service = {
             getAllCollabs: getAllCollabs,
             getCollabById: getCollabById,
-            addTrackToCollab: addTrackToCollab
+            addTrackToCollab: addTrackToCollab,
+            updateCollab: updateCollab
         };
         return service;
 
@@ -28,6 +29,19 @@
 
         function addTrackToCollab(collabId, trackId) {
             return $http.post(apiUrl + "/collabs/" + collabId + "/tracks/" + trackId);
+        }
+
+        function updateCollab(collab) {
+            // custom set up the object to send out
+            // because we don't want to include all the sound
+            // buffers in this request .. they aren't necessary
+            var newCollab = {
+                _id: collab._id,
+                name: collab.name,
+                startDate: collab.startDate,
+                completed: collab.completed
+            }
+            return $http.put(apiUrl + "/collabs/" + newCollab._id, newCollab)
         }
     }
 })();

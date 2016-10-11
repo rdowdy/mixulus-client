@@ -5,10 +5,10 @@
         .module('app')
         .controller('WorkspaceController', WorkspaceController);
 
-    WorkspaceController.$inject = ['$rootScope', 'localStorageService', 'CollabFactory', 'MixFactory'];
+    WorkspaceController.$inject = ['$rootScope', 'localStorageService', 'CollabFactory', 'MixFactory', 'TrackFactory'];
 
     /* @ngInject */
-    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory) {
+    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory) {
         var vm = this;
         vm.recording = false;
         vm.tracks = [];
@@ -19,6 +19,8 @@
         vm.addTrack = addTrack;
         vm.toggleMute = toggleMute;
         vm.toggleSolo = toggleSolo;
+        vm.updateCollabName = updateCollabName;
+        vm.updateTrackName = updateTrackName;
 
         ////////////////
         getCollab();
@@ -55,6 +57,14 @@
 
         function addTrack() {
             MixFactory.addTrack();
+        }
+
+        function updateCollabName() {
+            CollabFactory.updateCollab(vm.collab);
+        }
+
+        function updateTrackName(track) {
+            TrackFactory.updateTrack(track);
         }
         
     }

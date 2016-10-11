@@ -11,6 +11,7 @@
     function TrackFactory($http, ContextFactory) {
         var service = {
             addTrack: addTrack,
+            updateTrack: updateTrack,
             createEmptyTrack: createEmptyTrack,
             addInitialEffectsChainToTrack: addInitialEffectsChainToTrack
         };
@@ -23,6 +24,18 @@
 
         function addTrack(track) {
         	return $http.post("/tracks", track);
+        }
+
+        function updateTrack(track) {
+            console.log(track);
+            // make a separate object because 
+            // we don't want to unnecessarily send audio buffers
+            var updatedTrack = {
+                _id: track._id,
+                gain: track.gain,
+                name: track.name
+            }
+            return $http.put("/tracks/" + track._id, updatedTrack);
         }
 
         ////////////////
