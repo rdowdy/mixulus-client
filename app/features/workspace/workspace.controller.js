@@ -5,11 +5,10 @@
         .module('app')
         .controller('WorkspaceController', WorkspaceController);
 
-    WorkspaceController.$inject = 
-        [
-        '$rootScope', 'localStorageService', 'CollabFactory', 
+    WorkspaceController.$inject = [
+        '$rootScope', 'localStorageService', 'CollabFactory',
         'MixFactory', 'TrackFactory', 'GridFactory', 'SoundFactory'
-        ];
+    ];
 
     /* @ngInject */
     function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory) {
@@ -19,7 +18,7 @@
         vm.tracks = [];
         vm.armedTrack = 0;
         vm.selectedSound = {};
-        
+
         ////////////////
         vm.toggleTrackArmed = toggleTrackArmed;
         vm.addTrack = addTrack;
@@ -43,7 +42,7 @@
 
         function getCollab() {
             vm.collabId = localStorageService.get('collabId');
-            
+
             CollabFactory.getCollabById(vm.collabId).then(function(response) {
                 vm.collab = response.data;
                 vm.tracks = MixFactory.initTracks(vm.collab);
@@ -59,7 +58,7 @@
         }
 
         function toggleTrackArmed(trackNum) {
-            if(vm.armedTrack == trackNum) {
+            if (vm.armedTrack == trackNum) {
                 vm.armedTrack = null;
             } else {
                 vm.armedTrack = trackNum;
@@ -86,25 +85,26 @@
             vm.selectedSound.sound = MixFactory.getSoundFromX(trackNum, $event.clientX);
             vm.selectedSound.canvas = $event.target;
 
-            if(vm.selectedSound.sound != null) {                
-                // remove 'selected' class from others
-                var elems = document.getElementsByClassName("selected");
-                for(var i = 0; i < elems.length; i++) {
-                    var elem = elems[i];
+            // regardless of whether something is selected
+            // remove the selected class from all elements
+            var elems = document.getElementsByClassName('selected');
+            for (var i = 0; i < elems.length; i++) {
+                var elem = elems[i];
 
-                    elem.className =
-                    elem.className.replace(/\bselected\b/,'');
-                }
+                elem.className =
+                    elem.className.replace(/\bselected\b/, '');
+            }
 
+            if (vm.selectedSound.sound != null) {
                 // add 'selected' class to selected sound canvas
                 vm.selectedSound.canvas.classList += " selected";
-            }
+            } 
         }
 
-        function keydown($event){
+        function keydown($event) {
             // handle delete keypress
-            if($event.keyCode == 8) {
-                if(vm.selectedSound.sound != null) {
+            if ($event.keyCode == 8) {
+                if (vm.selectedSound.sound != null) {
                     // remove from DB
                     SoundFactory.deleteSound(vm.selectedSound.sound);
                     // remove from mix
@@ -114,6 +114,6 @@
                 }
             }
         }
-        
+
     }
 })();
