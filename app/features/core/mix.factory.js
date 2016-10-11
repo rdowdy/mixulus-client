@@ -36,8 +36,10 @@
         // functions
         var service = {
             addAudioToTrack: addAudioToTrack,
+            deleteSound: deleteSound,
             addTrack: addTrack,
             getEndMarker: getEndMarker,
+            getSoundFromX: getSoundFromX,
             getTracks: getTracks,
             initTracks: initTracks,
             playAt: playAt,
@@ -93,6 +95,27 @@
 
         function getTracks() {
             return tracks;
+        }
+
+        function getSoundFromX(trackNum, coordX) {
+            var track = tracks[trackNum];
+            
+            if(track == null) {
+                return null;
+            }
+
+            // iterate over the sounds in this track
+            for(var i = 0; i < track.soundIds.length; i++) {
+                var sound = track.soundIds[i];
+                var soundEnd = sound.gridLocation + sound.frameLength;
+
+                // check if coordX is within the bounds of this sound
+                if(coordX > sound.gridLocation && coordX < soundEnd) {
+                    return sound;
+                }
+            }
+
+            return null;
         }
 
         // add an empty track to the collab
@@ -173,6 +196,16 @@
                     latestLoc = gridLocation + frameLength;
                 }
             });
+        }
+
+        function deleteSound(sound) { 
+            // remove from internal data structure
+            var track = tracks[sound.track];
+            for(var i = 0; i < track.soundIds.length; i++) {
+                if(track.soundIds[i]._id == sound._id) {
+                    track.soundIds.splice(i, 1);
+                }
+            }
         }
 
         // play all audio tracks from the marker onward

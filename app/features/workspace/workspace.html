@@ -14,7 +14,7 @@
     <!-- endinject -->
 </head>
 
-<body ng-controller="WorkspaceController as workspace">
+<body ng-controller="WorkspaceController as workspace" ng-keydown="workspace.keydown($event)">
     <div class="topNav">
         <h1 class="collabHeader" ng-show="!workspace.editCollabName" ng-click="workspace.editCollabName = true">{{workspace.collab.name}}</h1>
         <input type="text" class="editCollabName" ng-model="workspace.collab.name" ng-show="workspace.editCollabName" ng-blur="workspace.editCollabName = false; workspace.updateCollabName()">

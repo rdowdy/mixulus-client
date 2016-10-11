@@ -9,22 +9,33 @@
 
     /* @ngInject */
     function GridFactory() {
+        var gridRulerHeight = 15;
+        var topNavHeight = 60;
+        var borderHeight = 1;
+        var trackHeight = 100;
+
         var service = {
+            getTrackNumFromY: getTrackNumFromY,
             drawBuffer: drawAudioBuffer,
-            createCanvas: createCanvas
+            createCanvas: createCanvas,
+            removeSound: removeSound
         };
         return service;
 
 
         ////////////////
 
+        // based on a y location in the grid
+        // return the track number this location is correlates to
+        function getTrackNumFromY(y) {
+            y = y - gridRulerHeight - topNavHeight;
+            y /= trackHeight;
+            return Math.floor(y);
+        }
+
         function createCanvas(trackNum, gridLocation, length) {
             var grid = document.getElementById('grid');
             var div = document.createElement('div');
-            var gridRulerHeight = 15;
-            var topNavHeight = 60;
-            var borderHeight = 1;
-            var trackHeight = 100;
 
             div.classList += " audioClip";
             div.style.width = length + 'px';
@@ -39,6 +50,13 @@
             grid.appendChild(div);
 
             return canvas;
+        }
+
+        function removeSound(canvas) {
+            var div = canvas.parentNode;
+            var grid = div.parentNode;
+
+            grid.removeChild(div);
         }
 
         /* CANVAS DRAWING STUFF */
