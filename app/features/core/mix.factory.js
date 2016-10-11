@@ -36,6 +36,7 @@
         // functions
         var service = {
             addAudioToTrack: addAudioToTrack,
+            deleteSound: deleteSound,
             addTrack: addTrack,
             getEndMarker: getEndMarker,
             getSoundFromX: getSoundFromX,
@@ -103,10 +104,11 @@
                 return null;
             }
 
+            // iterate over the sounds in this track
             for(var i = 0; i < track.soundIds.length; i++) {
                 var sound = track.soundIds[i];
                 var soundEnd = sound.gridLocation + sound.frameLength;
-                
+
                 // check if coordX is within the bounds of this sound
                 if(coordX > sound.gridLocation && coordX < soundEnd) {
                     return sound;
