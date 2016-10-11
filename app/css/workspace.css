@@ -10,9 +10,16 @@
 	background: white;
 }
 
-.topNav .collabHeader {
+.topNav .collabHeader,
+.topNav .editCollabName {
 	margin: 3px 15px;
 	font-family: 'Oswald';
+}
+
+.topNav .editCollabName {
+	font-size: 2em;
+	font-weight: bold;
+	border: 1px solid black;
 }
 
 /************************/
@@ -41,6 +48,7 @@
 	color: white;
 	cursor: pointer;
 }
+
 /************************/
 /*  Track Info Styles   */
 /************************/
@@ -52,11 +60,20 @@
 	padding: 5px;
 }
 
-.track .trackName {
+.track .trackName,
+.track .editTrackName {
 	margin: 0;
 	margin-top: 5px;
 	padding: 0;
 	font-weight: normal;
+}
+
+.track .editTrackName {
+	display: block;
+	font-size: 1.17em;
+	width: 80%;
+	font-family: 'Open Sans';
+	border: 1px solid black;
 }
 
 .track .button,

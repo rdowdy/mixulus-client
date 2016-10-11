@@ -19,6 +19,8 @@
         vm.addTrack = addTrack;
         vm.toggleMute = toggleMute;
         vm.toggleSolo = toggleSolo;
+        vm.updateCollabName = updateCollabName;
+        vm.updateTrackName = updateTrackName;
 
         ////////////////
         getCollab();
@@ -55,6 +57,14 @@
 
         function addTrack() {
             MixFactory.addTrack();
+        }
+
+        function updateCollabName() {
+
+        }
+
+        function updateTrackName(trackNum) {
+            
         }
         
     }
