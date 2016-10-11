@@ -13,7 +13,8 @@
             getAllCollabs: getAllCollabs,
             getCollabById: getCollabById,
             addTrackToCollab: addTrackToCollab,
-            updateCollab: updateCollab
+            updateCollab: updateCollab,
+            commitChanges: commitChanges
         };
         return service;
 
@@ -42,6 +43,14 @@
                 completed: collab.completed
             }
             return $http.put(apiUrl + "/collabs/" + newCollab._id, newCollab)
+        }
+
+        // POST to collabs/:collabId/commit
+        // will signal the server that this user
+        // is done making changes, and to pass the collab
+        // off to the next user
+        function commitChanges(collab) {
+            return $http.post(apiUrl + "/collabs/commit/" + collab._id);
         }
     }
 })();

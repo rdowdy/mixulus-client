@@ -6,12 +6,12 @@
         .controller('WorkspaceController', WorkspaceController);
 
     WorkspaceController.$inject = [
-        '$rootScope', 'localStorageService', 'CollabFactory',
+        '$window', '$rootScope', 'localStorageService', 'CollabFactory',
         'MixFactory', 'TrackFactory', 'GridFactory', 'SoundFactory'
     ];
 
     /* @ngInject */
-    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory) {
+    function WorkspaceController($window, $rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory) {
         var vm = this;
 
         vm.recording = false;
@@ -117,7 +117,10 @@
         }
 
         function commit() {
-            
+            CollabFactory.commitChanges(vm.collab).then(function(res) {
+                // redirect back to homepage
+                $window.location.href = "/home";
+            });
         }
 
     }
