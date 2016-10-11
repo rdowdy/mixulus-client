@@ -73,10 +73,11 @@
         }
 
         function gridClickEvent($event) {
-            console.log($event);
-            GridFactory.getTrackNumFromY($event.clientY);
             // calculate track number
-            // set reference to sound object
+            var trackNum = GridFactory.getTrackNumFromY($event.clientY);
+
+            // set selectedSound reference to sound object
+            vm.selectedSound = MixFactory.getSoundFromX(trackNum, $event.clientX);
         }
         
     }

@@ -38,6 +38,7 @@
             addAudioToTrack: addAudioToTrack,
             addTrack: addTrack,
             getEndMarker: getEndMarker,
+            getSoundFromX: getSoundFromX,
             getTracks: getTracks,
             initTracks: initTracks,
             playAt: playAt,
@@ -93,6 +94,26 @@
 
         function getTracks() {
             return tracks;
+        }
+
+        function getSoundFromX(trackNum, coordX) {
+            var track = tracks[trackNum];
+            
+            if(track == null) {
+                return null;
+            }
+
+            for(var i = 0; i < track.soundIds.length; i++) {
+                var sound = track.soundIds[i];
+                var soundEnd = sound.gridLocation + sound.frameLength;
+                
+                // check if coordX is within the bounds of this sound
+                if(coordX > sound.gridLocation && coordX < soundEnd) {
+                    return sound;
+                }
+            }
+
+            return null;
         }
 
         // add an empty track to the collab
