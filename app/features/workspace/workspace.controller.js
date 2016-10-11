@@ -5,14 +5,15 @@
         .module('app')
         .controller('WorkspaceController', WorkspaceController);
 
-    WorkspaceController.$inject = ['$rootScope', 'localStorageService', 'CollabFactory', 'MixFactory', 'TrackFactory'];
+    WorkspaceController.$inject = ['$rootScope', 'localStorageService', 'CollabFactory', 'MixFactory', 'TrackFactory', 'GridFactory'];
 
     /* @ngInject */
-    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory) {
+    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory) {
         var vm = this;
         vm.recording = false;
         vm.tracks = [];
         vm.armedTrack = 0;
+        vm.selectedSound = null;
         
         ////////////////
         vm.toggleTrackArmed = toggleTrackArmed;
@@ -28,6 +29,10 @@
         $rootScope.$on('onended', function() {
             vm.playing = false;
             $rootScope.$apply();
+        });
+
+        $rootScope.$on('gridClick', function(event, args) {
+            gridClickEvent(args.$event);
         });
 
         function getCollab() {
@@ -65,6 +70,13 @@
 
         function updateTrackName(track) {
             TrackFactory.updateTrack(track);
+        }
+
+        function gridClickEvent($event) {
+            console.log($event);
+            GridFactory.getTrackNumFromY($event.clientY);
+            // calculate track number
+            // set reference to sound object
         }
         
     }
