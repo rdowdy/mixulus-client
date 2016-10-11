@@ -25,7 +25,6 @@
 
         function goToWorkspace(collabId) {
         	localStorageService.set('collabId', collabId);
-        	//$window.location.href = "/workspace";
             $window.open("/workspace", "_blank");
         }
     }
