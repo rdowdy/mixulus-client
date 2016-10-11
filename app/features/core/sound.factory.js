@@ -12,7 +12,8 @@
         var service = {
             addSound: addSound,
             getSoundById: getSoundById,
-            updateSound: updateSound
+            updateSound: updateSound,
+            deleteSound: deleteSound
         };
         return service;
 

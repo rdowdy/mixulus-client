@@ -199,17 +199,13 @@
         }
 
         function deleteSound(sound) { 
-            console.log("sound deleted from mix");
-            // remove from DB
-            //SoundFactory.deleteSound(sound);
-
             // remove from internal data structure
-            // var track = tracks[sound.track];
-            // for(var i = 0; i < track.soundIds.length; i++) {
-            //     if(track.soundIds[i]._id == sound._id) {
-            //         track.soundIds.splice(i, 1);
-            //     }
-            // }
+            var track = tracks[sound.track];
+            for(var i = 0; i < track.soundIds.length; i++) {
+                if(track.soundIds[i]._id == sound._id) {
+                    track.soundIds.splice(i, 1);
+                }
+            }
         }
 
         // play all audio tracks from the marker onward

@@ -5,10 +5,14 @@
         .module('app')
         .controller('WorkspaceController', WorkspaceController);
 
-    WorkspaceController.$inject = ['$rootScope', 'localStorageService', 'CollabFactory', 'MixFactory', 'TrackFactory', 'GridFactory'];
+    WorkspaceController.$inject = 
+        [
+        '$rootScope', 'localStorageService', 'CollabFactory', 
+        'MixFactory', 'TrackFactory', 'GridFactory', 'SoundFactory'
+        ];
 
     /* @ngInject */
-    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory) {
+    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory) {
         var vm = this;
 
         vm.recording = false;
@@ -92,7 +96,11 @@
             // handle delete keypress
             if($event.keyCode == 8) {
                 if(vm.selectedSound.sound != null) {
+                    // remove from DB
+                    SoundFactory.deleteSound(vm.selectedSound.sound);
+                    // remove from mix
                     MixFactory.deleteSound(vm.selectedSound.sound);
+                    // remove from grid ui
                     GridFactory.removeSound(vm.selectedSound.canvas);
                 }
             }
