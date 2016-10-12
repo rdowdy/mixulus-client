@@ -58,6 +58,10 @@
 /************************/
 /*    Dialog Styles     */
 /************************/
+.users h2 {
+	font-family: 'Oswald';
+}
+
 .users ul {
 	list-style: none;
 	font-size: 1.2em;
@@ -69,6 +73,14 @@
 
 .addUserButton {
 	font-size: 0.8em;
+}
+
+/* Custom ngDialog Style */
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+	border-radius: 0px;
+	border: 1px solid black;
+	background: white;
+	color: black;
 }
 
 /************************/
