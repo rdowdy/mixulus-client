@@ -7,11 +7,11 @@
 
     WorkspaceController.$inject = [
         '$window', '$rootScope', 'localStorageService', 'CollabFactory',
-        'MixFactory', 'TrackFactory', 'GridFactory', 'SoundFactory'
+        'MixFactory', 'TrackFactory', 'GridFactory', 'SoundFactory', 'ngDialog'
     ];
 
     /* @ngInject */
-    function WorkspaceController($window, $rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory) {
+    function WorkspaceController($window, $rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory, ngDialog) {
         var vm = this;
 
         vm.recording = false;
@@ -81,6 +81,9 @@
 
         function addUser() {
             // open a modal to get user input
+            ngDialog.open({
+                templateUrl: 'features/workspace/addUser.tmpl.html'
+            });
             // add user to collab
         }
 
