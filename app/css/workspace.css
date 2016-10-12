@@ -27,11 +27,20 @@
 	border: 1px solid black;
 }
 
+.topNav p,
 .topNav .commit {
 	position: absolute;
 	top: 14px;
-	right: 20px;
 	margin: 0;
+}
+
+.topNav p {
+	display: inline-block;
+	width: 50%;
+}
+
+.topNav .commit {
+	right: 20px;
 	font-size: 0.8em;
 	height: 30px;
 }
