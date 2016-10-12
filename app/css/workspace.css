@@ -38,7 +38,10 @@
 
 .collaborators p {
 	display: inline-block;
-	max-width: 80%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 65%;
 }
 
 .collaborators .button {

@@ -14,6 +14,7 @@
             getAllCollabs: getAllCollabs,
             getCollabById: getCollabById,
             addTrackToCollab: addTrackToCollab,
+            addUserToCollab: addUserToCollab,
             updateCollab: updateCollab,
             commitChanges: commitChanges
         };
@@ -34,6 +35,10 @@
 
         function addTrackToCollab(collabId, trackId) {
             return $http.post(apiUrl + "/collabs/" + collabId + "/tracks/" + trackId);
+        }
+
+        function addUserToCollab(collabId, userId) {
+            return $http.post(apiUrl + "/collabs/" + collabId + "/" + userId)
         }
 
         function updateCollab(collab) {

@@ -22,13 +22,14 @@
         ////////////////
         vm.toggleTrackArmed = toggleTrackArmed;
         vm.addTrack = addTrack;
-        vm.addUser = addUser;
+        vm.addUser = addUserDialog;
         vm.keydown = keydown;
         vm.toggleMute = toggleMute;
         vm.toggleSolo = toggleSolo;
         vm.updateCollabName = updateCollabName;
         vm.updateTrackName = updateTrackName;
         vm.commit = commit;
+        vm.addUserToCollab = addUserToCollab;
 
         ////////////////
         getCollab();
@@ -79,12 +80,17 @@
             MixFactory.addTrack();
         }
 
-        function addUser() {
+        function addUserDialog() {
             // open a modal to get user input
             ngDialog.open({
-                templateUrl: 'features/workspace/addUser.tmpl.html'
+                templateUrl: 'features/dialog/addUser.tmpl.html',
+                controller: "DialogController",
+                controllerAs: "dialog"
             });
-            // add user to collab
+        }
+
+        function addUserToCollab() {
+            console.log("did it work");
         }
 
         function updateCollabName() {
