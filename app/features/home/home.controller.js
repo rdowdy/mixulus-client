@@ -14,18 +14,37 @@
         vm.goToWorkspace = goToWorkspace;
 
         /////////////////////
-        getCollabs();
+        init();
         /////////////////////
 
-        function getCollabs() {
+        function init() {
+            // get user id
+            vm.userId = localStorageService.get('userId');
+
+            // get collabs and check which ones
+            // are available to make changes
         	CollabFactory.getAllCollabs().then(function(response) {
         		vm.collabs = response.data;
+
+                var collab;
+                for(var i = 0; i < vm.collabs.length; i++) {
+                    collab = vm.collabs[i];
+                    console.log(collab);
+
+                    if(collab.userIds[collab.currentUserIndex]._id == vm.userId) {
+                        collab.waiting = false;
+                    } else {
+                        collab.waiting = true;
+                    }
+                }
         	});
         }
 
-        function goToWorkspace(collabId) {
-        	localStorageService.set('collabId', collabId);
-            $window.open("/workspace", "_blank");
+        function goToWorkspace(collab) {
+            if(!collab.waiting) {
+                localStorageService.set('collabId', collab._id);
+                $window.open("/workspace", "_blank");
+            }
         }
     }
 })();

@@ -16,10 +16,29 @@
 	font-family: 'Oswald';
 }
 
+.topNav .collabHeader {
+	width: 30%;
+	display: inline-block;
+}
+
 .topNav .editCollabName {
 	font-size: 2em;
 	font-weight: bold;
 	border: 1px solid black;
+}
+
+.topNav .commit {
+	position: absolute;
+	top: 14px;
+	right: 20px;
+	margin: 0;
+	font-size: 0.8em;
+	height: 30px;
+}
+
+.commit:hover {
+	background: black;
+	color: white;
 }
 
 /************************/

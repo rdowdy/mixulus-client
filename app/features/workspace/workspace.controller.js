@@ -6,12 +6,12 @@
         .controller('WorkspaceController', WorkspaceController);
 
     WorkspaceController.$inject = [
-        '$rootScope', 'localStorageService', 'CollabFactory',
+        '$window', '$rootScope', 'localStorageService', 'CollabFactory',
         'MixFactory', 'TrackFactory', 'GridFactory', 'SoundFactory'
     ];
 
     /* @ngInject */
-    function WorkspaceController($rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory) {
+    function WorkspaceController($window, $rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory) {
         var vm = this;
 
         vm.recording = false;
@@ -27,6 +27,7 @@
         vm.toggleSolo = toggleSolo;
         vm.updateCollabName = updateCollabName;
         vm.updateTrackName = updateTrackName;
+        vm.commit = commit;
 
         ////////////////
         getCollab();
@@ -46,6 +47,7 @@
             CollabFactory.getCollabById(vm.collabId).then(function(response) {
                 vm.collab = response.data;
                 vm.tracks = MixFactory.initTracks(vm.collab);
+
             });
         }
 
@@ -113,6 +115,13 @@
                     GridFactory.removeSound(vm.selectedSound.canvas);
                 }
             }
+        }
+
+        function commit() {
+            CollabFactory.commitChanges(vm.collab).then(function(res) {
+                // redirect back to homepage
+                $window.location.href = "/home";
+            });
         }
 
     }
