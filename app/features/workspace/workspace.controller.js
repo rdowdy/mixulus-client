@@ -48,6 +48,13 @@
                 vm.collab = response.data;
                 vm.tracks = MixFactory.initTracks(vm.collab);
 
+            }, function(err) {
+                console.log(err);
+                if(err.status == 403) {
+                    // forbidden, not authorized, 
+                    // redirect to home
+                    $window.location.href = "/home";
+                }
             });
         }
 
