@@ -22,6 +22,7 @@
         ////////////////
         vm.toggleTrackArmed = toggleTrackArmed;
         vm.addTrack = addTrack;
+        vm.addUser = addUser;
         vm.keydown = keydown;
         vm.toggleMute = toggleMute;
         vm.toggleSolo = toggleSolo;
@@ -76,6 +77,11 @@
 
         function addTrack() {
             MixFactory.addTrack();
+        }
+
+        function addUser() {
+            // open a modal to get user input
+            // add user to collab
         }
 
         function updateCollabName() {

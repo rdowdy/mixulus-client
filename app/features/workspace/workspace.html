@@ -17,10 +17,13 @@
 <body ng-controller="WorkspaceController as workspace" ng-keydown="workspace.keydown($event)">
     <div class="topNav">
         <h1 class="collabHeader" ng-show="!workspace.editCollabName" ng-click="workspace.editCollabName = true">{{workspace.collab.name}}</h1>
-        <p>
-            With 
-            <span ng-repeat="user in workspace.collab.userIds">{{user.username}}{{$last ? '' : ', '}}</span>
-        </p>
+        <div class="collaborators">
+            <p>
+                With 
+                <span ng-repeat="user in workspace.collab.userIds">{{user.username}}{{$last ? '' : ', '}}</span>
+            </p>
+            <button class="button" ng-click="workspace.addUser()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        </div>
         <input type="text" class="editCollabName" ng-model="workspace.collab.name" ng-show="workspace.editCollabName" ng-blur="workspace.editCollabName = false; 
                  workspace.updateCollabName()">
         <button class="button commit" ng-click="workspace.commit();">Commit Changes</button>
