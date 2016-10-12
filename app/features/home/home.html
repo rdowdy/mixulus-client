@@ -22,16 +22,16 @@
                 <h3><i class="fa fa-plus" aria-hidden="true"></i> New Collab</h3>
                 <p>Click here to start a new collaboration!</p>
             </div>
-            <div class="collab" ng-repeat="collab in home.collabs" ng-click="home.goToWorkspace(collab._id)" >
+            <div class="collab" ng-repeat="collab in home.collabs" ng-click="home.goToWorkspace(collab)" ng-class="{'disabled': collab.waiting == true}">
                 <div class="metainfo">
-                    <h3>{{collab.name}}</h3>
+                    <h3><i class="fa fa-hourglass" aria-hidden="true" ng-show="collab.waiting"></i>
+                    <i class="fa fa-music" aria-hidden="true" ng-show="!collab.waiting"></i> {{collab.name}}</h3>
                     <p>
                         <span ng-repeat="user in collab.userIds">
-						{{user.username}}{{$last ? '' : ', '}}
-					</span>
+                        {{user.username}}{{$last ? '' : ', '}}
+                    </span>
                     </p>
                 </div>
-
             </div>
         </div>
         <!-- past collabs will go here eventually -->

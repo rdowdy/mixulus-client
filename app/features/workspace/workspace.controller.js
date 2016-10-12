@@ -47,6 +47,7 @@
             CollabFactory.getCollabById(vm.collabId).then(function(response) {
                 vm.collab = response.data;
                 vm.tracks = MixFactory.initTracks(vm.collab);
+
             });
         }
 

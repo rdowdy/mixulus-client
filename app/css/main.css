@@ -120,7 +120,13 @@ select {
     margin-bottom: 10px;
 }
 
-.collab:hover {
+.collab.disabled {
+    border-color: #999;
+    background: #ccc;
+    color: #666;
+}
+
+.collab:not(.disabled):hover {
     background: black;
     color: white;
     border: 1px solid black;
