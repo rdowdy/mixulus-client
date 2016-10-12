@@ -19,16 +19,13 @@
 <body ng-controller="WorkspaceController as workspace" ng-keydown="workspace.keydown($event)">
     <div class="topNav">
         <h1 class="collabHeader" ng-show="!workspace.editCollabName" ng-click="workspace.editCollabName = true">{{workspace.collab.name}}</h1>
-        <div class="collaborators">
-            <p>
-                With 
-                <span ng-repeat="user in workspace.collab.userIds">{{user.username}}{{$last ? '' : ', '}}</span>
-            </p>
-            <button class="button" ng-click="workspace.addUser()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        <div class="collaboration">
+            <button class="button addUser" ng-click="workspace.addUser()"><i class="fa fa-plus" aria-hidden="true"></i> Add Collab'er</button>
+            <button class="button commit" ng-click="workspace.commit();">Commit Changes</button>
         </div>
+        
         <input type="text" class="editCollabName" ng-model="workspace.collab.name" ng-show="workspace.editCollabName" ng-blur="workspace.editCollabName = false; 
                  workspace.updateCollabName()">
-        <button class="button commit" ng-click="workspace.commit();">Commit Changes</button>
     </div>
     <!-- beginning of tracks listing -->
     <div class="tracks">

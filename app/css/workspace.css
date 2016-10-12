@@ -27,35 +27,21 @@
 	border: 1px solid black;
 }
 
-.collaborators {
+.topNav .collaboration {
 	display: inline-block;
 	margin: 0;
-	position: absolute;
-	top: 0;
 	height: 100%;
 	width: 40%;
+	float: right;
+	text-align: right;
 }
 
-.collaborators p {
-	display: inline-block;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	max-width: 65%;
-}
-
-.collaborators .button {
-	display: inline-block;
-	width: 15%;
-	margin: 0;
-	font-size: 0.8em;
-}
-
-.topNav .commit {
-	position: absolute;
-	top: 14px;
-	margin: 0;
+.topNav .commit,
+.topNav .addUser {
+	position: relative;
+	top: 15px;
 	right: 20px;
+	margin: 0;
 	font-size: 0.8em;
 	height: 30px;
 }
