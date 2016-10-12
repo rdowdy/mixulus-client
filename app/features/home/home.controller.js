@@ -12,6 +12,7 @@
         var vm = this;
         
         vm.goToWorkspace = goToWorkspace;
+        vm.newCollab = newCollab;
 
         /////////////////////
         init();
@@ -40,10 +41,23 @@
         	});
         }
 
+        function newCollab() {
+            var newCollab = {
+                name: "New Collab", 
+                currentUserIndex: 0
+            }
+
+            CollabFactory.addCollab(newCollab).then(function(res) {
+                console.log(res.data);
+                res.data.waiting = false;
+                goToWorkspace(res.data);
+            });
+        }
+
         function goToWorkspace(collab) {
             if(!collab.waiting) {
                 localStorageService.set('collabId', collab._id);
-                $window.open("/workspace", "_blank");
+                $window.location.href = "/workspace";
             }
         }
     }

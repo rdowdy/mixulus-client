@@ -10,6 +10,7 @@
     /* @ngInject */
     function CollabFactory(apiUrl, $http) {
         var service = {
+            addCollab: addCollab,
             getAllCollabs: getAllCollabs,
             getCollabById: getCollabById,
             addTrackToCollab: addTrackToCollab,
@@ -19,6 +20,9 @@
         return service;
 
         ////////////////
+        function addCollab(collab) {
+            return $http.post(apiUrl + "/collabs", collab);
+        }
 
         function getAllCollabs() {
         	return $http.get(apiUrl + "/collabs");
