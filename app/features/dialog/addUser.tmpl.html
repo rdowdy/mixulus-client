@@ -1,5 +1,11 @@
-<div class="input-group">
-	<label for="addUser">Username</label>
-	<input type="text" ng-model="dialog.addUsername">
+<div class="users">
+	<h2>Collaborators</h2>
+	<ul>
+		<li ng-repeat="user in dialog.users.userIds">{{user.username}}</li>
+	</ul>
 </div>
-<button class="button" ng-click="dialog.addUserToCollab(dialog.addUsername);">Add to Collab</button>
+<div class="input-group">
+	<label for="addUser">Add Collaborator:</label>
+	<input type="text" id="addUser" ng-model="dialog.addUsername" placeholder="Username...">
+</div>
+<button class="button addUserButton" ng-click="dialog.addUserToCollab(dialog.addUsername);">Add to Collab</button>

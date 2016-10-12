@@ -46,9 +46,29 @@
 	height: 30px;
 }
 
+.topNav .addUser {
+	width: 150px;
+}
+
 .commit:hover {
 	background: black;
 	color: white;
+}
+
+/************************/
+/*    Dialog Styles     */
+/************************/
+.users ul {
+	list-style: none;
+	font-size: 1.2em;
+}
+
+#addUser {
+	font-size: 0.8em;
+}
+
+.addUserButton {
+	font-size: 0.8em;
 }
 
 /************************/
