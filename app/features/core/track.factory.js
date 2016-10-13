@@ -27,7 +27,6 @@
         }
 
         function updateTrack(track) {
-            console.log(track);
             // make a separate object because 
             // we don't want to unnecessarily send audio buffers
             var updatedTrack = {

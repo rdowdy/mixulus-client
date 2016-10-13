@@ -42,6 +42,7 @@
             <div class="arm-group button-group">
                 <button class="button arm" ng-click="workspace.toggleTrackArmed($index)" ng-class="{ 'armed': workspace.armedTrack == $index }">Arm</button>
             </div>
+            <input type="range" min="0" max="300" class="fader" ng-model="track.gain" ng-change="workspace.adjustTrackVolume(track)">
         </div>
     </div>
     <!-- end of tracks listing -->
