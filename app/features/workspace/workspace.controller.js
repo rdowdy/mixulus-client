@@ -30,6 +30,7 @@
         vm.updateTrackName = updateTrackName;
         vm.commit = commit;
         vm.addUserToCollab = addUserToCollab;
+        vm.adjustTrackVolume = adjustTrackVolume;
 
         ////////////////
         getCollab();
@@ -66,6 +67,10 @@
 
         function toggleSolo(trackNum) {
             MixFactory.toggleSolo(trackNum);
+        }
+
+        function adjustTrackVolume(track) {
+            MixFactory.adjustTrackVolume(track);
         }
 
         function toggleTrackArmed(trackNum) {

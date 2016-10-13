@@ -65,6 +65,7 @@
         // functions
         var service = {
             addAudioToTrack: addAudioToTrack,
+            adjustTrackVolume: adjustTrackVolume,
             deleteSound: deleteSound,
             addTrack: addTrack,
             getEndMarker: getEndMarker,
@@ -201,6 +202,12 @@
                 }
             }
 
+        }
+
+        function adjustTrackVolume(track) {
+            var nodeGain = track.gain / 100;
+
+            track.volumeGainNode.gain.value = nodeGain;
         }
 
         function addAudioToTrack(num, buffer, gridLocation, frameLength, fps, soundModel) {
