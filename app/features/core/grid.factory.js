@@ -14,6 +14,9 @@
         var borderHeight = 1;
         var trackHeight = 100;
 
+        ///////////
+        init();
+
         var service = {
             getTrackNumFromY: getTrackNumFromY,
             drawBuffer: drawAudioBuffer,
@@ -24,6 +27,19 @@
 
 
         ////////////////
+
+        function init() {
+            var grid = document.getElementById('grid');
+
+            // init drop zone!
+            grid.addEventListener('dragover', function() {
+
+            });
+
+            grid .addEventListener('drop', function() {
+                console.log('drop!');
+            });
+        }
 
         // based on a y location in the grid
         // return the track number this location is correlates to
@@ -36,6 +52,10 @@
         function createCanvas(trackNum, gridLocation, length) {
             var grid = document.getElementById('grid');
             var div = document.createElement('div');
+
+            // set up drag and drop
+            div.setAttribute('draggable', true);
+            div.addEventListener('dragstart', dragstart);
 
             div.classList += " audioClip";
             div.style.width = length + 'px';
@@ -50,6 +70,10 @@
             grid.appendChild(div);
 
             return canvas;
+        }
+
+        function dragstart() {
+            console.log("dragging!");
         }
 
         function removeSound(canvas) {
