@@ -137,6 +137,10 @@
 	border: 1px solid black;
 }
 
+.track .button-group {
+	margin-top: 10px;
+}
+
 .track .button,
 .track select {
 	border-color: #aaa;
@@ -175,11 +179,56 @@
 	color: #eee;
 }
 
-.track select {
-  	height: 25px;
-  	margin: 0;
-  	margin-left: -7px;
-  	line-height: 12px;
+/* Custom Input Range Styles */
+
+.track input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 90%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+.track .fader {
+	display: block;
+	margin: 0 auto;
+	margin-top: 13px;
+}
+
+input[type=range].fader::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range].fader:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+/*IE compatibility*/
+/*input[type=range].fader::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+   Hides the slider so custom styles can be added 
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}*/
+
+/* Webkit styling for the slider */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 2px solid #000;
+  height: 22px;
+  width: 12px;
+  cursor: pointer;
+  background: #ffffff;
+  margin-top: -10px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+}
+
+/* Webkit styling for the track */
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #000;
 }
 
 /************************/
