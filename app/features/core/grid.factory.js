@@ -92,9 +92,13 @@
             var dragEndY = e.clientY;
             dragEndY = dragEndY - topNavHeight - gridRulerHeight;
 
+            // calculate track number based on y-axis movement
             var trackNum = Math.floor((dragEndY + (dragEndY % trackHeight)) / trackHeight) - 1;
 
             if(trackNum < 0) trackNum = 0;
+
+            e.target.style.top = 
+            gridRulerHeight + topNavHeight + (trackNum * trackHeight) + 'px';
 
             console.log(trackNum);
         }
