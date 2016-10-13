@@ -6,14 +6,14 @@
         .factory('MixFactory', MixFactory);
 
     MixFactory.$inject = [
-        '$q', 'localStorageService',
+        '$q', 'localStorageService', '$rootScope',
         'CollabFactory', 'ContextFactory',
         'TrackFactory', 'SoundFactory',
         'GridFactory'
     ];
 
     /* @ngInject */
-    function MixFactory($q, localStorageService, CollabFactory, ContextFactory, TrackFactory, SoundFactory, GridFactory) {
+    function MixFactory($q, localStorageService, $rootScope, CollabFactory, ContextFactory, TrackFactory, SoundFactory, GridFactory) {
         ////////////////
         // Array diff
         Array.prototype.diff = function(a) {
@@ -31,6 +31,35 @@
         var dbGainUnity = 100;
 
         var latestLoc = 0;
+
+        ////////////////
+        // Root Scope Events
+        $rootScope.$on('sounddrag', function(event, args) {
+            var newLoc = args.newLoc;
+            var newTrack = args.newTrack;
+            var dragStart = args.dragStartX;
+            var trackStart = args.trackStart;
+
+            // get the sound obj from the mix
+            var soundObj = getSoundFromX(trackStart, dragStart);
+            // update the sound obj in the mix
+            soundObj.gridLocation = newLoc;
+            soundObj.track = newTrack;
+
+            // reconstruct the sound obj for the DB because we don't 
+            // want to resend the audio buffer
+            var soundToSave = {
+                "_id" : soundObj._id,
+                "trackId" : soundObj.trackId,
+                "fps" : soundObj.fps,
+                "gridLocation" : newLoc, // the new position
+                "track" : newTrack, // the new track number
+                "filePath" : soundObj.filePath,
+                "frameLength" : soundObj.frameLength
+            }
+
+            SoundFactory.updateSound(soundToSave);
+        })
 
         ////////////////
         // functions
@@ -110,7 +139,7 @@
                 var soundEnd = sound.gridLocation + sound.frameLength;
 
                 // check if coordX is within the bounds of this sound
-                if(coordX > sound.gridLocation && coordX < soundEnd) {
+                if(coordX >= sound.gridLocation && coordX < soundEnd) {
                     return sound;
                 }
             }

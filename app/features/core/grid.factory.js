@@ -5,14 +5,24 @@
         .module('app')
         .factory('GridFactory', GridFactory);
 
-    GridFactory.$inject = [];
+    GridFactory.$inject = ['$window', '$rootScope'];
 
     /* @ngInject */
-    function GridFactory() {
+    function GridFactory($window, $rootScope) {
         var gridRulerHeight = 15;
         var topNavHeight = 60;
         var borderHeight = 1;
         var trackHeight = 100;
+        var trackListWidth = 215;
+
+        var dragStartX = 0;
+        var trackStart = 0;
+        var dragEndX = 0;
+
+        document.getElementById('grid').addEventListener('dragover', dragover)
+        document.getElementById('grid').addEventListener('drop', drop);
+
+        ///////////
 
         var service = {
             getTrackNumFromY: getTrackNumFromY,
@@ -37,6 +47,11 @@
             var grid = document.getElementById('grid');
             var div = document.createElement('div');
 
+            // set up drag and drop
+            div.setAttribute('draggable', true);
+            div.addEventListener('dragstart', dragstart);
+            div.addEventListener('dragend', dragend);
+
             div.classList += " audioClip";
             div.style.width = length + 'px';
             div.style.left = gridLocation + 'px';
@@ -50,6 +65,68 @@
             grid.appendChild(div);
 
             return canvas;
+        }
+
+        function dragstart(e) {
+            dragStartX = e.target.offsetLeft;
+            trackStart = getTrackNumFromY(e.target.offsetTop);
+            return false;
+        }
+
+        function dragover(e) {
+            e.preventDefault();
+            return false;
+        }
+
+        function drop(e) {
+            e.stopPropagation();
+            return false;
+        }
+
+        function dragend(e) {
+            ///////////////////////////
+            // Move the sound clip 
+
+            ////////
+            // x-axis movement
+            dragEndX = e.clientX;
+            var dragDelta = dragEndX - dragStartX;
+
+            // move the clip in the x direction
+            var leftOffset = parseInt(e.target.style.left);
+            leftOffset += dragDelta;
+
+            // check left bound
+            if(leftOffset < trackListWidth) {
+                leftOffset = trackListWidth;
+            }
+
+            e.target.style.left = leftOffset + 'px';
+
+            ////////
+            // check for y-axis movement
+            var dragEndY = e.clientY;
+            dragEndY = dragEndY - topNavHeight - gridRulerHeight;
+
+            // calculate track number based on y-axis movement
+            var trackNum = Math.floor((dragEndY + (dragEndY % trackHeight)) / trackHeight) - 1;
+
+            if(trackNum < 0) trackNum = 0;
+
+            e.target.style.top = 
+            gridRulerHeight + topNavHeight + (trackNum * trackHeight) + 'px';
+
+            ///////////////////////////
+            // Save the new position of the sound clip
+            $rootScope.$broadcast("sounddrag", {
+                newLoc: leftOffset,
+                newTrack: trackNum,
+                dragStartX: dragStartX,
+                trackStart: trackStart
+            })
+            
+
+            return false;
         }
 
         function removeSound(canvas) {
