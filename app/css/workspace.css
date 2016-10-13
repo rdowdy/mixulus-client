@@ -217,6 +217,13 @@
 	position: absolute;
 	height: 100px;
 	border: 1px solid white;
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+
+	/* Rules below not implemented in browsers yet */
+	-o-user-select: none;
+	user-select: none;
 }
 
 .clipCanvas:hover,
