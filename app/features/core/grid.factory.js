@@ -13,6 +13,7 @@
         var topNavHeight = 60;
         var borderHeight = 1;
         var trackHeight = 100;
+        var trackListWidth = 215;
 
         var dragStartX = 0;
         var dragEndX = 0;
@@ -63,18 +64,39 @@
         }
 
         function dragstart(e) {
-            console.log("dragging!");
-            console.log(e);
+            //console.log("dragging!");
+            //console.log(e);
             dragStartX = e.target.offsetLeft;
 
         }
 
         function dragend(e) {
-            console.log("drag end!");
-            console.log(e);
+            //console.log("drag end!");
+            //console.log(e);
             dragEndX = e.clientX;
             var dragDelta = dragEndX - dragStartX;
-            console.log(dragDelta);
+            //console.log(dragDelta);
+
+            // move the clip in the x direction
+            var leftOffset = parseInt(e.target.style.left);
+            leftOffset += dragDelta;
+
+            // check left bound
+            if(leftOffset < trackListWidth) {
+                leftOffset = trackListWidth;
+            }
+
+            e.target.style.left = leftOffset + 'px';
+
+            // check for y-axis movement
+            var dragEndY = e.clientY;
+            dragEndY = dragEndY - topNavHeight - gridRulerHeight;
+
+            var trackNum = Math.floor((dragEndY + (dragEndY % trackHeight)) / trackHeight) - 1;
+
+            if(trackNum < 0) trackNum = 0;
+
+            console.log(trackNum);
         }
 
         function removeSound(canvas) {
