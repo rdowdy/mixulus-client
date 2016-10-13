@@ -18,6 +18,7 @@
 
 <body ng-controller="WorkspaceController as workspace" ng-keydown="workspace.keydown($event)">
     <div class="topNav">
+        <a href="/home"><i class="fa fa-home" aria-hidden="true"></i></a>
         <h1 class="collabHeader" ng-show="!workspace.editCollabName" ng-click="workspace.editCollabName = true">{{workspace.collab.name}}</h1>
         <div class="collaboration">
             <button class="button addUser" ng-click="workspace.addUser()">Collaborators</button>

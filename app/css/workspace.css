@@ -10,6 +10,20 @@
 	background: white;
 }
 
+.topNav a,
+.topNav a:visited {
+	color: black;
+}
+
+.topNav a:active {
+	color: #cc0000;
+}
+
+.topNav i {
+	font-size: 2.2em;
+	margin-left: 15px;
+}
+
 .topNav .collabHeader,
 .topNav .editCollabName {
 	margin: 3px 15px;
