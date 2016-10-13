@@ -18,6 +18,9 @@
         var dragStartX = 0;
         var dragEndX = 0;
 
+        document.getElementById('grid').addEventListener('dragover', dragover)
+        document.getElementById('grid').addEventListener('drop', drop);
+
         ///////////
 
         var service = {
@@ -64,10 +67,18 @@
         }
 
         function dragstart(e) {
-            //console.log("dragging!");
-            //console.log(e);
             dragStartX = e.target.offsetLeft;
+            return false;
+        }
 
+        function dragover(e) {
+            e.preventDefault();
+            return false;
+        }
+
+        function drop(e) {
+            e.stopPropagation();
+            return false;
         }
 
         function dragend(e) {
@@ -101,6 +112,8 @@
             gridRulerHeight + topNavHeight + (trackNum * trackHeight) + 'px';
 
             console.log(trackNum);
+
+            return false;
         }
 
         function removeSound(canvas) {
