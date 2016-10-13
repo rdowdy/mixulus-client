@@ -5,10 +5,10 @@
         .module('app')
         .factory('GridFactory', GridFactory);
 
-    GridFactory.$inject = ['$window'];
+    GridFactory.$inject = ['$window', '$rootScope'];
 
     /* @ngInject */
-    function GridFactory($window) {
+    function GridFactory($window, $rootScope) {
         var gridRulerHeight = 15;
         var topNavHeight = 60;
         var borderHeight = 1;
@@ -16,6 +16,7 @@
         var trackListWidth = 215;
 
         var dragStartX = 0;
+        var trackStart = 0;
         var dragEndX = 0;
 
         document.getElementById('grid').addEventListener('dragover', dragover)
@@ -68,6 +69,7 @@
 
         function dragstart(e) {
             dragStartX = e.target.offsetLeft;
+            trackStart = getTrackNumFromY(e.target.offsetTop);
             return false;
         }
 
@@ -82,11 +84,13 @@
         }
 
         function dragend(e) {
-            //console.log("drag end!");
-            //console.log(e);
+            ///////////////////////////
+            // Move the sound clip 
+
+            ////////
+            // x-axis movement
             dragEndX = e.clientX;
             var dragDelta = dragEndX - dragStartX;
-            //console.log(dragDelta);
 
             // move the clip in the x direction
             var leftOffset = parseInt(e.target.style.left);
@@ -99,6 +103,7 @@
 
             e.target.style.left = leftOffset + 'px';
 
+            ////////
             // check for y-axis movement
             var dragEndY = e.clientY;
             dragEndY = dragEndY - topNavHeight - gridRulerHeight;
@@ -111,7 +116,15 @@
             e.target.style.top = 
             gridRulerHeight + topNavHeight + (trackNum * trackHeight) + 'px';
 
-            console.log(trackNum);
+            ///////////////////////////
+            // Save the new position of the sound clip
+            $rootScope.$broadcast("sounddrag", {
+                newLoc: leftOffset,
+                newTrack: trackNum,
+                dragStartX: dragStartX,
+                trackStart: trackStart
+            })
+            
 
             return false;
         }
