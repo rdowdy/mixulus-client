@@ -5,17 +5,19 @@
         .module('app')
         .factory('GridFactory', GridFactory);
 
-    GridFactory.$inject = [];
+    GridFactory.$inject = ['$window'];
 
     /* @ngInject */
-    function GridFactory() {
+    function GridFactory($window) {
         var gridRulerHeight = 15;
         var topNavHeight = 60;
         var borderHeight = 1;
         var trackHeight = 100;
 
+        var dragStartX = 0;
+        var dragEndX = 0;
+
         ///////////
-        init();
 
         var service = {
             getTrackNumFromY: getTrackNumFromY,
@@ -27,19 +29,6 @@
 
 
         ////////////////
-
-        function init() {
-            var grid = document.getElementById('grid');
-
-            // init drop zone!
-            grid.addEventListener('dragover', function() {
-
-            });
-
-            grid .addEventListener('drop', function() {
-                console.log('drop!');
-            });
-        }
 
         // based on a y location in the grid
         // return the track number this location is correlates to
@@ -56,6 +45,7 @@
             // set up drag and drop
             div.setAttribute('draggable', true);
             div.addEventListener('dragstart', dragstart);
+            div.addEventListener('dragend', dragend);
 
             div.classList += " audioClip";
             div.style.width = length + 'px';
@@ -72,8 +62,19 @@
             return canvas;
         }
 
-        function dragstart() {
+        function dragstart(e) {
             console.log("dragging!");
+            console.log(e);
+            dragStartX = e.target.offsetLeft;
+
+        }
+
+        function dragend(e) {
+            console.log("drag end!");
+            console.log(e);
+            dragEndX = e.clientX;
+            var dragDelta = dragEndX - dragStartX;
+            console.log(dragDelta);
         }
 
         function removeSound(canvas) {
