@@ -147,3 +147,8 @@ select {
     font-size: 0.75em;
     text-overflow: ellipsis;
 }
+
+/* For Angular */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
