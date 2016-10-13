@@ -167,12 +167,12 @@
 	font-size: 0.8em;
 }
 
-.muteActive {
+.button.muteActive {
 	background-color: #cc0000;
 	color: #eee;
 }
 
-.soloActive {
+.button.soloActive {
 	background-color: #0000cc;
 	color: #eee;
 }
