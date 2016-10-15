@@ -53,7 +53,7 @@
 
             }, function(err) {
                 console.log(err);
-                if(err.status == 403) {
+                if (err.status == 403) {
                     // forbidden, not authorized, 
                     // redirect to home
                     $window.location.href = "/home";
@@ -127,7 +127,7 @@
             if (vm.selectedSound.sound != null) {
                 // add 'selected' class to selected sound canvas
                 vm.selectedSound.canvas.classList += " selected";
-            } 
+            }
         }
 
         function keydown($event) {
@@ -146,10 +146,10 @@
             }
 
             // handle left/right arrow keypresses
-            if($event.keyCode == 37 || $event.keyCode == 39) {
-                if(vm.selectedSound.sound != null) {
+            if ($event.keyCode == 37 || $event.keyCode == 39) {
+                if (vm.selectedSound.sound != null) {
                     var xDirection;
-                    if($event.keyCode == 37) {
+                    if ($event.keyCode == 37) {
                         xDirection = -1;
                     } else {
                         xDirection = 1;
@@ -163,12 +163,28 @@
 
                     $rootScope.$broadcast("refreshPlay");
                     // update sound in the DB
+
+                    // reconstruct the sound obj for the DB because we don't 
+                    // want to resend the audio buffer
+                    var soundToSave = {
+                        "_id": vm.selectedSound.sound._id,
+                        "trackId": vm.selectedSound.sound.trackId,
+                        "fps": vm.selectedSound.sound.fps,
+                        "gridLocation": vm.selectedSound.sound.gridLocation,
+                        "track": vm.selectedSound.sound.track,
+                        "filePath": vm.selectedSound.sound.filePath,
+                        "frameLength": vm.selectedSound.sound.frameLength
+                    }
+
+                    SoundFactory.updateSound(soundToSave);
                 }
             }
 
             // handle space keypress
-            if($event.keyCode == 32) {
+            if ($event.keyCode == 32) {
                 $rootScope.$broadcast("togglePlay");
+
+                $event.preventDefault();
             }
         }
 
