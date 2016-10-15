@@ -87,6 +87,12 @@
                     fps: fps
                 }).then(function(res) {
                     vm.recording = true;
+                    if (!vm.playing) {
+                        // vm.intervalId = setInterval(moveMarker, 1000 / fps);
+                        //vm.playing = true;
+                        togglePlay();
+                        vm.playing = true;
+                    } 
 
                     // some meta information about the current recording session
                     vm.recordMeta.soundId = res.data._id;
@@ -99,9 +105,7 @@
 
                     // only initiate moveMarker animation if the collab was paused
                     // aka the marker wasnt moving
-                    if (!vm.playing) {
-                        vm.intervalId = setInterval(moveMarker, 1000 / fps);
-                    } 
+                    
                 })
             }
         }
@@ -123,6 +127,9 @@
             clearInterval(vm.intervalId);
 
             MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen, fps, vm.recordMeta.soundModel);
+
+            togglePlay();
+            vm.playing = false;
         }
 
         // play the audio and trigger marker move animation
