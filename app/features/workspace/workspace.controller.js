@@ -144,6 +144,32 @@
                     $rootScope.$broadcast("refreshPlay");
                 }
             }
+
+            // handle left/right arrow keypresses
+            if($event.keyCode == 37 || $event.keyCode == 39) {
+                if(vm.selectedSound.sound != null) {
+                    var xDirection;
+                    if($event.keyCode == 37) {
+                        xDirection = -1;
+                    } else {
+                        xDirection = 1;
+                    }
+
+                    var div = vm.selectedSound.canvas.parentNode;
+                    var leftOffset = parseInt(div.style.left);
+                    leftOffset += xDirection;
+                    div.style.left = leftOffset + "px";
+                    vm.selectedSound.sound.gridLocation += xDirection;
+
+                    $rootScope.$broadcast("refreshPlay");
+                    // update sound in the DB
+                }
+            }
+
+            // handle space keypress
+            if($event.keyCode == 32) {
+                $rootScope.$broadcast("togglePlay");
+            }
         }
 
         function commit() {

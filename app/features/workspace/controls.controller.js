@@ -55,6 +55,11 @@
             }
         })
 
+        $rootScope.$on("togglePlay", function() {
+            togglePlay();
+            vm.playing = !vm.playing;
+        })
+
         //////
 
         vm.buffer = null;
