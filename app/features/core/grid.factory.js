@@ -125,6 +125,7 @@
                 trackStart: trackStart
             })
             
+            $rootScope.$broadcast("refreshPlay");
 
             return false;
         }

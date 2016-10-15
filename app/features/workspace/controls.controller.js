@@ -48,6 +48,13 @@
             gridClickEvent(args.$event);
         })
 
+        $rootScope.$on("refreshPlay", function() {
+            if(vm.playing) {
+                pause();
+                play();
+            }
+        })
+
         //////
 
         vm.buffer = null;
@@ -69,6 +76,7 @@
                 vm.recording = false;
                 // stop recording
                 ContextFactory.stop(doneRecording, trackNum);
+
             } else {
                 // before we start recording, create a new
                 // sound entry in the DB
@@ -93,7 +101,7 @@
                     // aka the marker wasnt moving
                     if (!vm.playing) {
                         vm.intervalId = setInterval(moveMarker, 1000 / fps);
-                    }
+                    } 
                 })
             }
         }

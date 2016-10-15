@@ -140,6 +140,8 @@
                     MixFactory.deleteSound(vm.selectedSound.sound);
                     // remove from grid ui
                     GridFactory.removeSound(vm.selectedSound.canvas);
+
+                    $rootScope.$broadcast("refreshPlay");
                 }
             }
         }
