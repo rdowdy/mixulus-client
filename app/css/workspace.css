@@ -9,9 +9,12 @@ body {
 }
 
 .topNav,
-.tracks,
 .bottomNav {
 	background: rgba(255, 255, 255, 0.2);
+}
+
+.tracks {
+	background: rgba(255, 255, 255, 0.25);
 }
 
 .grid {
@@ -20,6 +23,16 @@ body {
 
 .gridRuler {
 	background: rgba(238, 238, 238, 0.3);
+}
+
+.container {
+	padding: 0;
+	width: 100%;
+	height: calc(100vh - 60px - 70px);
+	position: absolute;
+	top: 60px;
+	bottom: 70px;
+	overflow: auto;
 }
 
 /************************/
@@ -126,8 +139,8 @@ body {
 .tracks {
 	position: absolute;
 	width: 215px;
-	height: 100%;
-	padding-top: 60px;
+	/*height: 100%;*/
+	/*margin-top: 60px;*/
 	border-right: 1px solid black;
 	z-index: 600;
 }
@@ -256,8 +269,8 @@ input[type=range]::-webkit-slider-thumb {
   height: 22px;
   width: 12px;
   cursor: pointer;
-  background: #ffffff;
-  margin-top: -10px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  background: rgba(255, 255, 255, 0.5);
+  margin-top: -9px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
 }
 
 /* Webkit styling for the track */
@@ -275,8 +288,8 @@ input[type=range]::-webkit-slider-runnable-track {
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	padding-left: 215px;
-	padding-top: 60px;
+	margin-left: 215px;
+	/*padding-top: 60px;*/
 }
 
 .gridRuler {
@@ -291,7 +304,7 @@ input[type=range]::-webkit-slider-runnable-track {
 #locationMarker {
 	position: absolute;
 	width: 1px;
-	height: 100%;
+	/*height: calc(100vh - 60px - 70px);*/
 	border-left: 1px solid #0000cc;
 	z-index: 1001;
 }

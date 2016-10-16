@@ -24,10 +24,10 @@
             <button class="button addUser" ng-click="workspace.addUser()">Collaborators</button>
             <button class="button commit" ng-click="workspace.commit();">Commit Changes</button>
         </div>
-        
         <input type="text" class="ng-cloak editCollabName" ng-model="workspace.collab.name" ng-show="workspace.editCollabName" ng-blur="workspace.editCollabName = false; 
                  workspace.updateCollabName()">
     </div>
+    <div class="container">
     <!-- beginning of tracks listing -->
     <div class="tracks">
         <div class="addNewTrack" ng-click="workspace.addTrack()">
@@ -50,6 +50,7 @@
     <div id="grid" class="grid" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
         <div class="gridRuler"></div>
         <div id="locationMarker" ng-style="{left: grid.markerLocation + 'px'}"></div>
+    </div>
     </div>
     <div class="bottomNav">
         <div class="locationDisplay">
