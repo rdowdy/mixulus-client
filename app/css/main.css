@@ -2,12 +2,20 @@
 
 html {
     box-sizing: border-box;
+    height: 100%;
 }
 
 body {
     width: 100%;
+    height: 100%;
     margin: 0 auto;
     font-family: 'Open Sans';
+    
+
+
+background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);  /*#A83279,*/
+background-repeat: no-repeat;
+        
 }
 
 *,
@@ -25,6 +33,7 @@ button:focus {
 
 
 /* Base Styles */
+
 .container {
     width: 100%;
     padding: 2% 7%;
@@ -35,9 +44,11 @@ header h1 {
     font-family: 'Oswald';
 }
 
+
 /************************/
 /*    Button Styles     */
 /************************/
+
 .button {
     font-size: 1.2em;
     padding: .4em;
@@ -68,9 +79,11 @@ header h1 {
     margin-left: -6px;
 }
 
+
 /************************/
 /* Form Elements Styles */
 /************************/
+
 .form {
     width: 30%;
     margin: 0 auto;
@@ -113,21 +126,40 @@ select {
     padding: 5px;
 }
 
+
 /************************/
 /*  Collab List Styles  */
 /************************/
+
 #collabList {
-    width: 40%;
+    width: 100%;
+}
+
+#collabList hr {
+    border-color: black;
+    width: 100%;
+}
+
+#collabList h1 {
+    text-align: center;
+}
+
+#collabList h1,
+.collab h3 {
+    font-family: 'Oswald';
 }
 
 .collab {
     border: 1px solid black;
+    margin: 0 auto;
     margin-bottom: 10px;
+    background: rgba(255,255,255,0.7);
+    width: 95%;
 }
 
 .collab.disabled {
     border-color: #999;
-    background: #ccc;
+    background: rgba(204,204,204,0.4);
     color: #666;
 }
 
@@ -148,7 +180,17 @@ select {
     text-overflow: ellipsis;
 }
 
+.collab i {
+    margin-right: 5px;
+}
+
 /* For Angular */
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-  display: none !important;
+
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display: none !important;
 }
