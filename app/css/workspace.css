@@ -21,10 +21,6 @@ body {
 	background: rgba(204, 204, 204, 0.2);
 }
 
-.gridRuler {
-	background: rgba(238, 238, 238, 0.3);
-}
-
 .container {
 	padding: 0;
 	width: 100%;
@@ -174,7 +170,7 @@ body {
 	height: 100px;
 	border-bottom: 2px solid black;
 	border-top: 1px solid black;
-	border-right: 1px solid black;
+	border-right: 2px solid black;
 	padding: 5px;
 	padding-bottom: 10px;
 }
@@ -301,27 +297,17 @@ table.grid {
 }
 
 .trackCellContainer {
-	width: 204px;
+	width: 203px;
 }
 
 table.grid tr td:nth-child(2) {
 	width: 100%;
 }
 
-.gridRuler {
-	position: fixed;
-	border-bottom: 1px solid #bbb;
-	width: 100%;
-	margin-left: 215px;
-	height: 15px;
-	top: 60px;
-	z-index: 1000;
-}
-
 #locationMarker {
 	position: absolute;
 	width: 1px;
-	/*height: calc(100vh - 60px - 70px);*/
+	height: calc(100vh - 60px - 70px - 30px);
 	border-left: 1px solid #0000cc;
 	z-index: 1001;
 }
