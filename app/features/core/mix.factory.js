@@ -170,6 +170,14 @@
                     tracks.push(trackFromDB);
                 });
             });
+
+            // check to see if the location marker needs to be made longer
+            var marker = document.getElementById("locationMarker");
+            var tracks = document.getElementById("grid");
+
+            if(tracks.offsetHeight > marker.offsetHeight) {
+                marker.style.height = tracks.offsetHeight + "px";
+            }
         }
 
         function toggleMute(trackNum) {
