@@ -77,6 +77,7 @@ body {
 	font-size: 2em;
 	font-weight: bold;
 	border: 1px solid black;
+	background: rgba(255,255,255,0.2);
 }
 
 .topNav .collaboration {
@@ -186,6 +187,7 @@ body {
 	font-size: 1.17em;
 	width: 80%;
 	border: 1px solid black;
+	background: rgba(255,255,255,0.2);
 }
 
 .track .button-group {
@@ -273,7 +275,7 @@ input[type=range]::-webkit-slider-thumb {
   height: 22px;
   width: 12px;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.3);
   margin-top: -9px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
 }
 
@@ -340,13 +342,13 @@ table.grid tr td:nth-child(2) {
 
 .clipCanvas:hover,
 .clipCanvas.selected {
-	background: #555;
+	background: rgba(85,85,85,0.6);
 }
 
 .clipCanvas {
 	width: 100%;
 	height: 100%;
-	background: black;
+	background: rgba(0,0,0,0.8);
 }
 
 /************************/
