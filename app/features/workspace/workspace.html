@@ -36,7 +36,7 @@
         </div>
         <div id="locationMarker" ng-style="{left: grid.markerLocation + 'px'}"></div>
         <table id="grid" class="grid">
-            <tr ng-repeat="track in workspace.tracks" id="track{{$index}}">
+            <tr ng-repeat="track in workspace.tracks" id="track{{$index}}" ng-init="workspace.trackListUpdated();">
                 <td class="track">
                     <div class="trackCellContainer">
                         <h3 class="ng-cloak trackName" ng-show="!track.editTrackName" ng-click="track.editTrackName = true">{{track.name}}</h3>

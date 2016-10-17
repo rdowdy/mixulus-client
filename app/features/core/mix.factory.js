@@ -40,8 +40,6 @@
             var dragStart = args.dragStartX;
             var trackStart = args.trackStart;
 
-            console.log(trackStart, dragStart);
-
             // get the sound obj from the mix
             var soundObj = getSoundFromX(trackStart, dragStart);
             // update the sound obj in the mix
@@ -155,16 +153,6 @@
                                     height -= heightDiff;
                                     mixContainer.style.height = height + "px";
                                 }
-
-                                /////////////////
-                                // check to see if the grid marker
-                                // needs to be extended
-                                var trackList = document.getElementById("grid");
-                                var locationMarker = document.getElementById("locationMarker");
-
-                                if(trackList.offsetHeight > mixContainer.offsetHeight) {
-                                    locationMarker.style.height = trackList.offsetHeight + "px";
-                                }
                             }
                         });
                     }
@@ -213,14 +201,6 @@
                     tracks.push(trackFromDB);
                 });
             });
-
-            // check to see if the location marker needs to be made longer
-            var marker = document.getElementById("locationMarker");
-            var trackList = document.getElementById("grid");
-
-            if(trackList.offsetHeight > marker.offsetHeight) {
-                marker.style.height = trackList.offsetHeight + "px";
-            }
         }
 
         function toggleMute(trackNum) {

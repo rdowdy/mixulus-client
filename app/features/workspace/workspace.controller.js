@@ -31,6 +31,7 @@
         vm.commit = commit;
         vm.addUserToCollab = addUserToCollab;
         vm.adjustTrackVolume = adjustTrackVolume;
+        vm.trackListUpdated = trackListUpdated;
 
         ////////////////
         getCollab();
@@ -85,6 +86,21 @@
             MixFactory.addTrack();
         }
 
+        function trackListUpdated() {
+            /////////////////
+            // check to see if the grid marker
+            // needs to be extended
+            var trackList = document.getElementById("grid");
+            var locationMarker = document.getElementById("locationMarker");
+            var mixContainer = document.getElementById("mixBoard");
+
+            console.log(trackList.offsetHeight);
+
+            if(trackList.offsetHeight > mixContainer.offsetHeight) {
+                locationMarker.style.height = trackList.offsetHeight + "px";
+            }
+        }
+
         function addUserDialog() {
             // open a modal to get user input
             ngDialog.open({
@@ -108,7 +124,6 @@
 
         function gridClickEvent($event) {
             // calculate track number
-            console.log($event.clientX);
             var trackNum = GridFactory.getTrackNumFromY($event.pageY);
 
             // set selectedSound reference to sound object
