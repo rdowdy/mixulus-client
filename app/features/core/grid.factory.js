@@ -9,7 +9,7 @@
 
     /* @ngInject */
     function GridFactory($window, $rootScope) {
-        var gridRulerHeight = 15;
+        var gridRulerHeight = 16;
         var topNavHeight = 0;
         var topNavHeightAbsolute = 60;
         var borderHeight = 0;
