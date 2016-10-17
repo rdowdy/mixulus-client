@@ -27,31 +27,43 @@
         <input type="text" class="ng-cloak editCollabName" ng-model="workspace.collab.name" ng-show="workspace.editCollabName" ng-blur="workspace.editCollabName = false; 
                  workspace.updateCollabName()">
     </div>
-    <div class="container">
-    <!-- beginning of tracks listing -->
-    <div class="tracks">
-        <div class="addNewTrack" ng-click="workspace.addTrack()">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-        </div>
-        <div class="track" ng-repeat="track in workspace.tracks" id="track{{$index}}">
-            <h3 class="ng-cloak trackName" ng-show="!track.editTrackName" ng-click="track.editTrackName = true">{{track.name}}</h3>
-            <input type="text" class="editTrackName" ng-model="track.name" ng-show="track.editTrackName" ng-blur="track.editTrackName = false; workspace.updateTrackName(track)">
-            <div class="button-group">
-                <button class="button mutesolo" ng-click="workspace.toggleMute($index); track.muted = !track.muted" ng-class="{'muteActive': track.muted}">M</button>
-                <button class="button mutesolo" ng-click="workspace.toggleSolo($index); track.solo = !track.solo" ng-class="{'soloActive': track.solo}">S</button>
+    <div class="mixContainer" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
+        <div class="gridTop">
+            <div class="addNewTrack" ng-click="workspace.addTrack()">
+                <i class="fa fa-plus" aria-hidden="true"></i>
             </div>
-            <div class="arm-group button-group">
-                <button class="button arm" ng-click="workspace.toggleTrackArmed($index)" ng-class="{ 'armed': workspace.armedTrack == $index }">Arm</button>
-            </div>
-            <input type="range" min="0" max="300" class="fader" ng-model="track.gain" ng-change="workspace.adjustTrackVolume(track)">
+            <div class="gridRuler"></div>
         </div>
-    </div>
-    <!-- end of tracks listing -->
-    <div id="grid" class="grid" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
-        <div class="gridRuler"></div>
         <div id="locationMarker" ng-style="{left: grid.markerLocation + 'px'}"></div>
+        <table id="grid" class="grid">
+            <tr ng-repeat="track in workspace.tracks" id="track{{$index}}">
+                <td class="track">
+                    <div class="trackCellContainer">
+                        <h3 class="ng-cloak trackName" ng-show="!track.editTrackName" ng-click="track.editTrackName = true">{{track.name}}</h3>
+                        <input type="text" class="editTrackName" ng-model="track.name" ng-show="track.editTrackName" ng-blur="track.editTrackName = false; workspace.updateTrackName(track)">
+                        <div class="button-group">
+                            <button class="button mutesolo" ng-click="workspace.toggleMute($index); track.muted = !track.muted" ng-class="{'muteActive': track.muted}">M</button>
+                            <button class="button mutesolo" ng-click="workspace.toggleSolo($index); track.solo = !track.solo" ng-class="{'soloActive': track.solo}">S</button>
+                        </div>
+                        <div class="arm-group button-group">
+                            <button class="button arm" ng-click="workspace.toggleTrackArmed($index)" ng-class="{ 'armed': workspace.armedTrack == $index }">Arm</button>
+                        </div>
+                        <input type="range" min="0" max="300" class="fader" ng-model="track.gain" ng-change="workspace.adjustTrackVolume(track)">
+                    </div>
+                </td>
+                <td class="track{{$index}}Sounds"></td>
+            </tr>
+        </table>
     </div>
-    </div>
+    <!-- beginning of tracks listing -->
+    <!--  <div class="tracks">
+        
+        
+    </div> -->
+    <!-- end of tracks listing -->
+    <!-- <div id="grid" class="grid" >
+        
+    </div> -->
     <div class="bottomNav">
         <div class="locationDisplay">
             01:04:45
