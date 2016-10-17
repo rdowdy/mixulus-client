@@ -109,10 +109,10 @@
         function gridClickEvent($event) {
             // calculate track number
             console.log($event.clientX);
-            var trackNum = GridFactory.getTrackNumFromY($event.clientY);
+            var trackNum = GridFactory.getTrackNumFromY($event.pageY);
 
             // set selectedSound reference to sound object
-            vm.selectedSound.sound = MixFactory.getSoundFromX(trackNum, $event.clientX);
+            vm.selectedSound.sound = MixFactory.getSoundFromX(trackNum, $event.pageX);
             vm.selectedSound.canvas = $event.target;
 
             // regardless of whether something is selected

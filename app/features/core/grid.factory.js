@@ -75,8 +75,8 @@
         }
 
         function dragstart(e) {
-            dragStartX = e.clientX;
-            trackStart = getTrackNumFromY(e.clientY);
+            dragStartX = e.pageX;
+            trackStart = getTrackNumFromY(e.pageY);
             return false;
         }
 
@@ -96,7 +96,7 @@
 
             ////////
             // x-axis movement
-            dragEndX = e.clientX;
+            dragEndX = e.pageX;
             var dragDelta = dragEndX - dragStartX;
 
             // move the clip in the x direction
@@ -112,7 +112,7 @@
 
             ////////
             // check for y-axis movement
-            var dragEndY = e.clientY;
+            var dragEndY = e.pageY;
             dragEndY = dragEndY - topNavHeight - gridRulerHeight;
 
             // calculate track number based on y-axis movement

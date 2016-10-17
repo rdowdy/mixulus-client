@@ -199,7 +199,7 @@
             }
 
             // check for location of click
-            if($event.clientX < 215) {
+            if($event.pageX < 215) {
                 return ;
             }
 
@@ -208,7 +208,7 @@
                 pause();
                 unpause = true;
             }
-            var x = $event.clientX - markerCenterOffset;
+            var x = $event.pageX - markerCenterOffset;
             vm.markerLocation = x;
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
             if (unpause) {

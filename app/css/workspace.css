@@ -6,6 +6,8 @@ body {
 	background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);  /*#A83279,*/
 	background-repeat: no-repeat;
 	background-attachment: fixed;
+
+	overflow-x: scroll;
 }
 
 .topNav,
@@ -33,9 +35,11 @@ body {
 
 .mixContainer {
     width: 100%;
-    min-height: calc(100vh - 60px - 70px);
+    /* 16px to account for bottom scrollbar */
+    height: calc(100vh - 60px - 70px - 16px);
     margin-top: 60px;
     position: absolute;
+    overflow-y: auto;
 }
 /************************/
 /*    Top Nav Styles    */
