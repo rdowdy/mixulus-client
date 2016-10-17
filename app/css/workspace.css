@@ -97,9 +97,8 @@ body {
 	margin: 0;
 	font-size: 0.8em;
 	height: 30px;
-}
-
-.topNav .addUser {
+	font-family: 'Oswald';
+	line-height: 15px;
 	width: 150px;
 }
 
@@ -180,14 +179,14 @@ body {
 	margin: 0;
 	margin-top: 5px;
 	padding: 0;
-	font-weight: normal;
+	font-weight: bold;
+	font-family: 'Oswald';
 }
 
 .track .editTrackName {
 	display: block;
 	font-size: 1.17em;
 	width: 80%;
-	font-family: 'Open Sans';
 	border: 1px solid black;
 }
 
@@ -197,7 +196,7 @@ body {
 
 .track .button,
 .track select {
-	border-color: #aaa;
+	border-color: black;
 }
 
 .mutesolo {
@@ -205,6 +204,7 @@ body {
 	width: 25px;
 	height: 25px;
 	font-size: 0.8em;
+	font-family: 'Oswald';
 }
 
 .button.muteActive {
@@ -227,6 +227,7 @@ body {
 	font-size: 0.8em;
 	line-height: 12px;
 	margin-left: 10px;
+	font-family: 'Oswald';
 }
 
 .arm.armed {
