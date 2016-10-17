@@ -216,10 +216,10 @@
 
             // check to see if the location marker needs to be made longer
             var marker = document.getElementById("locationMarker");
-            var tracks = document.getElementById("grid");
+            var trackList = document.getElementById("grid");
 
-            if(tracks.offsetHeight > marker.offsetHeight) {
-                marker.style.height = tracks.offsetHeight + "px";
+            if(trackList.offsetHeight > marker.offsetHeight) {
+                marker.style.height = trackList.offsetHeight + "px";
             }
         }
 
@@ -244,7 +244,7 @@
                 } else {
                     for (var i = 0; i < tracks.length; i++) {
                         if (tracks[i].mute == false) {
-                            console.log('unmuting');
+                            // unmute 
                             tracks[i].muteSoloGainNode.gain.value = 1.0;
                         }
                     }
