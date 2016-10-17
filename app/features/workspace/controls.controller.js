@@ -198,12 +198,17 @@
                 return;
             }
 
+            // check for location of click
+            if($event.offsetX < 215) {
+                return ;
+            }
+
             var unpause = false;
             if (vm.playing) {
                 pause();
                 unpause = true;
             }
-            var x = $event.clientX - markerCenterOffset;
+            var x = $event.offsetX - markerCenterOffset;
             vm.markerLocation = x;
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
             if (unpause) {
