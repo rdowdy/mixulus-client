@@ -64,6 +64,13 @@
             div.appendChild(canvas);
             grid.appendChild(div);
 
+            // extend width of mixer ui if needed
+            var mixer = document.getElementById("mixBoard");
+            if(gridLocation + length > mixer.offsetWidth) {
+                mixer.style.width = mixer.offsetWidth + length + "px";
+            }
+            console.log(mixer.offsetWidth);
+
             return canvas;
         }
 

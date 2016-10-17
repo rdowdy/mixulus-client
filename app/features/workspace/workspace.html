@@ -27,7 +27,7 @@
         <input type="text" class="ng-cloak editCollabName" ng-model="workspace.collab.name" ng-show="workspace.editCollabName" ng-blur="workspace.editCollabName = false; 
                  workspace.updateCollabName()">
     </div>
-    <div class="mixContainer" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
+    <div class="mixContainer" id="mixBoard" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
         <div class="gridTop">
             <div class="addNewTrack" ng-click="workspace.addTrack()">
                 <i class="fa fa-plus" aria-hidden="true"></i>
@@ -51,7 +51,7 @@
                         <input type="range" min="0" max="300" class="fader" ng-model="track.gain" ng-change="workspace.adjustTrackVolume(track)">
                     </div>
                 </td>
-                <!-- <td class="track{{$index}}Sounds"></td> -->
+                <!-- <td id="track{{$index}}Sounds"></td> -->
             </tr>
         </table>
     </div>
