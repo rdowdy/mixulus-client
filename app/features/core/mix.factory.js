@@ -40,11 +40,22 @@
             var dragStart = args.dragStartX;
             var trackStart = args.trackStart;
 
+            console.log(trackStart, dragStart);
+
             // get the sound obj from the mix
             var soundObj = getSoundFromX(trackStart, dragStart);
             // update the sound obj in the mix
             soundObj.gridLocation = newLoc;
-            soundObj.track = newTrack;
+
+            // new track, so splice it from old track
+            // and put into new track
+            if(newTrack != trackStart) {
+                soundObj.track = newTrack;
+
+                var idx = tracks[trackStart].soundIds.indexOf(soundObj);
+                tracks[trackStart].soundIds.splice(idx, 1);
+                tracks[newTrack].soundIds.push(soundObj);
+            }
 
             // reconstruct the sound obj for the DB because we don't 
             // want to resend the audio buffer
@@ -129,7 +140,7 @@
 
         function getSoundFromX(trackNum, coordX) {
             var track = tracks[trackNum];
-            
+            console.log(tracks);
             if(track == null) {
                 return null;
             }

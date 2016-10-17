@@ -11,6 +11,7 @@
     function GridFactory($window, $rootScope) {
         var gridRulerHeight = 15;
         var topNavHeight = 0;
+        var topNavHeightAbsolute = 60;
         var borderHeight = 0;
         var trackHeight = 100;
         var trackListWidth = 215;
@@ -38,7 +39,7 @@
         // based on a y location in the grid
         // return the track number this location is correlates to
         function getTrackNumFromY(y) {
-            y = y - gridRulerHeight - topNavHeight;
+            y = y - gridRulerHeight - topNavHeightAbsolute;
             y /= trackHeight;
             return Math.floor(y);
         }
@@ -69,14 +70,13 @@
             if(gridLocation + length > mixer.offsetWidth) {
                 mixer.style.width = mixer.offsetWidth + length + "px";
             }
-            console.log(mixer.offsetWidth);
 
             return canvas;
         }
 
         function dragstart(e) {
-            dragStartX = e.target.offsetLeft;
-            trackStart = getTrackNumFromY(e.target.offsetTop);
+            dragStartX = e.clientX;
+            trackStart = getTrackNumFromY(e.clientY);
             return false;
         }
 
