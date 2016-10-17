@@ -35,8 +35,7 @@ body {
 
 .mixContainer {
     width: 100%;
-    /* 16px to account for bottom scrollbar */
-    height: calc(100vh - 60px - 70px - 16px);
+    height: calc(100vh - 60px - 70px);
     margin-top: 60px;
     position: absolute;
     overflow-y: auto;

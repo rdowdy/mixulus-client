@@ -28,9 +28,9 @@
         var tracks = [];
         var soloedTracks = [];
 
-        var dbGainUnity = 100;
-
         var latestLoc = 0;
+
+        var soundsToLoad = 0;
 
         ////////////////
         // Root Scope Events
@@ -103,6 +103,12 @@
                 tracks = collab.trackIds;
             }
 
+            soundsToLoad = 0;
+            // figure out how many sounds need to be loaded
+            for(var i = 0; i < tracks.length; i++) {
+                soundsToLoad += tracks[i].soundIds.length;
+            }
+
             // set up volume gain node
             // and mutesolo gain node
             for (var i = 0; i < tracks.length; i++) {
@@ -123,6 +129,43 @@
 
                             var canvas = GridFactory.createCanvas(sound.track, sound.gridLocation, sound.frameLength);
                             GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), sound.buffer);
+
+                            soundsToLoad--;
+                        }, function(err) {
+                            if(err.status == 500) {
+                                // TODO: elaborate this
+                                soundsToLoad--;
+                            }
+                        }).finally(function() {
+                            if(soundsToLoad == 0) {
+                                ///////////////////////////
+                                // run this code once all the sounds are done loading
+                                ///////////////////////////
+                                var mixContainer = document.getElementById('mixBoard')
+
+                                /////////////////
+                                // check to see if the bottom scrollbar is affecting
+                                // the position of the bottom navbar
+                                // and change the height of the track lists, if so
+                                var bottomNav = document.getElementById('bottomNav');
+                                var heightDiff = bottomNav.offsetTop + bottomNav.offsetHeight - document.body.offsetHeight
+                                if(heightDiff > 0) {
+                                    console.log("scrollbar!");
+                                    var height = mixContainer.offsetHeight;
+                                    height -= heightDiff;
+                                    mixContainer.style.height = height + "px";
+                                }
+
+                                /////////////////
+                                // check to see if the grid marker
+                                // needs to be extended
+                                var trackList = document.getElementById("grid");
+                                var locationMarker = document.getElementById("locationMarker");
+
+                                if(trackList.offsetHeight > mixContainer.offsetHeight) {
+                                    locationMarker.style.height = trackList.offsetHeight + "px";
+                                }
+                            }
                         });
                     }
                 }

@@ -17,7 +17,7 @@
 </head>
 
 <body ng-controller="WorkspaceController as workspace" ng-keydown="workspace.keydown($event)">
-    <div class="topNav">
+    <div class="topNav" id="topNav">
         <a href="/home"><i class="fa fa-home" aria-hidden="true"></i></a>
         <h1 class="ng-cloak collabHeader" ng-show="!workspace.editCollabName" ng-click="workspace.editCollabName = true">{{workspace.collab.name}}</h1>
         <div class="collaboration">
@@ -54,16 +54,7 @@
             </tr>
         </table>
     </div>
-    <!-- beginning of tracks listing -->
-    <!--  <div class="tracks">
-        
-        
-    </div> -->
-    <!-- end of tracks listing -->
-    <!-- <div id="grid" class="grid" >
-        
-    </div> -->
-    <div class="bottomNav">
+    <div class="bottomNav" id="bottomNav">
         <div class="locationDisplay">
             01:04:45
         </div>
