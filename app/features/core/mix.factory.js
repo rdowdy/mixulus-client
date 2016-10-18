@@ -28,9 +28,9 @@
         var tracks = [];
         var soloedTracks = [];
 
-        var dbGainUnity = 100;
-
         var latestLoc = 0;
+
+        var soundsToLoad = 0;
 
         ////////////////
         // Root Scope Events
@@ -44,7 +44,16 @@
             var soundObj = getSoundFromX(trackStart, dragStart);
             // update the sound obj in the mix
             soundObj.gridLocation = newLoc;
-            soundObj.track = newTrack;
+
+            // new track, so splice it from old track
+            // and put into new track
+            if(newTrack != trackStart) {
+                soundObj.track = newTrack;
+
+                var idx = tracks[trackStart].soundIds.indexOf(soundObj);
+                tracks[trackStart].soundIds.splice(idx, 1);
+                tracks[newTrack].soundIds.push(soundObj);
+            }
 
             // reconstruct the sound obj for the DB because we don't 
             // want to resend the audio buffer
@@ -92,6 +101,12 @@
                 tracks = collab.trackIds;
             }
 
+            soundsToLoad = 0;
+            // figure out how many sounds need to be loaded
+            for(var i = 0; i < tracks.length; i++) {
+                soundsToLoad += tracks[i].soundIds.length;
+            }
+
             // set up volume gain node
             // and mutesolo gain node
             for (var i = 0; i < tracks.length; i++) {
@@ -112,6 +127,13 @@
 
                             var canvas = GridFactory.createCanvas(sound.track, sound.gridLocation, sound.frameLength);
                             GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), sound.buffer);
+
+                            soundsToLoad--;
+                        }, function(err) {
+                            if(err.status == 500) {
+                                // TODO: elaborate this
+                                soundsToLoad--;
+                            }
                         });
                     }
                 }
@@ -129,7 +151,6 @@
 
         function getSoundFromX(trackNum, coordX) {
             var track = tracks[trackNum];
-            
             if(track == null) {
                 return null;
             }
@@ -182,7 +203,7 @@
                 } else {
                     for (var i = 0; i < tracks.length; i++) {
                         if (tracks[i].mute == false) {
-                            console.log('unmuting');
+                            // unmute 
                             tracks[i].muteSoloGainNode.gain.value = 1.0;
                         }
                     }

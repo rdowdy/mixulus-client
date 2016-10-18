@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Music App</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald:400,700" rel="stylesheet">
+    <script src="https://use.fontawesome.com/965f3ecbfc.js"></script>
     <!-- bower:css -->
     <!-- endbower -->
     <!-- inject:css -->
@@ -13,35 +14,40 @@
 </head>
 
 <body ng-controller="AuthController as auth">
-    <header>
-        <h1>Music App</h1>
+    <header class="banner">
+        <div>
+            <a href="#authForms"><h1>collabio</h1>
+            <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+        </div>
     </header>
-    <form ng-submit="auth.login()" class="form">
-        <div class="input-group">
-            <label for="username">email</label>
-            <input type="text" ng-model="auth.loginUsername" id="username">
-        </div>
-        <div class="input-group">
-            <label>password</label>
-            <input type="password" ng-model="auth.loginPassword" id="password">
-        </div>
-        <button type="submit" class="button">Log In</button>
-    </form>
-    <div class="registrationModal">
-        <form class="form">
+    <div class="authForms" id="authForms">
+        <form ng-submit="auth.login()" class="form" id="login">
+            <h2>Log In</h2>
             <div class="input-group">
-                <label for="username">username</label>
-                <input type="text" id="username" name="username">
+                <label for="username">email</label>
+                <input type="text" ng-model="auth.loginUsername" id="username">
             </div>
             <div class="input-group">
                 <label for="password">password</label>
-                <input type="password" id="password" name="password">
+                <input type="password" ng-model="auth.loginPassword" id="password">
+            </div>
+            <button type="submit" class="button">Log In</button>
+        </form>
+        <form class="form" id="signup">
+            <h2>Sign Up</h2>
+            <div class="input-group">
+                <label for="newUsername">username</label>
+                <input type="text" id="newUsername" name="newUsername" ng-model="auth.signupUsername">
+            </div>
+            <div class="input-group">
+                <label for="newPassword">password</label>
+                <input type="password" id="newPassword" name="newPassword" ng-model="auth.signupPassword">
             </div>
             <div class="input-group">
                 <label for="confirmPassword">confirm password</label>
-                <input type="password" id="confirmPassword">
+                <input type="password" id="confirmPassword" ng-model="auth.signupPasswordConfirm">
             </div>
-            <button class="button">Sign Up</button>
+            <button class="button" ng-click="auth.signup();">Sign Up</button>
         </form>
     </div>
     <!-- bower:js -->

@@ -31,6 +31,7 @@
         vm.commit = commit;
         vm.addUserToCollab = addUserToCollab;
         vm.adjustTrackVolume = adjustTrackVolume;
+        vm.trackListUpdated = trackListUpdated;
 
         ////////////////
         getCollab();
@@ -59,6 +60,20 @@
                     $window.location.href = "/home";
                 }
             });
+
+            if (!Modernizr.hiddenscroll) {
+                var mixContainer = document.getElementById('mixBoard');
+                console.log("scrollbar!");
+                var height = mixContainer.offsetHeight;
+                height -= 17;
+                mixContainer.style.height = height + "px";
+
+                // do the same for the location marker
+                var locationMarker = document.getElementById("locationMarker");
+                height = locationMarker.offsetHeight;
+                height -= 17;
+                locationMarker.style.height = height + "px";
+            }
         }
 
         function toggleMute(trackNum) {
@@ -85,6 +100,21 @@
             MixFactory.addTrack();
         }
 
+        function trackListUpdated() {
+            /////////////////
+            // check to see if the grid marker
+            // needs to be extended
+            var trackList = document.getElementById("grid");
+            var locationMarker = document.getElementById("locationMarker");
+            var mixContainer = document.getElementById("mixBoard");
+
+            console.log(trackList.offsetHeight);
+
+            if (trackList.offsetHeight > mixContainer.offsetHeight) {
+                locationMarker.style.height = trackList.offsetHeight + "px";
+            }
+        }
+
         function addUserDialog() {
             // open a modal to get user input
             ngDialog.open({
@@ -107,11 +137,17 @@
         }
 
         function gridClickEvent($event) {
+            // chrome was recording pageY coordinates weirdly, 
+            // so im gonna calculate y-coord using clientY + scrollTop
+            var yCoord = $event.clientY;
+            var mixContainer = document.getElementById('mixBoard');
+            yCoord += mixContainer.scrollTop;
+
             // calculate track number
-            var trackNum = GridFactory.getTrackNumFromY($event.clientY);
+            var trackNum = GridFactory.getTrackNumFromY(yCoord);
 
             // set selectedSound reference to sound object
-            vm.selectedSound.sound = MixFactory.getSoundFromX(trackNum, $event.clientX);
+            vm.selectedSound.sound = MixFactory.getSoundFromX(trackNum, $event.pageX);
             vm.selectedSound.canvas = $event.target;
 
             // regardless of whether something is selected

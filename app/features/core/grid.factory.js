@@ -9,9 +9,10 @@
 
     /* @ngInject */
     function GridFactory($window, $rootScope) {
-        var gridRulerHeight = 15;
-        var topNavHeight = 60;
-        var borderHeight = 1;
+        var gridRulerHeight = 16;
+        var topNavHeight = 0;
+        var topNavHeightAbsolute = 60;
+        var borderHeight = 0;
         var trackHeight = 100;
         var trackListWidth = 215;
 
@@ -38,7 +39,7 @@
         // based on a y location in the grid
         // return the track number this location is correlates to
         function getTrackNumFromY(y) {
-            y = y - gridRulerHeight - topNavHeight;
+            y = y - gridRulerHeight - topNavHeightAbsolute;
             y /= trackHeight;
             return Math.floor(y);
         }
@@ -64,12 +65,25 @@
             div.appendChild(canvas);
             grid.appendChild(div);
 
+            // extend width of mixer ui if needed
+            var mixer = document.getElementById("mixBoard");
+            if(gridLocation + length > mixer.offsetWidth) {
+                mixer.style.width = mixer.offsetWidth + length + "px";
+            }
+
             return canvas;
         }
 
         function dragstart(e) {
-            dragStartX = e.target.offsetLeft;
-            trackStart = getTrackNumFromY(e.target.offsetTop);
+            dragStartX = e.pageX;
+
+            // chrome was recording pageY coordinates weirdly, 
+            // so im gonna calculate y-coord using clientY + scrollTop
+            var yCoord = e.clientY;
+            var mixContainer = document.getElementById('mixBoard');
+            yCoord += mixContainer.scrollTop;
+
+            trackStart = getTrackNumFromY(yCoord);
             return false;
         }
 
@@ -89,7 +103,7 @@
 
             ////////
             // x-axis movement
-            dragEndX = e.clientX;
+            dragEndX = e.pageX;
             var dragDelta = dragEndX - dragStartX;
 
             // move the clip in the x direction
@@ -105,7 +119,14 @@
 
             ////////
             // check for y-axis movement
-            var dragEndY = e.clientY;
+
+            // chrome was recording pageY coordinates weirdly, 
+            // so im gonna calculate y-coord using clientY + scrollTop
+            var yCoord = e.clientY;
+            var mixContainer = document.getElementById('mixBoard');
+            yCoord += mixContainer.scrollTop;
+
+            var dragEndY = yCoord;
             dragEndY = dragEndY - topNavHeight - gridRulerHeight;
 
             // calculate track number based on y-axis movement

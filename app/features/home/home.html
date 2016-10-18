@@ -22,6 +22,7 @@
                 <h3><i class="fa fa-plus" aria-hidden="true"></i> New Collab</h3>
                 <p>Click here to start a new collaboration!</p>
             </div>
+            <hr>
             <div class="collab" ng-repeat="collab in home.collabs" ng-click="home.goToWorkspace(collab)" ng-class="{'disabled': collab.waiting == true}">
                 <div class="ng-cloak metainfo">
                     <h3><i class="fa fa-hourglass" aria-hidden="true" ng-show="collab.waiting"></i>

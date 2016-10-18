@@ -43,7 +43,30 @@
         }
 
         function signup() {
+            var newUser = {
+                "username": vm.signupUsername,
+                "password": vm.signupPassword
+            }
 
+            if(vm.signupPassword != vm.signupPasswordConfirm) {
+                alert("Your passwords don't match!");
+            } else {
+
+                $http.post("/signup", newUser).then(function(res) {
+                    if(res.data.success == true) {
+                        $http.post("/authenticate", newUser).then(function(jwtRes) {
+                            if(jwtRes.data.success == true) {
+                                localStorageService.set('token', jwtRes.data.token);
+                                localStorageService.set('userId', res.data.user._id);
+                                $window.location.href = "/home";
+                            } else {
+                                // some sort of JWT error
+                            }
+                        });
+                    }
+                    
+                })
+            }
         }
     }
 })();
