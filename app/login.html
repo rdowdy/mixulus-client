@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Music App</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald:400,700" rel="stylesheet">
+    <script src="https://use.fontawesome.com/965f3ecbfc.js"></script>
     <!-- bower:css -->
     <!-- endbower -->
     <!-- inject:css -->
@@ -13,21 +14,24 @@
 </head>
 
 <body ng-controller="AuthController as auth">
-    <header>
-        <h1>Music App</h1>
+    <header class="banner">
+        <div>
+            <h1>collabio</h1>
+            <i class="fa fa-angle-down" aria-hidden="true"></i>
+        </div>
     </header>
-    <form ng-submit="auth.login()" class="form">
-        <div class="input-group">
-            <label for="username">email</label>
-            <input type="text" ng-model="auth.loginUsername" id="username">
-        </div>
-        <div class="input-group">
-            <label for="password">password</label>
-            <input type="password" ng-model="auth.loginPassword" id="password">
-        </div>
-        <button type="submit" class="button">Log In</button>
-    </form>
-    <div class="registrationModal">
+    <div class="authForms">
+        <form ng-submit="auth.login()" class="form">
+            <div class="input-group">
+                <label for="username">email</label>
+                <input type="text" ng-model="auth.loginUsername" id="username">
+            </div>
+            <div class="input-group">
+                <label for="password">password</label>
+                <input type="password" ng-model="auth.loginPassword" id="password">
+            </div>
+            <button type="submit" class="button">Log In</button>
+        </form>
         <form class="form">
             <div class="input-group">
                 <label for="newUsername">username</label>
