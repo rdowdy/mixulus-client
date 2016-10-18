@@ -84,6 +84,18 @@ background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
 .authForms {
     width: 100%;
     height: 100%;
+    padding: 0 10%;
+}
+
+.authForms .button {
+    background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
+    font-family: 'Oswald';
+}
+
+.authForms .button:hover,
+.authForms .button:focus {
+    cursor: pointer;
+    background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
 }
 
 /************************/
@@ -94,15 +106,13 @@ background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
     font-size: 1.2em;
     padding: .4em;
     margin: 10px 0;
-    background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
+    background: none;
     border: 2px solid black;
-    font-family: 'Oswald';
 }
 
-.button:hover,
-.button:focus {
+.button:hover {
     color: white;
-    cursor: pointer;
+    background: black;
 }
 
 .button:active {
@@ -126,10 +136,6 @@ background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
 /************************/
 /* Form Elements Styles */
 /************************/
-.authForms {
-    padding: 0 10%;
-    width: 100%;
-}
 
 .form {
     width: 100%;
