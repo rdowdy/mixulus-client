@@ -60,6 +60,20 @@
                     $window.location.href = "/home";
                 }
             });
+
+            if (!Modernizr.hiddenscroll) {
+                var mixContainer = document.getElementById('mixBoard');
+                console.log("scrollbar!");
+                var height = mixContainer.offsetHeight;
+                height -= 17;
+                mixContainer.style.height = height + "px";
+
+                // do the same for the location marker
+                var locationMarker = document.getElementById("locationMarker");
+                height = locationMarker.offsetHeight;
+                height -= 17;
+                locationMarker.style.height = height + "px";
+            }
         }
 
         function toggleMute(trackNum) {
@@ -96,7 +110,7 @@
 
             console.log(trackList.offsetHeight);
 
-            if(trackList.offsetHeight > mixContainer.offsetHeight) {
+            if (trackList.offsetHeight > mixContainer.offsetHeight) {
                 locationMarker.style.height = trackList.offsetHeight + "px";
             }
         }

@@ -134,26 +134,6 @@
                                 // TODO: elaborate this
                                 soundsToLoad--;
                             }
-                        }).finally(function() {
-                            if(soundsToLoad == 0) {
-                                ///////////////////////////
-                                // run this code once all the sounds are done loading
-                                ///////////////////////////
-                                var mixContainer = document.getElementById('mixBoard')
-
-                                /////////////////
-                                // check to see if the bottom scrollbar is affecting
-                                // the position of the bottom navbar
-                                // and change the height of the track lists, if so
-                                var bottomNav = document.getElementById('bottomNav');
-                                var heightDiff = bottomNav.offsetTop + bottomNav.offsetHeight - document.body.offsetHeight
-                                if(heightDiff > 0) {
-                                    console.log("scrollbar!");
-                                    var height = mixContainer.offsetHeight;
-                                    height -= heightDiff;
-                                    mixContainer.style.height = height + "px";
-                                }
-                            }
                         });
                     }
                 }
