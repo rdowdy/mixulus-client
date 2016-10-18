@@ -9,7 +9,7 @@ body {
     width: 100%;
     height: 100%;
     margin: 0 auto;
-    font-family: 'Open Sans';
+    font-family: 'Oswald';
     
 
 
@@ -58,6 +58,21 @@ button:focus {
     justify-content: center;
 }
 
+.banner a {
+    text-decoration: none;
+}
+
+.banner div h1,
+.banner div i {
+background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.banner div h1 {
+    margin: 0;
+}
+
 .banner div i {
     position: absolute;
     bottom: -5%;
@@ -79,11 +94,12 @@ button:focus {
     margin: 10px 0;
     background: none;
     border: 2px solid black;
+    font-family: 'Oswald';
 }
 
-.button:hover {
-    color: white;
-    background: black;
+.button:hover,
+.button:focus {
+    background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
 }
 
 .button:active {
@@ -126,7 +142,6 @@ button:focus {
 
 .input-group label {
     display: block;
-    font-weight: bold;
     text-align: left;
 }
 

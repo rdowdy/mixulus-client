@@ -16,11 +16,11 @@
 <body ng-controller="AuthController as auth">
     <header class="banner">
         <div>
-            <h1>collabio</h1>
-            <i class="fa fa-angle-down" aria-hidden="true"></i>
+            <a href="#authForms"><h1>collabio</h1>
+            <i class="fa fa-angle-down" aria-hidden="true"></i></a>
         </div>
     </header>
-    <div class="authForms">
+    <div class="authForms" id="authForms">
         <form ng-submit="auth.login()" class="form">
             <div class="input-group">
                 <label for="username">email</label>
