@@ -92,14 +92,15 @@ background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
     font-size: 1.2em;
     padding: .4em;
     margin: 10px 0;
-    background: none;
+    background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
     border: 2px solid black;
     font-family: 'Oswald';
 }
 
 .button:hover,
 .button:focus {
-    background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
+    color: white;
+    cursor: pointer;
 }
 
 .button:active {
@@ -123,11 +124,25 @@ background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
 /************************/
 /* Form Elements Styles */
 /************************/
+.authForms {
+    padding: 0 10%;
+    width: 100%;
+}
 
 .form {
-    width: 30%;
+    width: 100%;
     margin: 0 auto;
     padding: 15px;
+}
+
+#login {
+    width: 50%;
+    float: left;
+}
+
+#signup {
+    width: 50%;
+    float: right;
 }
 
 .form button {
