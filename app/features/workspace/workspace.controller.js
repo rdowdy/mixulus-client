@@ -137,8 +137,14 @@
         }
 
         function gridClickEvent($event) {
+            // chrome was recording pageY coordinates weirdly, 
+            // so im gonna calculate y-coord using clientY + scrollTop
+            var yCoord = $event.clientY;
+            var mixContainer = document.getElementById('mixBoard');
+            yCoord += mixContainer.scrollTop;
+
             // calculate track number
-            var trackNum = GridFactory.getTrackNumFromY($event.pageY);
+            var trackNum = GridFactory.getTrackNumFromY(yCoord);
 
             // set selectedSound reference to sound object
             vm.selectedSound.sound = MixFactory.getSoundFromX(trackNum, $event.pageX);

@@ -76,7 +76,14 @@
 
         function dragstart(e) {
             dragStartX = e.pageX;
-            trackStart = getTrackNumFromY(e.pageY);
+
+            // chrome was recording pageY coordinates weirdly, 
+            // so im gonna calculate y-coord using clientY + scrollTop
+            var yCoord = e.clientY;
+            var mixContainer = document.getElementById('mixBoard');
+            yCoord += mixContainer.scrollTop;
+
+            trackStart = getTrackNumFromY(yCoord);
             return false;
         }
 
@@ -112,7 +119,14 @@
 
             ////////
             // check for y-axis movement
-            var dragEndY = e.pageY;
+
+            // chrome was recording pageY coordinates weirdly, 
+            // so im gonna calculate y-coord using clientY + scrollTop
+            var yCoord = e.clientY;
+            var mixContainer = document.getElementById('mixBoard');
+            yCoord += mixContainer.scrollTop;
+
+            var dragEndY = yCoord;
             dragEndY = dragEndY - topNavHeight - gridRulerHeight;
 
             // calculate track number based on y-axis movement

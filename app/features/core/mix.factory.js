@@ -151,7 +151,6 @@
 
         function getSoundFromX(trackNum, coordX) {
             var track = tracks[trackNum];
-            console.log(tracks);
             if(track == null) {
                 return null;
             }
