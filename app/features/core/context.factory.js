@@ -5,12 +5,12 @@
         .module('app')
         .factory('ContextFactory', ContextFactory);
 
-    ContextFactory.$inject = ['$window'];
+    ContextFactory.$inject = ['$window', 'SoundFactory'];
 
     /* @ngInject */
-    function ContextFactory($window) {
+    function ContextFactory($window, SoundFactory) {
 
-    	var audioContext;
+        var audioContext;
         var audioRecorder;
         var processorNode;
         var bufferSource;
@@ -18,10 +18,20 @@
 
         var recording = false;
 
-      	var bufferLen = 2048;
+        var bufferLen = 4096;
 
-      	var recLen = 0;
-      	var recBuffer = new Float32Array();
+        var recLen = 0;
+        var recBuffer = new Float32Array();
+
+        var socket;
+        var socketWorker;
+        var socketUrl = "http://localhost:9999";
+        var currentCallback;
+        var currentSoundId;
+        var audioBufferNum = 0;
+        var armedTrack;
+
+        var currentlyPlaying = [];
 
         init();
 
@@ -31,7 +41,8 @@
             getSource: getBufferSource,
             record: record,
             stop: stop,
-            playAt: playAt
+            playAt: playAt,
+            stopAudio: stopAudio
         };
 
         return service;
@@ -42,8 +53,8 @@
 
         // set audio context, create new instance
         function init() {
-        	console.log("initializing")
-        	// add the audio context to the window if needed
+            console.log("initializing")
+                // add the audio context to the window if needed
             if (!$window.AudioContext) {
                 $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
             }
@@ -72,6 +83,11 @@
                 console.log(e);
             });
 
+            socketWorker = new Worker("features/core/socket.worker.js");
+            socketWorker.onmessage = function(e) {
+                recLen = e.data.recLen;
+                currentCallback(mergeBuffers(e.data.buffer), armedTrack);
+            }
         }
 
         // once we are permitted access to the stream
@@ -91,9 +107,6 @@
 
             // set up audio buffer source for playback
             bufferSource = audioContext.createBufferSource();
-            //var gainNode = audioContext.createGain();
-            //gainNode.gain.value = 1.0;
-            //bufferSource.connect(gainNode);
             bufferSource.connect(audioContext.destination);
         }
 
@@ -101,93 +114,120 @@
         // Initialize recorder
         ////////////////
         function initRecorder(source) {
-        	// initialize a processor node
-        	// which will be linked to an input buffer
-        	// and an output buffer. This allows for
-        	// audio processing
-        	//var processorNode;
+            // initialize a processor node
+            // which will be linked to an input buffer
+            // and an output buffer. This allows for
+            // audio processing
 
-        	if(!audioContext.createScriptProcessor) {
-        		processorNode = audioContext.createJavaScriptNode(bufferLen, 1, 1);
-        	} else {
-        		processorNode = audioContext.createScriptProcessor(bufferLen, 1, 1);
-        	}
+            if (!audioContext.createScriptProcessor) {
+                processorNode = audioContext.createJavaScriptNode(bufferLen, 1, 1);
+            } else {
+                processorNode = audioContext.createScriptProcessor(bufferLen, 1, 1);
+            }
 
-        	processorNode.onaudioprocess = audioProcessCallback;
+            processorNode.onaudioprocess = audioProcessCallback;
 
-        	source.connect(processorNode);
-        	processorNode.connect(audioContext.destination);
-
-        	console.log("dont initializing recorder")
+            source.connect(processorNode);
+            processorNode.connect(audioContext.destination);
 
         }
 
 
-		// when new audio samples arrive
-    	// either discard them (if not recording)
-    	// or push them to the recording buffer
+        // when new audio samples arrive
+        // either discard them (if not recording)
+        // or push them to the recording buffer
+        // and send to the server 
         function audioProcessCallback(e) {
-        	if (recording) {
-    			var inputBuffer = e.inputBuffer.getChannelData(0);
-        		recBuffer.push(new Float32Array(inputBuffer));
-        		recLen += inputBuffer.length;
-    		}
+            if (recording) {
+                //var inputBuffer = e.inputBuffer.getChannelData(0);
+                //recBuffer.push(new Float32Array(inputBuffer));
+                //recLen += inputBuffer.length;
+                socketWorker.postMessage({
+                    command: 'emit',
+                    buffer: e.inputBuffer.getChannelData(0),
+                    bufferNum: audioBufferNum++
+                })
+            }
         }
 
-        function record() {
-        	console.log('context factory record')
-        	recBuffer = [];
-        	recLen = 0;
-        	recording = true;
+        function record(soundId) {
+            recBuffer = [];
+            recLen = 0;
+            currentSoundId = soundId;
+            recording = true;
+
+            socketWorker.postMessage({
+                command: 'init',
+                soundId: soundId
+            })
         }
 
-        function stop() {
-        	console.log('context factory done');
-        	recording = false;
-        	//console.log(recBuffer);
-        	return mergeBuffers(recBuffer);
+        function stop(callback, trackNum) {
+            recording = false;
+            socketWorker.postMessage({
+                command: 'finish',
+                soundId: currentSoundId
+            })
+            currentCallback = callback;
+            armedTrack = trackNum;
+            audioBufferNum = 0;
+            //return mergeBuffers(recBuffer);
         }
 
         function mergeBuffers(buf) {
-        	console.log("merging buffers");
-        	var result = new Float32Array(recLen);
-        	var offset = 0;
-        	for(var i = 0; i < buf.length; i++) {
-        		// put recBuffer[i] values into result
-        		// at position {offset}
-        		//console.log(buf);
-        		result.set(buf[i], offset);
-        		offset += buf[i].length;
-        	}
+            console.log('merging');
+            var result = new Float32Array(recLen);
+            var offset = 0;
+            for (var i = 0; i < buf.length; i++) {
+                // put recBuffer[i] values into result
+                // at position {offset}
+                result.set(buf[i], offset);
+                offset += buf[i].length;
+            }
 
-        	return result;
+            return result;
         }
         ///////////////////////////////
 
         ////////////////
         // Play
-        function playAt(buffer, offset) {
+        function playAt(buffer, effects, offset) {
             var source = audioContext.createBufferSource();
             source.buffer = audioContext.createBuffer(1, buffer.length, audioContext.sampleRate);
 
             var audioBufferArray = source.buffer.getChannelData(0);
             audioBufferArray.set(buffer);
 
-            source.connect(audioContext.destination);
-            source.start(offset);
-        }
+            if (effects == null) {
+                source.connect(audioContext.destination);
+            } else {
+                source.connect(effects);
+            }
 
+            source.start(offset);
+
+            currentlyPlaying.push(source);
+            source.onended = function() {
+                currentlyPlaying.splice(currentlyPlaying.indexOf(source), 1);
+            }
+        }
+        ////////////////
+        // Stop Audio
+        function stopAudio() {
+            for (var i = 0; i < currentlyPlaying.length; i++) {
+                currentlyPlaying[i].stop();
+            }
+        }
 
         ////////////////
         // Getters
         ////////////////
-
-		function getAudioContext() {
+        function getAudioContext() {
             return audioContext;
         }
 
         function getBufferSource() {
-        	return bufferSource;
+            return bufferSource;
         }
 
     }

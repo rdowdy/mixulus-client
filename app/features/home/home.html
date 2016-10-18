@@ -18,30 +18,32 @@
         <!-- current collabs  -->
         <div id="collabList">
             <h1>Current Collabs</h1>
-            <div class="collab">
-                <h3>Collab Name</h3>
-                <p><span>User 1,</span><span>User 2</span></p>
+            <div class="collab" ng-click="home.newCollab()">
+                <h3><i class="fa fa-plus" aria-hidden="true"></i> New Collab</h3>
+                <p>Click here to start a new collaboration!</p>
             </div>
-            <div class="collab" ng-repeat="collab in home.collabs" ng-click="home.goToWorkspace(collab._id)" >
-                <div class="metainfo">
-                	<!-- TODO!!!!! change collab model and route to include collab name -->
-                    <h3>collab.name goes here</h3>
+            <hr>
+            <div class="collab" ng-repeat="collab in home.collabs" ng-click="home.goToWorkspace(collab)" ng-class="{'disabled': collab.waiting == true}">
+                <div class="ng-cloak metainfo">
+                    <h3><i class="fa fa-hourglass" aria-hidden="true" ng-show="collab.waiting"></i>
+                    <i class="fa fa-music" aria-hidden="true" ng-show="!collab.waiting"></i> {{collab.name}}</h3>
                     <p>
                         <span ng-repeat="user in collab.userIds">
-						{{user.username}}{{$last ? '' : ', '}}
-					</span>
+                        {{user.username}}{{$last ? '' : ', '}}
+                    </span>
                     </p>
                 </div>
-
             </div>
         </div>
-        <!-- past collabs -->
+        <!-- past collabs will go here eventually -->
         <div>
         </div>
     </div>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
+    <script src="bower_components/ng-dialog/js/ngDialog.min.js"></script>
     <script src="features/app.module.js"></script>
+    <script src="features/auth/auth.interceptor.js"></script>
     <script src="features/core/collab.factory.js"></script>
     <script src="features/home/home.controller.js"></script>
 </body>

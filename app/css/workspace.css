@@ -1,4 +1,46 @@
 /************************/
+/*Background and Opacity*/
+/************************/
+
+body {
+	background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);  /*#A83279,*/
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+
+	overflow-x: scroll;
+}
+
+.topNav,
+.bottomNav {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.tracks {
+	background: rgba(255, 255, 255, 0.25);
+}
+
+.grid {
+	background: rgba(204, 204, 204, 0.2);
+}
+
+.container {
+	padding: 0;
+	width: 100%;
+	height: calc(100vh - 60px - 70px);
+	position: absolute;
+	top: 60px;
+	bottom: 70px;
+	overflow: auto;
+}
+
+.mixContainer {
+    width: 100%;
+    height: calc(100vh - 60px - 70px);
+    margin-top: 60px;
+    position: absolute;
+    overflow-y: auto;
+}
+/************************/
 /*    Top Nav Styles    */
 /************************/
 .topNav {
@@ -7,12 +49,93 @@
 	height: 60px;
 	border-bottom: 3px solid black;
 	z-index: 2000;
-	background: white;
+}
+
+.topNav a,
+.topNav a:visited {
+	color: black;
+}
+
+.topNav a:active {
+	color: #ffc500;
+}
+
+.topNav i {
+	font-size: 2.2em;
+	margin-left: 15px;
+}
+
+.topNav .collabHeader,
+.topNav .editCollabName {
+	margin: 3px 15px;
+	font-family: 'Oswald';
 }
 
 .topNav .collabHeader {
-	margin: 3px 15px;
+	width: 30%;
+	display: inline-block;
+}
+
+.topNav .editCollabName {
+	font-size: 2em;
+	font-weight: bold;
+	border: 1px solid black;
+	background: rgba(255,255,255,0.2);
+}
+
+.topNav .collaboration {
+	display: inline-block;
+	margin: 0;
+	height: 100%;
+	width: 40%;
+	float: right;
+	text-align: right;
+}
+
+.topNav .commit,
+.topNav .addUser {
+	position: relative;
+	top: 15px;
+	right: 20px;
+	margin: 0;
+	font-size: 0.8em;
+	height: 30px;
 	font-family: 'Oswald';
+	line-height: 15px;
+	width: 150px;
+}
+
+.commit:hover {
+	background: black;
+	color: white;
+}
+
+/************************/
+/*    Dialog Styles     */
+/************************/
+.users h2 {
+	font-family: 'Oswald';
+}
+
+.users ul {
+	list-style: none;
+	font-size: 1.2em;
+}
+
+#addUser {
+	font-size: 0.8em;
+}
+
+.addUserButton {
+	font-size: 0.8em;
+}
+
+/* Custom ngDialog Style */
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+	border-radius: 0px;
+	border: 1px solid black;
+	background: white;
+	color: black;
 }
 
 /************************/
@@ -21,32 +144,62 @@
 .tracks {
 	position: absolute;
 	width: 215px;
-	height: 100%;
-	padding-top: 75px;
+	/*height: 100%;*/
+	/*margin-top: 60px;*/
 	border-right: 1px solid black;
 	z-index: 600;
-	background: white;
 }
+
+.addNewTrack {
+	height: 15px;
+	width: 215px;
+	text-align: center;
+	font-size: 1em;
+	line-height: 15px;
+}
+
+.addNewTrack:hover {
+	background: black;
+	color: white;
+	cursor: pointer;
+}
+
 /************************/
 /*  Track Info Styles   */
 /************************/
 .track {
-	width: 100%;
+	/*width: 100%;*/
 	height: 100px;
-	border-bottom: 1px solid black;
+	border-bottom: 2px solid black;
+	border-right: 2px solid black;
 	padding: 5px;
+	padding-bottom: 10px;
 }
 
-.track .trackName {
+.track .trackName,
+.track .editTrackName {
 	margin: 0;
-	margin-top: 5px;
+	/*margin-top: 5px;*/
 	padding: 0;
-	font-weight: normal;
+	font-weight: bold;
+	font-family: 'Oswald';
+}
+
+.track .editTrackName {
+	display: block;
+	font-size: 1.17em;
+	width: 80%;
+	border: 1px solid black;
+	background: rgba(255,255,255,0.2);
+}
+
+.track .button-group {
+	margin-top: 10px;
 }
 
 .track .button,
 .track select {
-	border-color: #aaa;
+	border-color: black;
 }
 
 .mutesolo {
@@ -54,17 +207,30 @@
 	width: 25px;
 	height: 25px;
 	font-size: 0.8em;
+	font-family: 'Oswald';
+}
+
+.button.muteActive {
+	background-color: #cc0000;
+	color: #eee;
+}
+
+.button.soloActive {
+	background-color: #0000cc;
+	color: #eee;
 }
 
 .arm-group {
-	margin-left: 15px;
+	margin-left: 35px;
 }
 
 .arm {
 	height: 25px;
+	width: 80px;
 	font-size: 0.8em;
 	line-height: 12px;
 	margin-left: 10px;
+	font-family: 'Oswald';
 }
 
 .arm.armed {
@@ -72,60 +238,120 @@
 	color: #eee;
 }
 
-.track select {
-  	height: 25px;
-  	margin: 0;
-  	margin-left: -7px;
-  	line-height: 12px;
+/* Custom Input Range Styles */
+
+.track input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 90%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+.track .fader {
+	display: block;
+	margin: 0 auto;
+	margin-top: 13px;
+}
+
+input[type=range].fader::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range].fader:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+/*IE compatibility*/
+/*input[type=range].fader::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+   Hides the slider so custom styles can be added 
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}*/
+
+/* Webkit styling for the slider */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 2px solid #000;
+  height: 22px;
+  width: 12px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.3);
+  margin-top: -9px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+}
+
+/* Webkit styling for the track */
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #000;
 }
 
 /************************/
 /*     Grid Styles      */
 /************************/
-.grid {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background: #eee;
-	padding-left: 215px;
-	padding-top: 60px;
+table.grid {
+	margin: 0;
+	padding: 0;
+	border-collapse: collapse;
+	border-spacing: 0px;
 }
 
-.gridRuler {
-	position: fixed;
-	border-bottom: 1px solid #bbb;
-	background: #eee;
+table.grid td:nth-child(1) {
+	border-top: 2px solid black;
+}
+
+table.grid td {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+.trackCellContainer {
+	width: 213px;
+	height: 95px;
+	box-sizing: border-box;
+	padding: 5px 10px;
+}
+
+table.grid tr td:nth-child(2) {
 	width: 100%;
-	height: 15px;
-	top: 60px;
-	z-index: 1000;
 }
 
 #locationMarker {
 	position: absolute;
 	width: 1px;
-	height: 100%;
-	border-left: 1px solid #cc0000;
+	height: calc(100vh - 60px - 70px - 15px);
+	border-left: 1px solid #0000cc;
 	z-index: 1001;
 }
 
 /* FOR TESTING ONLY */
-#audioClip {
-	position: relative;
-	top: 15px;
-	width: 200px;
-	height: 100px;
-}
-
 .audioClip {
-	border: 1px solid black;
+	position: absolute;
+	height: 100px;
+	border: 1px solid white;
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+
+	/* Rules below not implemented in browsers yet */
+	-o-user-select: none;
+	user-select: none;
 }
 
-#clipCanvas,
+.clipCanvas:hover,
+.clipCanvas.selected {
+	background: rgba(85,85,85,0.6);
+}
+
 .clipCanvas {
 	width: 100%;
 	height: 100%;
-	background: black;
+	background: rgba(0,0,0,0.8);
 }
 
 /************************/
@@ -138,7 +364,6 @@
 	height: 70px;
 	border-top: 2px solid black;
 	z-index: 2000;
-	background: white;
 	padding-top: 12px;
 	text-align: center;
 }

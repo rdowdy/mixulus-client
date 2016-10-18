@@ -17,6 +17,8 @@
   ],
   "dependencies": {
     "angular": "^1.5.8",
-    "angular-local-storage": "^0.5.2"
+    "angular-local-storage": "^0.5.2",
+    "angular-cookies": "^1.5.8",
+    "ng-dialog": "^0.6.4"
   }
 }

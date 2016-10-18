@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Music App | Workspace</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/ng-dialog/css/ngDialog.min.css">
+    <link rel="stylesheet" href="bower_components/ng-dialog/css/ngDialog-theme-default.min.css">
     <script src="https://use.fontawesome.com/965f3ecbfc.js"></script>
     <!-- bower:css -->
     <!-- endbower -->
@@ -14,70 +16,82 @@
     <!-- endinject -->
 </head>
 
-<body ng-controller="WorkspaceController as workspace">
-    <div class="topNav">
-    	<h1 class="collabHeader">Collab Name</h1>
-    </div>
-
-    <!-- beginning of tracks listing -->
-    <div class="tracks">
-        <div class="track" ng-repeat="track in workspace.tracks" id="track{{$index}}">
-            <h3 class="trackName">Track Name {{$index}}</h3>
-            <div class="button-group">
-                <button class="button mutesolo">M</button>
-                <button class="button mutesolo">S</button>
-            </div>
-            <div class="arm-group button-group">
-                <button class="button arm" ng-click="workspace.toggleTrackArmed($index)"
-                ng-class="{ 'armed': workspace.armedTrack == $index }">Arm</button>
-                <select name="inputSelect" id="inputSelect">
-                    <option value="">Mic</option>
-                    <option value="">Audio Interface</option>
-                </select>
-            </div>
+<body ng-controller="WorkspaceController as workspace" ng-keydown="workspace.keydown($event)">
+    <div class="topNav" id="topNav">
+        <a href="/home"><i class="fa fa-home" aria-hidden="true"></i></a>
+        <h1 class="ng-cloak collabHeader" ng-show="!workspace.editCollabName" ng-click="workspace.editCollabName = true">{{workspace.collab.name}}</h1>
+        <div class="collaboration">
+            <button class="button addUser" ng-click="workspace.addUser()">Collaborators</button>
+            <button class="button commit" ng-click="workspace.commit();">Commit Changes</button>
         </div>
+        <input type="text" class="ng-cloak editCollabName" ng-model="workspace.collab.name" ng-show="workspace.editCollabName" ng-blur="workspace.editCollabName = false; 
+                 workspace.updateCollabName()">
     </div>
-    <!-- end of tracks listing -->
-    <div id="grid" class="grid" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
-		<div class="gridRuler"></div>
+    <div class="mixContainer" id="mixBoard" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
+        <div class="gridTop">
+            <div class="addNewTrack" ng-click="workspace.addTrack()">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </div>
+            <div class="gridRuler"></div>
+        </div>
         <div id="locationMarker" ng-style="{left: grid.markerLocation + 'px'}"></div>
-        <div id="audioClip">
-            <canvas id="clipCanvas"></canvas>
+        <table id="grid" class="grid">
+            <tr ng-repeat="track in workspace.tracks" id="track{{$index}}" ng-init="workspace.trackListUpdated();">
+                <td class="track">
+                    <div class="trackCellContainer">
+                        <h3 class="ng-cloak trackName" ng-show="!track.editTrackName" ng-click="track.editTrackName = true">{{track.name}}</h3>
+                        <input type="text" class="editTrackName" ng-model="track.name" ng-show="track.editTrackName" ng-blur="track.editTrackName = false; workspace.updateTrackName(track)">
+                        <div class="button-group">
+                            <button class="button mutesolo" ng-click="workspace.toggleMute($index); track.muted = !track.muted" ng-class="{'muteActive': track.muted}">M</button>
+                            <button class="button mutesolo" ng-click="workspace.toggleSolo($index); track.solo = !track.solo" ng-class="{'soloActive': track.solo}">S</button>
+                        </div>
+                        <div class="arm-group button-group">
+                            <button class="button arm" ng-click="workspace.toggleTrackArmed($index)" ng-class="{ 'armed': workspace.armedTrack == $index }">Arm</button>
+                        </div>
+                        <input type="range" min="0" max="300" class="fader" ng-model="track.gain" ng-change="workspace.adjustTrackVolume(track)">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="bottomNav" id="bottomNav">
+        <div class="locationDisplay">
+            01:04:45
         </div>
-        
-    </div>
-    <div class="bottomNav">
-		<div class="locationDisplay">
-			01:04:45
-		</div>
-    	<div class="button-group" ng-controller="ControlsController as controls">
-    		<button class="button">
-				<i class="fa fa-money" aria-hidden="true"></i>
-    		</button>
-    		<button class="button" id="save" ng-click="controls.togglePlay(); controls.playing = !controls.playing">
-				<i class="fa fa-play" aria-hidden="true" ng-show="!controls.playing"></i>
-                <i class="fa fa-pause" aria-hidden="true" ng-show="controls.playing"></i>
-    		</button>
-    		<button class="button" ng-click="workspace.recording = !workspace.recording; controls.toggleRecord(workspace.recording, workspace.tracks[workspace.armedTrack])">
-				<i class="fa fa-circle" aria-hidden="true" ng-show="!workspace.recording"></i>
+        <div class="button-group" ng-controller="ControlsController as controls">
+            <button class="button">
+                <i class="fa fa-money" aria-hidden="true"></i>
+            </button>
+            <button class="button" ng-click="workspace.recording = !workspace.recording; controls.toggleRecord(workspace.recording, workspace.armedTrack)">
+                <i class="fa fa-circle" aria-hidden="true" ng-show="!workspace.recording"></i>
                 <i class="fa fa-square" aria-hidden="true" ng-show="workspace.recording"></i>
-    		</button>
-    		<button class="button" ng-click="controls.skipHome()">
-    			<i class="fa fa-fast-backward" aria-hidden="true"></i>
-    		</button>
-    		<button class="button">
-    			<i class="fa fa-fast-forward" aria-hidden="true"></i>
-    		</button>
-    	</div>
+            </button>
+            <button class="button" id="save" ng-click="controls.togglePlay(); controls.playing = !controls.playing">
+                <i class="fa fa-play" aria-hidden="true" ng-show="!controls.playing"></i>
+                <i class="fa fa-pause" aria-hidden="true" ng-show="controls.playing"></i>
+            </button>
+            <button class="button" ng-click="controls.skipHome()">
+                <i class="fa fa-fast-backward" aria-hidden="true"></i>
+            </button>
+            <button class="button" ng-click="controls.skipEnd()">
+                <i class="fa fa-fast-forward" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
+    <script src="features/core/modernizr-custom.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
-<!--     <script src="features/workspace/recorder/recorder.js"></script>
- -->    <script src="features/app.module.js"></script>
-    <script src="features/core/recorder.factory.js"></script>
+    <script src="bower_components/ng-dialog/js/ngDialog.min.js"></script>
+    <script src="features/app.module.js"></script>
+    <script src="features/auth/auth.interceptor.js"></script>
     <script src="features/core/collab.factory.js"></script>
+    <script src="features/core/sound.factory.js"></script>
     <script src="features/core/context.factory.js"></script>
     <script src="features/core/grid.factory.js"></script>
+    <script src="features/core/track.factory.js"></script>
+    <script src="features/core/mix.factory.js"></script>
+    <script src="features/dialog/dialog.controller.js"></script>
     <script src="features/workspace/workspace.controller.js"></script>
     <script src="features/workspace/controls.controller.js"></script>
     <script src="features/workspace/grid.controller.js"></script>
