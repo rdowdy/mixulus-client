@@ -22,7 +22,7 @@ this.onmessage = function(e){
 
 function init(id) {
   soundId = id;
-  socket = io.connect(socketUrl);
+  socket = io.connect(socketUrl, { path: '/record' });
   socket.emit("start record", {id: soundId});
   recLen = 0;
   recBuffer = [];
