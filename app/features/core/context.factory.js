@@ -158,8 +158,7 @@
 
             socketWorker.postMessage({
                 command: 'init',
-                soundId: soundId,
-                token: localStorageService.get('token')
+                soundId: soundId
             })
         }
 
