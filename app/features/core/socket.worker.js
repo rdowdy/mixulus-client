@@ -1,7 +1,7 @@
 importScripts('socket.io.js');
 
 var soundId;
-var socketUrl = "http://localhost:9999";
+var socketUrl = "https://mixulus.com:9999";
 var socket;
 var recBuffer;
 var recLen;
