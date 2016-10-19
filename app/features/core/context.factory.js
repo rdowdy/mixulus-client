@@ -5,10 +5,10 @@
         .module('app')
         .factory('ContextFactory', ContextFactory);
 
-    ContextFactory.$inject = ['$window', 'SoundFactory'];
+    ContextFactory.$inject = ['$window', 'SoundFactory', 'localStorageService'];
 
     /* @ngInject */
-    function ContextFactory($window, SoundFactory) {
+    function ContextFactory($window, SoundFactory, localStorageService) {
 
         var audioContext;
         var audioRecorder;
@@ -158,7 +158,8 @@
 
             socketWorker.postMessage({
                 command: 'init',
-                soundId: soundId
+                soundId: soundId,
+                token: localStorageService.get('token');
             })
         }
 
