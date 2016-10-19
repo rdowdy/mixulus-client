@@ -25,7 +25,7 @@
 
         var socket;
         var socketWorker;
-        var socketUrl = "http://localhost:9999";
+        var socketUrl = "https://mixulus.com:9999";
         var currentCallback;
         var currentSoundId;
         var audioBufferNum = 0;
