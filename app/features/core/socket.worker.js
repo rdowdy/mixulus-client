@@ -1,7 +1,7 @@
 importScripts('socket.io.js');
 
 var soundId;
-var socketUrl = "https://mixulus.com:9999";
+var socketUrl = "https://mixulus.com/record";
 var socket;
 var recBuffer;
 var recLen;
@@ -9,7 +9,7 @@ var recLen;
 this.onmessage = function(e){
   switch(e.data.command){
     case 'init':
-      init(e.data.soundId, e.data.socket);
+      init(e.data.soundId);
       break;
     case 'emit':
       emit(e.data.buffer, e.data.bufferNum);
@@ -22,10 +22,17 @@ this.onmessage = function(e){
 
 function init(id) {
   soundId = id;
-  socket = io(socketUrl);
+  socket = io.connect(socketUrl, { path: '/record' });
   socket.emit("start record", {id: soundId});
   recLen = 0;
   recBuffer = [];
+
+  var worker = this;
+  socket.on("ready", function() {
+    worker.postMessage({
+      message: 'ready start'
+    });
+  });
 }
 
 function emit(buffer, bufferNum) {

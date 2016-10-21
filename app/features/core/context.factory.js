@@ -5,10 +5,10 @@
         .module('app')
         .factory('ContextFactory', ContextFactory);
 
-    ContextFactory.$inject = ['$window', 'SoundFactory'];
+    ContextFactory.$inject = ['$window', 'SoundFactory', 'localStorageService'];
 
     /* @ngInject */
-    function ContextFactory($window, SoundFactory) {
+    function ContextFactory($window, SoundFactory, localStorageService) {
 
         var audioContext;
         var audioRecorder;
@@ -85,8 +85,12 @@
 
             socketWorker = new Worker("features/core/socket.worker.js");
             socketWorker.onmessage = function(e) {
-                recLen = e.data.recLen;
-                currentCallback(mergeBuffers(e.data.buffer), armedTrack);
+                if(e.data.message == "ready start") {
+                    startCollectingInput();
+                } else {
+                    recLen = e.data.recLen;
+                    currentCallback(mergeBuffers(e.data.buffer), armedTrack);  
+                }
             }
         }
 
@@ -154,12 +158,14 @@
             recBuffer = [];
             recLen = 0;
             currentSoundId = soundId;
-            recording = true;
-
             socketWorker.postMessage({
                 command: 'init',
                 soundId: soundId
             })
+        }
+
+        function startCollectingInput() {
+            recording = true;
         }
 
         function stop(callback, trackNum) {
