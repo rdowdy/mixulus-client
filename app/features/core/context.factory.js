@@ -154,12 +154,15 @@
             recBuffer = [];
             recLen = 0;
             currentSoundId = soundId;
-            recording = true;
-
             socketWorker.postMessage({
                 command: 'init',
-                soundId: soundId
+                soundId: soundId,
+                callback: startCollectingInput
             })
+        }
+
+        function startCollectingInput() {
+            recording = true;
         }
 
         function stop(callback, trackNum) {
