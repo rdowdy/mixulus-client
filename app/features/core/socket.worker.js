@@ -9,7 +9,7 @@ var recLen;
 this.onmessage = function(e){
   switch(e.data.command){
     case 'init':
-      init(e.data.soundId, e.data.callback);
+      init(e.data.soundId);
       break;
     case 'emit':
       emit(e.data.buffer, e.data.bufferNum);
@@ -20,7 +20,7 @@ this.onmessage = function(e){
   }
 };
 
-function init(id, cb) {
+function init(id) {
   soundId = id;
   socket = io.connect(socketUrl, { path: '/record' });
   socket.emit("start record", {id: soundId});
@@ -28,8 +28,10 @@ function init(id, cb) {
   recBuffer = [];
 
   socket.on("ready", function() {
-    cb();
-  })
+    this.postMessage({
+      message: 'ready start'
+    });
+  });
 }
 
 function emit(buffer, bufferNum) {

@@ -85,8 +85,12 @@
 
             socketWorker = new Worker("features/core/socket.worker.js");
             socketWorker.onmessage = function(e) {
-                recLen = e.data.recLen;
-                currentCallback(mergeBuffers(e.data.buffer), armedTrack);
+                if(e.data.message == "ready start") {
+                    startCollectingInput();
+                } else {
+                    recLen = e.data.recLen;
+                    currentCallback(mergeBuffers(e.data.buffer), armedTrack);  
+                }
             }
         }
 
@@ -156,8 +160,7 @@
             currentSoundId = soundId;
             socketWorker.postMessage({
                 command: 'init',
-                soundId: soundId,
-                callback: startCollectingInput
+                soundId: soundId
             })
         }
 
