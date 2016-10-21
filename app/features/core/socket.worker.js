@@ -27,8 +27,9 @@ function init(id) {
   recLen = 0;
   recBuffer = [];
 
+  var worker = this;
   socket.on("ready", function() {
-    this.postMessage({
+    worker.postMessage({
       message: 'ready start'
     });
   });
