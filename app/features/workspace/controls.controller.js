@@ -79,6 +79,7 @@
         function toggleRecording(recordBool, trackNum) {
             if (!recordBool) {
                 vm.recording = false;
+                vm.recordMeta.endLoc = vm.markerLocation;
                 // stop recording
                 ContextFactory.stop(doneRecording, trackNum);
 
@@ -117,7 +118,8 @@
             // the visual length of the clip is based on the
             // distance traversed by the marker
             var startLoc = vm.recordMeta.startLoc;
-            var canvasLen = vm.markerLocation - startLoc;
+            var endLoc = vm.recordMeta.endLoc;
+            var canvasLen = endLoc - startLoc;
 
             var canvas = GridFactory.createCanvas(trackNum, startLoc, canvasLen);
             GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
