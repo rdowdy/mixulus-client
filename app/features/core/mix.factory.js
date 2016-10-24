@@ -232,7 +232,7 @@
             TrackFactory.updateTrack(track);
         }
 
-        function addAudioToTrack(num, buffer, gridLocation, frameLength, fps, soundModel) {
+        function addAudioToTrack(num, buffer, gridLocation, frameLength, fps, soundModel, startLoc) {
             if (tracks[num].soundIds == null) {
                 tracks[num].soundIds = [];
             }
@@ -240,6 +240,7 @@
             var track = tracks[num];
 
             soundModel.frameLength = frameLength;
+            soundModel.gridLocation = gridLocation;
 
             // update DB entry
             SoundFactory.updateSound(soundModel).then(function(res) {

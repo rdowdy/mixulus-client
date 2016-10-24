@@ -87,7 +87,6 @@
                 // sound entry in the DB
                 SoundFactory.addSound({
                     track: trackNum,
-                    gridLocation: vm.markerLocation,
                     trackId: MixFactory.getTracks()[trackNum]._id,
                     fps: fps
                 }).then(function(res) {
@@ -125,7 +124,7 @@
 
             clearInterval(vm.intervalId);
 
-            MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen, fps, vm.recordMeta.soundModel);
+            MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen, fps, vm.recordMeta.soundModel, vm.recordMeta.startLoc);
 
             togglePlay();
             vm.playing = false;
