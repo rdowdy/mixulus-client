@@ -5,10 +5,10 @@
         .module('app')
         .factory('ProjectModelFactory', ProjectModelFactory);
 
-    ProjectModelFactory.$inject = ['localStorageService', 'CollabFactory'];
+    ProjectModelFactory.$inject = ['localStorageService', 'CollabFactory', 'AudioGraphFactory'];
 
     /* @ngInject */
-    function ProjectModelFactory(localStorageService, CollabFactory) {
+    function ProjectModelFactory(localStorageService, CollabFactory, AudioGraphFactory) {
     	/////////////////////
     	// Functions
     	/////////////////////
@@ -42,6 +42,14 @@
         /////////////////////
     	// Track Manipulation
     	/////////////////////
+    	function trackAdd() {
+
+    	}
+
+    	function trackAddSound() {
+
+    	}
+
     	function trackChangeVolume(trackNum, volume) {
 
     	}
@@ -66,7 +74,7 @@
     	}
 
     	function soundDelete(sound) {
-    		
+
     	}
 
         return service;
