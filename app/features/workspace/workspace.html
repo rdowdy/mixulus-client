@@ -24,7 +24,7 @@
             <button class="button addUser" ng-click="workspace.addUser()">Collaborators</button>
             <button class="button commit" ng-click="workspace.commit();">Commit Changes</button>
         </div>
-        <input id="collabHeaderInput" type="text" class="ng-cloak editCollabName" ng-model="workspace.collab.name" ng-show="workspace.editCollabName" ng-blur="workspace.editCollabName = false; workspace.updateCollabName(); workspace.disableUserActions = false;">
+        <input id="collabHeaderInput" type="text" class="ng-cloak editCollabName" ng-model="workspace.collab.name" ng-show="workspace.editCollabName" ng-blur="workspace.editCollabName = false; workspace.updateCollabName(); workspace.disableUserActions = false;" ng-keydown="workspace.editCollabKeyDown($event);">
     </div>
     <div class="mixContainer" id="mixBoard" ng-controller="GridController as grid" ng-click="grid.gridClickEvent($event)">
         <div class="gridTop">
@@ -39,7 +39,7 @@
                 <td class="track">
                     <div class="trackCellContainer">
                         <h3 class="ng-cloak trackName" ng-show="!track.editTrackName" ng-click=" track.editTrackName = true; workspace.focusOnTrackNameInput($index, track); workspace.disableUserActions = true;">{{track.name}}</h3>
-                        <input id="track{{$index}}Input" type="text" class="editTrackName" ng-model="track.name" ng-show="track.editTrackName" ng-blur="track.editTrackName = false; workspace.updateTrackName(track); workspace.disableUserActions = false;">
+                        <input id="track{{$index}}Input" type="text" class="editTrackName" ng-model="track.name" ng-show="track.editTrackName" ng-blur="track.editTrackName = false; workspace.updateTrackName(track); workspace.disableUserActions = false;" ng-keydown="workspace.editTrackKeyDown($event, track);">
                         <div class="button-group">
                             <button class="button mutesolo" ng-click="workspace.toggleMute($index); track.muted = !track.muted" ng-class="{'muteActive': track.muted}">M</button>
                             <button class="button mutesolo" ng-click="workspace.toggleSolo($index); track.solo = !track.solo" ng-class="{'soloActive': track.solo}">S</button>

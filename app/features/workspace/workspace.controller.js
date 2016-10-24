@@ -24,6 +24,8 @@
         vm.toggleTrackArmed = toggleTrackArmed;
         vm.addTrack = addTrack;
         vm.addUser = addUserDialog;
+        vm.editTrackKeyDown = editTrackKeyDown;
+        vm.editCollabKeyDown  = editCollabKeyDown;
         vm.focusOnTrackNameInput = focusOnTrackNameInput;
         vm.focusOnCollabNameInput = focusOnCollabNameInput
         vm.keydown = keydown;
@@ -111,12 +113,24 @@
             }, 0, false);
         }
 
+        function editTrackKeyDown($event, track) {
+            if($event.keyCode == 13) {
+                track.editTrackName = false;
+            }
+        }
+
         function focusOnCollabNameInput() {
             $timeout(function() {
                 var input = document.getElementById("collabHeaderInput");
                 input.focus();
                 input.setSelectionRange(vm.collab.name.length, vm.collab.name.length);
             }, 0, false);
+        }
+
+        function editCollabKeyDown($event) {
+            if($event.keyCode == 13) {
+                vm.editCollabName = false;
+            }
         }
 
         function trackListUpdated() {
