@@ -23,12 +23,31 @@
         };
 
         ////////////////
+        // functions
+        var service = {
+            addAudioToTrack: addAudioToTrack,
+            adjustTrackVolume: adjustTrackVolume,
+            deleteSound: deleteSound,
+            addTrack: addTrack,
+            getEndMarker: getEndMarker,
+            getSoundFromX: getSoundFromX,
+            getTracks: getTracks,
+            initTracks: initTracks,
+            playAt: playAt,
+            stopAudio: stopAudio,
+            toggleMute: toggleMute,
+            toggleSolo: toggleSolo,
+            updateEndMarker: updateEndMarker
+        }
+        ////////////////
+
+        ////////////////
         // variables
         var collabId;
         var tracks = [];
         var soloedTracks = [];
 
-        var latestLoc = 0;
+        var endLoc = 0;
 
         var soundsToLoad = 0;
 
@@ -44,6 +63,9 @@
             var soundObj = getSoundFromX(trackStart, dragStart);
             // update the sound obj in the mix
             soundObj.gridLocation = newLoc;
+
+            // check to see if the endLoc needs to be updated
+            updateEndMarker(soundObj);
 
             // new track, so splice it from old track
             // and put into new track
@@ -70,25 +92,9 @@
             SoundFactory.updateSound(soundToSave);
         })
 
-        ////////////////
-        // functions
-        var service = {
-            addAudioToTrack: addAudioToTrack,
-            adjustTrackVolume: adjustTrackVolume,
-            deleteSound: deleteSound,
-            addTrack: addTrack,
-            getEndMarker: getEndMarker,
-            getSoundFromX: getSoundFromX,
-            getTracks: getTracks,
-            initTracks: initTracks,
-            playAt: playAt,
-            stopAudio: stopAudio,
-            toggleMute: toggleMute,
-            toggleSolo: toggleSolo
-        }
-
-        return service;
-        ////////////////
+        /////////////////////
+        // Function Definitions
+        /////////////////////
 
         // set an internal reference to the tracks
         // if there are no tracks, create one
@@ -124,6 +130,9 @@
                             sound.buffer = res.data.buffer;
 
                             tracks[sound.track].soundIds.push(sound);
+
+                            // check to see if we have a new end location
+                            updateEndMarker(sound);
 
                             var canvas = GridFactory.createCanvas(sound.track, sound.gridLocation, sound.frameLength);
                             GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), sound.buffer);
@@ -251,8 +260,8 @@
 
                 // check to see if this is the end of the song
                 // for skipEnd functionality
-                if (gridLocation + frameLength > latestLoc) {
-                    latestLoc = gridLocation + frameLength;
+                if (gridLocation + frameLength > endLoc) {
+                    endLoc = gridLocation + frameLength;
                 }
             });
         }
@@ -309,8 +318,17 @@
             ContextFactory.stopAudio();
         }
 
-        function getEndMarker() {
-            return latestLoc;
+        function updateEndMarker(sound) {
+            // check to see if the endLoc needs to be updated
+            if(sound.gridLocation + sound.frameLength > endLoc) {
+                endLoc = sound.gridLocation + sound.frameLength;
+            }
         }
+
+        function getEndMarker() {
+            return endLoc;
+        }
+
+        return service;
     }
 })();

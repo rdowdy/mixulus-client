@@ -213,6 +213,7 @@
                     }
 
                     SoundFactory.updateSound(soundToSave);
+                    MixFactory.updateEndMarker(vm.selectedSound.sound);
                 }
             }
 
