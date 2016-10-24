@@ -1,12 +1,14 @@
 importScripts('../../3rd_party/socket.io.js');
 
 var soundId;
-//var socketUrl = "http://localhost:9998";
-var socketUrl = "https://mixulus.com/record";
+var socketUrl = "http://localhost:9998";
+//var socketUrl = "https://mixulus.com/record";
 var socket;
 var recBuffer;
 var recLen;
 var numBuffers;
+
+console.log('Socket url is ' + socketUrl);
 
 this.onmessage = function(e){
   switch(e.data.command){
@@ -24,7 +26,7 @@ this.onmessage = function(e){
 
 function init(id) {
   soundId = id;
-  socket = io.connect(socketUrl, { path: '/record' });
+  socket = io.connect(socketUrl/*, { path: '/record' }*/);
   socket.emit("start", {id: soundId});
   recLen = 0;
   recBuffer = [];
