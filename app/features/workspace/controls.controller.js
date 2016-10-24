@@ -236,8 +236,15 @@
         }
 
         function moveMarker() {
-            $rootScope.$emit('markerMove', { loc: ++vm.markerLocation });
-            $rootScope.$apply();
+            if(vm.markerLocation > MixFactory.getEndMarker() && !vm.recording) {
+                // if were at the end of the song and were NOT recording, then hit pause
+                togglePlay();
+                vm.playing = false;
+                $rootScope.$apply();
+            } else {
+                $rootScope.$emit('markerMove', { loc: ++vm.markerLocation });
+                $rootScope.$apply();
+            }
         }
     }
 })();
