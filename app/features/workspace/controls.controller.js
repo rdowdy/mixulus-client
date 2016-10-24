@@ -79,6 +79,7 @@
         function toggleRecording(recordBool, trackNum) {
             if (!recordBool) {
                 vm.recording = false;
+                vm.recordMeta.endLoc = vm.markerLocation;
                 // stop recording
                 ContextFactory.stop(doneRecording, trackNum);
 
@@ -87,32 +88,25 @@
                 // sound entry in the DB
                 SoundFactory.addSound({
                     track: trackNum,
-                    gridLocation: vm.markerLocation,
                     trackId: MixFactory.getTracks()[trackNum]._id,
                     fps: fps
                 }).then(function(res) {
-                    vm.recording = true;
-                    if (!vm.playing) {
-                        // vm.intervalId = setInterval(moveMarker, 1000 / fps);
-                        //vm.playing = true;
-                        togglePlay();
-                        vm.playing = true;
-                    } 
-
                     // some meta information about the current recording session
                     vm.recordMeta.soundId = res.data._id;
                     vm.recordMeta.soundModel = res.data;
-                    vm.recordMeta.startLoc = vm.markerLocation;
-
-
                     // start recording
-                    ContextFactory.record(vm.recordMeta.soundId);
-
-                    // only initiate moveMarker animation if the collab was paused
-                    // aka the marker wasnt moving
-                    
+                    ContextFactory.record(vm.recordMeta.soundId, recordingReadyStart);
                 })
             }
+        }
+
+        function recordingReadyStart() {
+            vm.recording = true;
+            vm.recordMeta.startLoc = vm.markerLocation;
+            if (!vm.playing) {
+                togglePlay();
+                vm.playing = true;
+            } 
         }
 
         // callback for when the buffers are retrieved after the recording is done
@@ -124,14 +118,15 @@
             // the visual length of the clip is based on the
             // distance traversed by the marker
             var startLoc = vm.recordMeta.startLoc;
-            var canvasLen = vm.markerLocation - startLoc;
+            var endLoc = vm.recordMeta.endLoc;
+            var canvasLen = endLoc - startLoc;
 
             var canvas = GridFactory.createCanvas(trackNum, startLoc, canvasLen);
             GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
 
             clearInterval(vm.intervalId);
 
-            MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen, fps, vm.recordMeta.soundModel);
+            MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen, fps, vm.recordMeta.soundModel, vm.recordMeta.startLoc);
 
             togglePlay();
             vm.playing = false;
