@@ -42,15 +42,8 @@
         }
 
         function updateCollab(collab) {
-            // custom set up the object to send out
-            // because we don't want to include all the sound
-            // buffers in this request .. they aren't necessary
-            var newCollab = {
-                _id: collab._id,
-                name: collab.name,
-                startDate: collab.startDate,
-                completed: collab.completed
-            }
+            // strip out unnecessities
+            var newCollab = stripCollab(collab);
             return $http.put(apiUrl + "/collabs/" + newCollab._id, newCollab)
         }
 
@@ -60,6 +53,17 @@
         // off to the next user
         function commitChanges(collab) {
             return $http.post(apiUrl + "/collabs/commit/" + collab._id);
+        }
+
+        function stripCollab(collab) {
+            // custom set up the object
+            // because we don't want to include all the sound
+            return {
+                _id: collab._id,
+                name: collab.name,
+                startDate: collab.startDate,
+                completed: collab.completed
+            };
         }
     }
 })();
