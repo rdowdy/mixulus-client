@@ -16,7 +16,6 @@
 
         ////////////////
         // Functions
-
         vm.toggleRecord = toggleRecording;
         vm.togglePlay = togglePlay;
         vm.skipHome = skipHome;
@@ -58,6 +57,13 @@
         $rootScope.$on("togglePlay", function() {
             togglePlay();
             vm.playing = !vm.playing;
+        })
+
+        $rootScope.$on("toggleIfPlaying", function() {
+            if(vm.playing) {
+                togglePlay();
+                vm.playing = false;
+            }
         })
 
         //////
@@ -135,6 +141,10 @@
         // play the audio and trigger marker move animation
         function togglePlay() {
             if (!vm.playing) {
+                if(vm.markerLocation >= MixFactory.getEndMarker()) {
+                    skipHome();
+                }
+
                 play();
 
                 stop = false;
