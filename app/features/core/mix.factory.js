@@ -119,6 +119,9 @@
                 var track = tracks[i];
                 TrackFactory.addInitialEffectsChainToTrack(track);
 
+                track.volumeGainNode.gain.value = track.gain / 100;
+                console.log(track);
+
                 if (track.soundIds.length > 0) {
                     // get the sound buffers from the DB!
                     for (var j = track.soundIds.length - 1; j >= 0; j--) {
