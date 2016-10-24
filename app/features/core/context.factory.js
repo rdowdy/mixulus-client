@@ -27,6 +27,7 @@
         var socketWorker;
         var socketUrl = "https://mixulus.com:9999";
         var currentCallback;
+        var readyCallback;
         var currentSoundId;
         var audioBufferNum = 0;
         var armedTrack;
@@ -154,10 +155,11 @@
             }
         }
 
-        function record(soundId) {
+        function record(soundId, cb) {
             recBuffer = [];
             recLen = 0;
             currentSoundId = soundId;
+            readyCallback = cb;
             socketWorker.postMessage({
                 command: 'init',
                 soundId: soundId
@@ -166,6 +168,7 @@
 
         function startCollectingInput() {
             recording = true;
+            readyCallback();
         }
 
         function stop(callback, trackNum) {

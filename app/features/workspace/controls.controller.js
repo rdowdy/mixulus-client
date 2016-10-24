@@ -91,28 +91,22 @@
                     trackId: MixFactory.getTracks()[trackNum]._id,
                     fps: fps
                 }).then(function(res) {
-                    vm.recording = true;
-                    if (!vm.playing) {
-                        // vm.intervalId = setInterval(moveMarker, 1000 / fps);
-                        //vm.playing = true;
-                        togglePlay();
-                        vm.playing = true;
-                    } 
-
                     // some meta information about the current recording session
                     vm.recordMeta.soundId = res.data._id;
                     vm.recordMeta.soundModel = res.data;
                     vm.recordMeta.startLoc = vm.markerLocation;
-
-
                     // start recording
-                    ContextFactory.record(vm.recordMeta.soundId);
-
-                    // only initiate moveMarker animation if the collab was paused
-                    // aka the marker wasnt moving
-                    
+                    ContextFactory.record(vm.recordMeta.soundId, recordingReadyStart);
                 })
             }
+        }
+
+        function recordingReadyStart() {
+            vm.recording = true;
+            if (!vm.playing) {
+                togglePlay();
+                vm.playing = true;
+            } 
         }
 
         // callback for when the buffers are retrieved after the recording is done
