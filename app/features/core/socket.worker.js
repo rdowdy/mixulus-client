@@ -8,6 +8,8 @@ var recBuffer;
 var recLen;
 var numBuffers;
 
+console.log('Socket url is ' + socketUrl);
+
 this.onmessage = function(e){
   switch(e.data.command){
     case 'init':

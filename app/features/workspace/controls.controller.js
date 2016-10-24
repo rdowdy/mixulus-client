@@ -16,7 +16,6 @@
 
         ////////////////
         // Functions
-
         vm.toggleRecord = toggleRecording;
         vm.togglePlay = togglePlay;
         vm.skipHome = skipHome;
@@ -58,6 +57,13 @@
         $rootScope.$on("togglePlay", function() {
             togglePlay();
             vm.playing = !vm.playing;
+        })
+
+        $rootScope.$on("toggleIfPlaying", function() {
+            if(vm.playing) {
+                togglePlay();
+                vm.playing = false;
+            }
         })
 
         //////
@@ -135,6 +141,10 @@
         // play the audio and trigger marker move animation
         function togglePlay() {
             if (!vm.playing) {
+                if(vm.markerLocation >= MixFactory.getEndMarker()) {
+                    skipHome();
+                }
+
                 play();
 
                 stop = false;
@@ -183,8 +193,8 @@
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
 
             if (vm.playing) {
-                pause();
-                stop = true;
+                togglePlay();
+                vm.playing = false;
             }
         }
 
@@ -236,8 +246,15 @@
         }
 
         function moveMarker() {
-            $rootScope.$emit('markerMove', { loc: ++vm.markerLocation });
-            $rootScope.$apply();
+            if(vm.markerLocation > MixFactory.getEndMarker() && !vm.recording) {
+                // if were at the end of the song and were NOT recording, then hit pause
+                togglePlay();
+                vm.playing = false;
+                $rootScope.$apply();
+            } else {
+                $rootScope.$emit('markerMove', { loc: ++vm.markerLocation });
+                $rootScope.$apply();
+            }
         }
     }
 })();

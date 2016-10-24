@@ -6,23 +6,28 @@
         .controller('WorkspaceController', WorkspaceController);
 
     WorkspaceController.$inject = [
-        '$window', '$rootScope', 'localStorageService', 'CollabFactory',
+        '$window', '$timeout', '$rootScope', 'localStorageService', 'ContextFactory', 'CollabFactory',
         'MixFactory', 'TrackFactory', 'GridFactory', 'SoundFactory', 'ngDialog'
     ];
 
     /* @ngInject */
-    function WorkspaceController($window, $rootScope, localStorageService, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory, ngDialog) {
+    function WorkspaceController($window, $timeout, $rootScope, localStorageService, ContextFactory, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory, ngDialog) {
         var vm = this;
 
         vm.recording = false;
         vm.tracks = [];
         vm.armedTrack = 0;
         vm.selectedSound = {};
+        vm.disableUserActions = false;
 
         ////////////////
         vm.toggleTrackArmed = toggleTrackArmed;
         vm.addTrack = addTrack;
         vm.addUser = addUserDialog;
+        vm.editTrackKeyDown = editTrackKeyDown;
+        vm.editCollabKeyDown  = editCollabKeyDown;
+        vm.focusOnTrackNameInput = focusOnTrackNameInput;
+        vm.focusOnCollabNameInput = focusOnCollabNameInput
         vm.keydown = keydown;
         vm.toggleMute = toggleMute;
         vm.toggleSolo = toggleSolo;
@@ -100,6 +105,34 @@
             MixFactory.addTrack();
         }
 
+        function focusOnTrackNameInput($index, track) {
+            $timeout(function() {
+                var input = document.getElementById("track" + $index + "Input");
+                input.focus();
+                input.setSelectionRange(track.name.length, track.name.length);
+            }, 0, false);
+        }
+
+        function editTrackKeyDown($event, track) {
+            if($event.keyCode == 13) {
+                track.editTrackName = false;
+            }
+        }
+
+        function focusOnCollabNameInput() {
+            $timeout(function() {
+                var input = document.getElementById("collabHeaderInput");
+                input.focus();
+                input.setSelectionRange(vm.collab.name.length, vm.collab.name.length);
+            }, 0, false);
+        }
+
+        function editCollabKeyDown($event) {
+            if($event.keyCode == 13) {
+                vm.editCollabName = false;
+            }
+        }
+
         function trackListUpdated() {
             /////////////////
             // check to see if the grid marker
@@ -116,11 +149,17 @@
         }
 
         function addUserDialog() {
+            // pause the music
+            $rootScope.$broadcast("toggleIfPlaying");
+            vm.disableUserActions = true;
+
             // open a modal to get user input
             ngDialog.open({
                 templateUrl: 'features/dialog/addUser.tmpl.html',
                 controller: "DialogController",
                 controllerAs: "dialog"
+            }).closePromise.then(function() {
+                vm.disableUserActions = false;
             });
         }
 
@@ -137,6 +176,11 @@
         }
 
         function gridClickEvent($event) {
+            // user actions are disabled, so get outta here
+            if(vm.disableUserActions) {
+                return;
+            }
+
             // chrome was recording pageY coordinates weirdly, 
             // so im gonna calculate y-coord using clientY + scrollTop
             var yCoord = $event.clientY;
@@ -167,6 +211,11 @@
         }
 
         function keydown($event) {
+            // user actions are disabled, so get outta here
+            if(vm.disableUserActions) {
+                return;
+            }
+
             // handle delete keypress
             if ($event.keyCode == 8) {
                 if (vm.selectedSound.sound != null) {
@@ -213,6 +262,7 @@
                     }
 
                     SoundFactory.updateSound(soundToSave);
+                    MixFactory.updateEndMarker(vm.selectedSound.sound);
                 }
             }
 
@@ -225,6 +275,9 @@
         }
 
         function commit() {
+            $rootScope.$broadcast("toggleIfPlaying");
+            vm.disableUserActions = true;
+
             CollabFactory.commitChanges(vm.collab).then(function(res) {
                 // redirect back to homepage
                 $window.location.href = "/home";

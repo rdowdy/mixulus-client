@@ -211,6 +211,16 @@ select {
     font-family: 'Oswald';
 }
 
+.fa-refresh {
+    float: right;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.fa-refresh:active {
+    color: white;
+}
+
 .collab {
     border: 1px solid black;
     margin: 0 auto;

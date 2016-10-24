@@ -16,9 +16,12 @@
         var trackHeight = 100;
         var trackListWidth = 215;
 
-        var dragStartX = 0;
+        var dragStartLocX = 0;
+        var mouseDragStartX = 0;
         var trackStart = 0;
         var dragEndX = 0;
+        var mouseDragEndX = 0;
+        var mouseOffset = 0;
 
         document.getElementById('grid').addEventListener('dragover', dragover)
         document.getElementById('grid').addEventListener('drop', drop);
@@ -75,12 +78,16 @@
         }
 
         function dragstart(e) {
-            dragStartX = e.pageX;
+            var mixContainer = document.getElementById('mixBoard');
+
+            dragStartLocX = e.target.offsetLeft;
+            mouseDragStartX = e.clientX;
+            mouseOffset = e.clientX - e.target.offsetLeft;
 
             // chrome was recording pageY coordinates weirdly, 
             // so im gonna calculate y-coord using clientY + scrollTop
             var yCoord = e.clientY;
-            var mixContainer = document.getElementById('mixBoard');
+            
             yCoord += mixContainer.scrollTop;
 
             trackStart = getTrackNumFromY(yCoord);
@@ -98,13 +105,15 @@
         }
 
         function dragend(e) {
+            var mixContainer = document.getElementById('mixBoard');
+
             ///////////////////////////
             // Move the sound clip 
 
             ////////
             // x-axis movement
-            dragEndX = e.pageX;
-            var dragDelta = dragEndX - dragStartX;
+            var mouseDragEndX = e.clientX + mouseOffset;
+            var dragDelta = mouseDragEndX - mouseDragStartX;
 
             // move the clip in the x direction
             var leftOffset = parseInt(e.target.style.left);
@@ -123,11 +132,10 @@
             // chrome was recording pageY coordinates weirdly, 
             // so im gonna calculate y-coord using clientY + scrollTop
             var yCoord = e.clientY;
-            var mixContainer = document.getElementById('mixBoard');
             yCoord += mixContainer.scrollTop;
 
             var dragEndY = yCoord;
-            dragEndY = dragEndY - topNavHeight - gridRulerHeight;
+            dragEndY = dragEndY - topNavHeightAbsolute - gridRulerHeight;
 
             // calculate track number based on y-axis movement
             var trackNum = Math.floor((dragEndY + (dragEndY % trackHeight)) / trackHeight) - 1;
@@ -142,7 +150,7 @@
             $rootScope.$broadcast("sounddrag", {
                 newLoc: leftOffset,
                 newTrack: trackNum,
-                dragStartX: dragStartX,
+                dragStartX: dragStartLocX,
                 trackStart: trackStart
             })
             
