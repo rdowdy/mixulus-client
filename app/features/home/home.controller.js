@@ -5,14 +5,15 @@
         .module('app')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['CollabFactory', '$window', 'localStorageService'];
+    HomeController.$inject = ['$window', 'localStorageService', 'CollabFactory'];
 
     /* @ngInject */
-    function HomeController(CollabFactory, $window, localStorageService) {
+    function HomeController($window, localStorageService, CollabFactory) {
         var vm = this;
         
         vm.goToWorkspace = goToWorkspace;
         vm.newCollab = newCollab;
+        vm.refresh = getCollabs;
 
         /////////////////////
         init();
@@ -21,16 +22,19 @@
         function init() {
             // get user id
             vm.userId = localStorageService.get('userId');
+            getCollabs();
+        }
 
+        function getCollabs() {
             // get collabs and check which ones
             // are available to make changes
-        	CollabFactory.getAllCollabs().then(function(response) {
-        		vm.collabs = response.data;
+            CollabFactory.getAllCollabs().then(function(response) {
+                vm.collabs = response.data;
 
                 var collab;
                 for(var i = 0; i < vm.collabs.length; i++) {
                     collab = vm.collabs[i];
-                    console.log(collab);
+                    //console.log(collab);
 
                     if(collab.userIds[collab.currentUserIndex]._id == vm.userId) {
                         collab.waiting = false;
@@ -38,7 +42,7 @@
                         collab.waiting = true;
                     }
                 }
-        	});
+            });
         }
 
         function newCollab() {
