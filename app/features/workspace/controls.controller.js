@@ -94,7 +94,6 @@
                     // some meta information about the current recording session
                     vm.recordMeta.soundId = res.data._id;
                     vm.recordMeta.soundModel = res.data;
-                    vm.recordMeta.startLoc = vm.markerLocation;
                     // start recording
                     ContextFactory.record(vm.recordMeta.soundId, recordingReadyStart);
                 })
@@ -103,6 +102,7 @@
 
         function recordingReadyStart() {
             vm.recording = true;
+            vm.recordMeta.startLoc = vm.markerLocation;
             if (!vm.playing) {
                 togglePlay();
                 vm.playing = true;
