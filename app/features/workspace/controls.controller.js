@@ -183,8 +183,8 @@
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
 
             if (vm.playing) {
-                pause();
-                stop = true;
+                togglePlay();
+                vm.playing = false;
             }
         }
 
