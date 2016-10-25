@@ -5,10 +5,10 @@
         .module('app')
         .factory('ContextFactory', ContextFactory);
 
-    ContextFactory.$inject = ['$window', 'SoundFactory', 'localStorageService'];
+    ContextFactory.$inject = ['$window', 'localStorageService'];
 
     /* @ngInject */
-    function ContextFactory($window, SoundFactory, localStorageService) {
+    function ContextFactory($window, localStorageService) {
         //////////////////////////
         // Functions
         //////////////////////////
