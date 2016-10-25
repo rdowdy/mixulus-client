@@ -141,7 +141,7 @@
         // play the audio and trigger marker move animation
         function togglePlay() {
             if (!vm.playing) {
-                if(vm.markerLocation >= MixFactory.getEndMarker()) {
+                if(!vm.recording && vm.markerLocation >= MixFactory.getEndMarker()) {
                     skipHome();
                 }
 
@@ -246,7 +246,7 @@
         }
 
         function moveMarker() {
-            if(vm.markerLocation > MixFactory.getEndMarker() && !vm.recording) {
+            if(vm.markerLocation >= MixFactory.getEndMarker() && !vm.recording) {
                 // if were at the end of the song and were NOT recording, then hit pause
                 togglePlay();
                 vm.playing = false;
