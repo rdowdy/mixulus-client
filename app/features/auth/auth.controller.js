@@ -30,16 +30,16 @@
                             localStorageService.set('userId', res.data.user._id);
                             $window.location.href = "/home";
                         } else {
-                            // some sort of JWT error
+                            vm.loginError = "Unable to log in due to server error.";
                         }
                     })
 
                 } else {
-                    // some sort of login error
+                    vm.loginError = "Incorrect username/password. Please try again.";
                 }
+            }, function(err) {
+                vm.loginError = "Incorrect username/password. Please try again.";
             });
-
-            //$http.post("/login", user);
         }
 
         function signup() {
