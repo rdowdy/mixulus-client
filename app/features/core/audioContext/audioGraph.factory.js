@@ -78,6 +78,31 @@
             RecordingFactory.initialize(realAudioInput, audioContext);
         }
 
+        /////////////////////
+        // Track Functions
+        /////////////////////
+
+        // add initial effects chain to track
+        // [volumeGainNode] => [muteSoloGainNode] => [destination]
+        function addInitialEffectsChainToTrack(track) {
+            var volumeGainNode = audioContext.createGain();
+            var muteSoloGainNode = audioContext.createGain();
+
+            volumeGainNode.gain.value = 1.0;
+            muteSoloGainNode.gain.value = 1.0;
+
+            volumeGainNode.connect(muteSoloGainNode);
+            muteSoloGainNode.connect(audioContext.destination);
+
+            track.volumeGainNode = volumeGainNode;
+            track.muteSoloGainNode = muteSoloGainNode;
+            track.effectsChainStart = volumeGainNode;
+
+            track.mute = false;
+
+            return track;
+        }
+
         return service;
     }
 })();
