@@ -188,7 +188,11 @@ select {
     padding: 5px;
 }
 
-#loginErrorDiv {
+/************************/
+/*    Error Handling    */
+/************************/
+
+.errorDiv {
     margin-bottom: 10px;
 
     width: 100%;
@@ -202,7 +206,7 @@ select {
     border: 1px solid black;
 }
 
-#loginErrorDiv p {
+.errorDiv p {
     width: 100%;
     height: 100%;
 }

@@ -30,7 +30,7 @@
                             localStorageService.set('userId', res.data.user._id);
                             $window.location.href = "/home";
                         } else {
-                            vm.loginError = "Unable to log in due to server error.";
+                            vm.loginError = "Unable to log in due to server error. Please try again later.";
                         }
                     })
 
@@ -60,11 +60,13 @@
                                 localStorageService.set('userId', res.data.user._id);
                                 $window.location.href = "/home";
                             } else {
-                                // some sort of JWT error
+                                vm.signupError = "Unable to log in due to server error. Please try again later.";
                             }
                         });
                     }
                     
+                }, function(err) {
+                    vm.signupError = "That username is already taken. Please try another one!";
                 })
             }
         }
