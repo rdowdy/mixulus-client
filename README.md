@@ -1,4 +1,4 @@
 # Mixulus
 The client side of a MEAN collaborative music webapp.
 
-The back-end can be found at [github.com/rdowdy/unnamed-music-proj-server](github.com/rdowdy/unnamed-music-proj-server)
+The back-end can be found at [rdowdy/unnamed-music-proj-server](https://github.com/rdowdy/unnamed-music-proj-server)
