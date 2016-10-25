@@ -57,6 +57,7 @@
                 vm.collab = response.data;
                 vm.tracks = MixFactory.initTracks(vm.collab);
 
+                console.log(vm.collab);
             }, function(err) {
                 console.log(err);
                 if (err.status == 403) {
