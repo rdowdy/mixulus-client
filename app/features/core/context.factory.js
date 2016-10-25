@@ -78,6 +78,11 @@
             // instantiate the singleton
             audioContext = new AudioContext();
 
+            // check that its there
+            if(audioContext == null) {
+                throw new Exception("Audio Context couldn't be instantied properly.");
+            }
+
             if (!navigator.getUserMedia)
                 navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 

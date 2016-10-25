@@ -5,10 +5,10 @@
         .module('app')
         .factory('AudioGraphFactory', AudioGraphFactory);
 
-    AudioGraphFactory.$inject = [];
+    AudioGraphFactory.$inject = ['$window', 'RecordingFactory'];
 
     /* @ngInject */
-    function AudioGraphFactory() {
+    function AudioGraphFactory(window, RecordingFactory) {
     	/////////////////////
     	// Functions
     	/////////////////////
@@ -19,9 +19,10 @@
         /////////////////////
         // Variables
         /////////////////////
-        var context;
+        var audioContext;
         var inputStream;
 
+        initialize();
         /////////////////////
         // Initialization
         /////////////////////
@@ -33,6 +34,11 @@
             }
             // instantiate the singleton
             audioContext = new AudioContext();
+
+            // check that its there
+            if(audioContext == null) {
+                throw new Error("Audio Context couldn't be instantied properly.");
+            }
 
             if (!navigator.getUserMedia)
                 navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -49,13 +55,13 @@
                     },
                     "optional": []
                 },
-            }, initializeAudioInputGraph, function(e) {
+            }, initializeAudioGraph, function(e) {
                 alert('Error getting audio');
-                console.log(e);
+                throw new Error("Couldn't retrieve user media stream! " + e);
             });
         }
 
-        function initializeAudioInputGraph(stream) {
+        function initializeAudioGraph(stream) {
             console.log("Initializing audio input graph...");
             // Create an AudioNode from the media stream.
             var realAudioInput = audioContext.createMediaStreamSource(stream);
@@ -67,7 +73,7 @@
             zeroGain.connect(audioContext.destination);
 
             // initialize the recorder
-            initRecorder(realAudioInput);
+            RecordingFactory.initialize(realAudioInput, audioContext);
         }
 
         return service;
