@@ -55,9 +55,11 @@
                     },
                     "optional": []
                 },
-            }, initializeAudioGraph, function(e) {
+            }, 
+            initializeAudioGraph, 
+            function(err) {
                 alert('Error getting audio');
-                throw new Error("Couldn't retrieve user media stream! " + e);
+                throw new Error("Couldn't retrieve user media stream! " + err);
             });
         }
 
