@@ -22,13 +22,14 @@
             });
         };
 
-        ////////////////
-        // functions
+        //////////////////////////
+        // Functions 
+        //////////////////////////
         var service = {
             addAudioToTrack: addAudioToTrack,
+            addTrack: addTrack,
             adjustTrackVolume: adjustTrackVolume,
             deleteSound: deleteSound,
-            addTrack: addTrack,
             getEndMarker: getEndMarker,
             getSoundFromX: getSoundFromX,
             getTracks: getTracks,
@@ -39,20 +40,19 @@
             toggleSolo: toggleSolo,
             updateEndMarker: updateEndMarker
         }
-        ////////////////
 
-        ////////////////
-        // variables
-        var collabId;
-        var tracks = [];
-        var soloedTracks = [];
-
+        //////////////////////////
+        // Variables 
+        //////////////////////////
+        var collabId = undefined;
         var endLoc = 0;
-
+        var soloedTracks = [];
         var soundsToLoad = 0;
+        var tracks = [];
 
-        ////////////////
-        // Root Scope Events
+        //////////////////////////
+        // Root Scope Listeners
+        //////////////////////////
         $rootScope.$on('sounddrag', function(event, args) {
             var newLoc = args.newLoc;
             var newTrack = args.newTrack;
@@ -92,10 +92,13 @@
             SoundFactory.updateSound(soundToSave);
         })
 
-        /////////////////////
+        //////////////////////////
         // Function Definitions
-        /////////////////////
+        //////////////////////////
 
+        /////////////////////
+        // Track Initialization
+        /////////////////////
         // set an internal reference to the tracks
         // if there are no tracks, create one
         function initTracks(collab) {
@@ -157,10 +160,118 @@
             return tracks;
         }
 
-        function getTracks() {
-            return tracks;
+        //////////////////////////
+        // Track Manipulation
+        //////////////////////////
+        // add an empty track to the collab
+        function addTrack() {
+            var track = TrackFactory.createEmptyTrack("Audio Track");
+
+            TrackFactory.addTrack(track).then(function(res) {
+                var trackFromDB = res.data;
+                CollabFactory.addTrackToCollab(collabId, res.data._id).then(function(res) {
+                    TrackFactory.addInitialEffectsChainToTrack(trackFromDB);
+                    tracks.push(trackFromDB);
+                });
+            });
         }
 
+        // add a sound clip to a track, and update the DB acordingly
+        function addAudioToTrack(num, buffer, gridLocation, frameLength, fps, soundModel, startLoc) {
+            // init the soundIds array if it isn't already
+            if (tracks[num].soundIds == null) {
+                tracks[num].soundIds = [];
+            }
+
+            var track = tracks[num];
+
+            // attach these to the sound model before DB update
+            soundModel.frameLength = frameLength;
+            soundModel.gridLocation = gridLocation;
+
+            // update DB entry
+            SoundFactory.updateSound(soundModel).then(function(res) {
+                // attach the buffer to the object after the DB call
+                res.data.buffer = buffer;
+                track.soundIds.push(res.data);
+
+                // check to see if this is the new end of the song
+                updateEndMarker(res.data);
+            });
+        }
+
+        function adjustTrackVolume(track) {
+            var nodeGain = track.gain / 100;
+
+            track.volumeGainNode.gain.value = nodeGain;
+            TrackFactory.updateTrack(track);
+        }
+
+        // mute or unmute a track
+        function toggleMute(trackNum) {
+            var track = tracks[trackNum];
+            if (track.mute == true) {
+                track.mute = false;
+                track.muteSoloGainNode.gain.value = 1.0;
+            } else {
+                track.mute = true;
+                track.muteSoloGainNode.gain.value = 0;
+            }
+        }
+
+        // solo or unsolo a track
+        function toggleSolo(trackNum) {
+            var idx = soloedTracks.indexOf(tracks[trackNum]);
+
+            // if the track was already on solo
+            if (idx >= 0) {
+                // remove it from the list of soloed tracks
+                soloedTracks.splice(idx, 1);
+
+                // set the gain to 0 if there are still soloed tracks
+                if (soloedTracks.length > 0) {
+                    tracks[trackNum].muteSoloGainNode.gain.value = 0;
+                } else {
+                    // restore the gain to all tracks, if there are no other tracks soloed
+                    for (var i = 0; i < tracks.length; i++) {
+                        // only restore if the track wasn't already muted with the mute button
+                        if (tracks[i].mute == false) {
+                            tracks[i].muteSoloGainNode.gain.value = 1.0;
+                        }
+                    }
+                }
+            } else { 
+                // add the track to the list of soloed tracks
+                soloedTracks.push(tracks[trackNum]);
+
+                // set gain to 1.0 if the track wasn't already muted with the mute button
+                if (tracks[trackNum].mute == false) {
+                    tracks[trackNum].muteSoloGainNode.gain.value = 1.0;
+                }
+
+                // mute nonsoled tracks
+                var nonSoloed = tracks.diff(soloedTracks);
+                for (var i = 0; i < nonSoloed.length; i++) {
+                    nonSoloed[i].muteSoloGainNode.gain.value = 0;
+                }
+            }
+
+        }
+
+        //////////////////////////
+        // Sound Manipulation/Playback
+        //////////////////////////
+        function deleteSound(sound) { 
+            // remove from internal data structure
+            var track = tracks[sound.track];
+            for(var i = 0; i < track.soundIds.length; i++) {
+                if(track.soundIds[i]._id == sound._id) {
+                    track.soundIds.splice(i, 1);
+                }
+            }
+        }
+
+        // return a reference to a sound clip based on a track number and x-coordinate
         function getSoundFromX(trackNum, coordX) {
             var track = tracks[trackNum];
             if(track == null) {
@@ -181,135 +292,47 @@
             return null;
         }
 
-        // add an empty track to the collab
-        function addTrack() {
-            var track = TrackFactory.createEmptyTrack("Audio Track");
-
-            TrackFactory.addTrack(track).then(function(res) {
-                var trackFromDB = res.data;
-                CollabFactory.addTrackToCollab(collabId, res.data._id).then(function(res) {
-                    TrackFactory.addInitialEffectsChainToTrack(trackFromDB);
-                    tracks.push(trackFromDB);
-                });
-            });
-        }
-
-        function toggleMute(trackNum) {
-            var track = tracks[trackNum];
-            if (track.mute == true) {
-                track.mute = false;
-                track.muteSoloGainNode.gain.value = 1.0;
-            } else {
-                track.mute = true;
-                track.muteSoloGainNode.gain.value = 0;
-            }
-        }
-
-        function toggleSolo(trackNum) {
-            var idx = soloedTracks.indexOf(tracks[trackNum]);
-            if (idx >= 0) {
-                soloedTracks.splice(idx, 1);
-
-                if (soloedTracks.length > 0) {
-                    tracks[trackNum].muteSoloGainNode.gain.value = 0;
-                } else {
-                    for (var i = 0; i < tracks.length; i++) {
-                        if (tracks[i].mute == false) {
-                            // unmute 
-                            tracks[i].muteSoloGainNode.gain.value = 1.0;
-                        }
-                    }
-                }
-            } else {
-                soloedTracks.push(tracks[trackNum]);
-
-                // don't solo if track is already muted
-                if (tracks[trackNum].mute == false) {
-                    tracks[trackNum].muteSoloGainNode.gain.value = 1.0;
-                }
-
-                // mute nonsoled tracks
-                var nonSoloed = tracks.diff(soloedTracks);
-                for (var i = 0; i < nonSoloed.length; i++) {
-                    nonSoloed[i].muteSoloGainNode.gain.value = 0;
-                }
-            }
-
-        }
-
-        function adjustTrackVolume(track) {
-            var nodeGain = track.gain / 100;
-            track.volumeGainNode.gain.value = nodeGain;
-
-            TrackFactory.updateTrack(track);
-        }
-
-        function addAudioToTrack(num, buffer, gridLocation, frameLength, fps, soundModel, startLoc) {
-            if (tracks[num].soundIds == null) {
-                tracks[num].soundIds = [];
-            }
-
-            var track = tracks[num];
-
-            soundModel.frameLength = frameLength;
-            soundModel.gridLocation = gridLocation;
-
-            // update DB entry
-            SoundFactory.updateSound(soundModel).then(function(res) {
-                // attach the buffer to the object after
-                // the DB call, then save to the track
-                res.data.buffer = buffer;
-                track.soundIds.push(res.data);
-
-                // check to see if this is the end of the song
-                // for skipEnd functionality
-                if (gridLocation + frameLength > endLoc) {
-                    endLoc = gridLocation + frameLength;
-                }
-            });
-        }
-
-        function deleteSound(sound) { 
-            // remove from internal data structure
-            var track = tracks[sound.track];
-            for(var i = 0; i < track.soundIds.length; i++) {
-                if(track.soundIds[i]._id == sound._id) {
-                    track.soundIds.splice(i, 1);
-                }
-            }
-        }
-
         // play all audio tracks from the marker onward
         function playAt(gridBaseOffset, markerOffset, fps) {
             var context = ContextFactory.getAudioContext();
 
-            // if there are tracks on solo
-            // then play only those
-            var iterateOver = tracks;
+            // iterate over all tracks
+            for (var trackNum = 0; trackNum < tracks.length; trackNum++) {
+                var track = tracks[trackNum];
 
-            for (var trackNum = 0; trackNum < iterateOver.length; trackNum++) {
-                var track = iterateOver[trackNum];
-
+                // iterate over all sounds for this track
                 for (var i = 0; i < track.soundIds.length; i++) {
                     var sound = track.soundIds[i];
+
                     var audioStartLoc = sound.gridLocation;
                     var audioEndLoc = audioStartLoc + sound.frameLength;
 
                     if (markerOffset >= audioEndLoc) {
-                        // we can ignore the clip if the marker 
-                        // is already past it
+                        // we can ignore the clip if the marker is already past it
                         continue;
+
                     } else if (markerOffset > audioStartLoc && markerOffset < audioEndLoc) {
+                        // if the marker is somewhere within the bounds of this sound clip
+
+                        // this is the marker's offset within the sound clip
+                        // frameOffset is the marker's offset in terms of FRAMES aka PIXELS
                         var frameOffset = markerOffset - audioStartLoc;
+
+                        // sampleOffset is the marker's offset in terms of SAMPLES
                         // sampleOffset = (frames) * (seconds / frame) * (samples / second) = samples
                         var sampleOffset = frameOffset * (1 / fps) * (context.sampleRate);
+
+                        // get only the part of the buffer at and past the marker
                         var buffer = sound.buffer.slice(sampleOffset, sound.buffer.length);
-
                         ContextFactory.playAt(buffer, track.effectsChainStart, 0);
-                    } else {
-                        var soundStart = sound.gridLocation - markerOffset;
-                        soundStart /= fps;
 
+                    } else {
+                        // if the marker is totally before the sound clip
+
+                        var soundStart = sound.gridLocation - markerOffset;
+                        // convert from frames to seconds
+                        soundStart /= fps;
+                        // calculate when the sound should start playing
                         var startTime = soundStart + context.currentTime;
                         ContextFactory.playAt(sound.buffer, track.effectsChainStart, startTime);
                     }
@@ -328,8 +351,15 @@
             }
         }
 
+        //////////////////////////
+        // Getters
+        //////////////////////////
         function getEndMarker() {
             return endLoc;
+        }
+
+        function getTracks() {
+            return tracks;
         }
 
         return service;
