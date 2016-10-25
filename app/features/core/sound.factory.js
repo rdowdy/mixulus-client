@@ -9,6 +9,9 @@
 
     /* @ngInject */
     function SoundFactory($http) {
+        /////////////////////
+        // Functions
+        /////////////////////
         var service = {
             addSound: addSound,
             deleteSound: deleteSound,
@@ -17,7 +20,9 @@
         };
         return service;
 
-        ////////////////
+        /////////////////////
+        // Function Definitions
+        /////////////////////
 
         // POST /sounds
         function addSound(sound) {
