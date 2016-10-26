@@ -125,9 +125,7 @@
         }
 
         function toggleTrackArmed(trackNum) {
-            if (vm.armedTrack == trackNum) {
-                vm.armedTrack = null;
-            } else {
+            if (vm.armedTrack != trackNum) {
                 vm.armedTrack = trackNum;
             }
         }
