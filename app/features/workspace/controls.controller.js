@@ -14,18 +14,17 @@
     function ControlsController($window, $rootScope, ContextFactory, GridFactory, MixFactory, SoundFactory, TrackFactory) {
         var vm = this;
 
-        ////////////////
+        //////////////////////////
         // Functions
-        vm.toggleRecord = toggleRecording;
-        vm.togglePlay = togglePlay;
-        vm.skipHome = skipHome;
+        //////////////////////////
         vm.skipEnd = skipEnd;
-
-        ////////////////
-
-        ////////////////
-        // Variables
-
+        vm.skipHome = skipHome;
+        vm.togglePlay = togglePlay;
+        vm.toggleRecord = toggleRecording;
+        
+        //////////////////////////
+        // Functions
+        //////////////////////////
         //////
         // animation
         var fps = 30;
@@ -37,78 +36,80 @@
         // marker location stuff
         var trackWidth = 215;
         var markerCenterOffset = 1;
+
         var markerHomeLoc = trackWidth;
-
         vm.markerLocation = markerHomeLoc;
-
         $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
-        
+
+        //////
+        // recording
+        vm.buffer = null;
+        vm.recordingSession = {};
+
+        //////
+        // playback
+        vm.playing = false;
+
+        //////////////////////////
+        // Root Scope Listeners
+        //////////////////////////
         $rootScope.$on("gridClick", function(event, args) {
             gridClickEvent(args.$event);
-        })
+        });
 
-        $rootScope.$on("refreshPlay", function() {
-            if(vm.playing) {
-                pause();
-                play();
-            }
-        })
+        // reset audio buffers to reflect any new changes
+        $rootScope.$on("refreshPlay", refreshPlay);
 
         $rootScope.$on("togglePlay", function() {
             togglePlay();
             vm.playing = !vm.playing;
-        })
+        });
 
+        // toggle only if already playing
         $rootScope.$on("toggleIfPlaying", function() {
             if(vm.playing) {
                 togglePlay();
                 vm.playing = false;
             }
-        })
+        });
 
-        //////
-
-        vm.buffer = null;
-        vm.playing = false;
-
-        //////
-        // recording
-        vm.recordMeta = {};
-
+        //////////////////////////
+        // Function Definitions
+        //////////////////////////
 
         ////////////////
-        // Function Definitions
+        // Recording
         ////////////////
 
         // record if recordBool is true, stop recording otherwise
-        // this is the recording entry point
+        // NOTE: this is the recording entry point
         function toggleRecording(recordBool, trackNum) {
             if (!recordBool) {
                 vm.recording = false;
-                vm.recordMeta.endLoc = vm.markerLocation;
+                vm.recordingSession.endLoc = vm.markerLocation;
                 // stop recording
                 ContextFactory.stop(doneRecording, trackNum);
 
             } else {
-                // before we start recording, create a new
-                // sound entry in the DB
+                // before we start recording, create a new sound entry in the DB
                 SoundFactory.addSound({
                     track: trackNum,
                     trackId: MixFactory.getTracks()[trackNum]._id,
                     fps: fps
                 }).then(function(res) {
                     // some meta information about the current recording session
-                    vm.recordMeta.soundId = res.data._id;
-                    vm.recordMeta.soundModel = res.data;
+                    vm.recordingSession.soundId = res.data._id;
+                    vm.recordingSession.soundModel = res.data;
                     // start recording
-                    ContextFactory.record(vm.recordMeta.soundId, recordingReadyStart);
+                    ContextFactory.record(vm.recordingSession.soundId, recordingReadyStart);
                 })
             }
         }
 
+        // this function is called when the server is ready to record
         function recordingReadyStart() {
             vm.recording = true;
-            vm.recordMeta.startLoc = vm.markerLocation;
+            vm.recordingSession.startLoc = vm.markerLocation;
             if (!vm.playing) {
                 togglePlay();
                 vm.playing = true;
@@ -121,22 +122,26 @@
         // 2. draw the audio bufer onto that canvas
         // 3. add the sound to the track in the MixFactory 
         function doneRecording(buffer, trackNum) {
-            // the visual length of the clip is based on the
-            // distance traversed by the marker
-            var startLoc = vm.recordMeta.startLoc;
-            var endLoc = vm.recordMeta.endLoc;
-            var canvasLen = endLoc - startLoc;
+            // the visual length of the clip is based on the distance traversed by the marker
+            var canvasLen = vm.recordingSession.endLoc - vm.recordingSession.startLoc;
 
-            var canvas = GridFactory.createCanvas(trackNum, startLoc, canvasLen);
-            GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
+            // create the canvas and draw the audio buffer onto it
+            var canvas = GridFactory.createCanvas(trackNum, vm.recordingSession.startLoc, canvasLen);
+            GridFactory.drawBuffer(canvas, buffer);
 
-            clearInterval(vm.intervalId);
+            // add audio buffer to trakc
+            MixFactory.addAudioToTrack(trackNum, buffer, vm.recordingSession.startLoc, canvasLen, fps, vm.recordingSession.soundModel);
 
-            MixFactory.addAudioToTrack(trackNum, buffer, startLoc, canvasLen, fps, vm.recordMeta.soundModel, vm.recordMeta.startLoc);
-
-            togglePlay();
-            vm.playing = false;
+            // stop playback if playing
+            if(vm.playing) {
+                togglePlay();
+                vm.playing = false;
+            }
         }
+
+        ////////////////
+        // Playback
+        ////////////////
 
         // play the audio and trigger marker move animation
         function togglePlay() {
@@ -147,6 +152,7 @@
 
                 play();
 
+                // set up marker animation
                 stop = false;
                 fpsInterval = 1000 / fps;
                 then = Date.now();
@@ -162,25 +168,26 @@
             MixFactory.playAt(markerHomeLoc, vm.markerLocation, fps);
         }
 
-        function pause() {
-            MixFactory.stopAudio();
-        }
-
-        function skipHome() {
-            var unpause = false;
-            if (vm.playing) {
+        function refreshPlay() {
+            if(vm.playing) {
                 pause();
-                unpause = true;
-            }
-
-            vm.markerLocation = markerHomeLoc;
-            $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
-
-            if (unpause) {
                 play();
             }
         }
 
+        function pause() {
+            MixFactory.stopAudio();
+        }
+
+        // send the grid marker back to its home position, reset playback to reflect this change
+        function skipHome() {
+            vm.markerLocation = markerHomeLoc;
+            $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
+
+            refreshPlay();
+        }
+
+        // skip the grid marker to the end, and stop playback if playing
         function skipEnd() {
             // MixFactory will provide the end loc based on all the tracks
             vm.markerLocation = MixFactory.getEndMarker();
@@ -198,42 +205,34 @@
             }
         }
 
+        // move the marker based on grid click location
         function gridClickEvent($event) {
             if (vm.recording) {
                 return;
             }
 
-            // check for location of click
+            // don't register a grid click unless its past the track list
             if($event.pageX < 215) {
-                return ;
+                return;
             }
 
-            var unpause = false;
-            if (vm.playing) {
-                pause();
-                unpause = true;
-            }
             var x = $event.pageX - markerCenterOffset;
             vm.markerLocation = x;
             $rootScope.$broadcast('markerMove', { loc: vm.markerLocation });
-            if (unpause) {
-                play();
-            }
+            refreshPlay();
         }
 
+        // request animation frame
         function animate() {
             if (!stop) {
                 // request another frame
-
                 requestAnimationFrame(animate);
 
                 // calc elapsed time since last loop
-
                 now = Date.now();
                 elapsed = now - then;
 
                 // if enough time has elapsed, draw the next frame
-
                 if (elapsed > fpsInterval) {
 
                     // Get ready for next frame by setting then=now, but also adjust for your
@@ -245,9 +244,10 @@
             }
         }
 
+        // move the marker incrementally forward
         function moveMarker() {
             if(vm.markerLocation >= MixFactory.getEndMarker() && !vm.recording) {
-                // if were at the end of the song and were NOT recording, then hit pause
+                // if we're at the end of the song and we're NOT recording, hit pause
                 togglePlay();
                 vm.playing = false;
                 $rootScope.$apply();

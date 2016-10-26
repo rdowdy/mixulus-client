@@ -141,7 +141,7 @@
                             updateEndMarker(sound);
 
                             var canvas = GridFactory.createCanvas(sound.track, sound.gridLocation, sound.frameLength);
-                            GridFactory.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), sound.buffer);
+                            GridFactory.drawBuffer(canvas, sound.buffer);
 
                             soundsToLoad--;
                         }, function(err) {
@@ -177,7 +177,7 @@
         }
 
         // add a sound clip to a track, and update the DB acordingly
-        function addAudioToTrack(num, buffer, gridLocation, frameLength, fps, soundModel, startLoc) {
+        function addAudioToTrack(num, buffer, gridLocation, frameLength, fps, soundModel) {
             // init the soundIds array if it isn't already
             if (tracks[num].soundIds == null) {
                 tracks[num].soundIds = [];
