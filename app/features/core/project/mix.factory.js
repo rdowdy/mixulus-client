@@ -46,6 +46,7 @@
         //////////////////////////
         var collabId = undefined;
         var endLoc = 0;
+        var endLocPadding = 45;
         var soloedTracks = [];
         var soundsToLoad = 0;
         var tracks = [];
@@ -346,8 +347,8 @@
 
         function updateEndMarker(sound) {
             // check to see if the endLoc needs to be updated
-            if(sound.gridLocation + sound.frameLength > endLoc) {
-                endLoc = sound.gridLocation + sound.frameLength;
+            if(sound.gridLocation + sound.frameLength + endLocPadding > endLoc) {
+                endLoc = sound.gridLocation + sound.frameLength + endLocPadding;
             }
         }
 
