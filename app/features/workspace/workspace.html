@@ -37,6 +37,7 @@
         <table id="grid" class="grid">
             <tr ng-repeat="track in workspace.tracks" id="track{{$index}}" ng-init="workspace.trackListUpdated();">
                 <td class="track">
+                    <button class="button deleteTrack" ng-click="workspace.deleteTrack(track)"><i class="fa fa-times" aria-hidden="true"></i></button>
                     <div class="trackCellContainer">
                         <h3 class="ng-cloak trackName" ng-show="!track.editTrackName" ng-click=" track.editTrackName = true; workspace.focusOnTrackNameInput($index, track); workspace.disableUserActions = true;">{{track.name}}</h3>
                         <input id="track{{$index}}Input" type="text" class="editTrackName" ng-model="track.name" ng-show="track.editTrackName" ng-blur="track.editTrackName = false; workspace.updateTrackName(track); workspace.disableUserActions = false;" ng-keydown="workspace.editTrackKeyDown($event, track);">

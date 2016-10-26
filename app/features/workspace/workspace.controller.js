@@ -21,6 +21,7 @@
         vm.addUser = addUserDialog;
         vm.adjustTrackVolume = adjustTrackVolume;
         vm.commit = commit;
+        vm.deleteTrack = deleteTrack;
         vm.editCollabKeyDown  = editCollabKeyDown;
         vm.editTrackKeyDown = editTrackKeyDown;
         vm.focusOnCollabNameInput = focusOnCollabNameInput
@@ -105,6 +106,10 @@
 
         function adjustTrackVolume(track) {
             MixFactory.adjustTrackVolume(track);
+        }
+
+        function deleteTrack(track) {
+            console.log("Delete track!");
         }
 
         // set focus on the track name editing input field and place cursor at the end
