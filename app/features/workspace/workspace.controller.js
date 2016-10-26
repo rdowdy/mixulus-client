@@ -68,6 +68,7 @@
         // Initialization
         //////////////////////////
         function init() {
+            // collabId passed from home.controller.js
             vm.collabId = localStorageService.get('collabId');
 
             CollabFactory.getCollabById(vm.collabId).then(function(response) {
