@@ -14,33 +14,45 @@
     function WorkspaceController($window, $timeout, $rootScope, localStorageService, ContextFactory, CollabFactory, MixFactory, TrackFactory, GridFactory, SoundFactory, ngDialog) {
         var vm = this;
 
+        //////////////////////////
+        // Functions
+        //////////////////////////
+        vm.addTrack = addTrack;
+        vm.addUser = addUserDialog;
+        vm.adjustTrackVolume = adjustTrackVolume;
+        vm.commit = commit;
+        vm.editCollabKeyDown  = editCollabKeyDown;
+        vm.editTrackKeyDown = editTrackKeyDown;
+        vm.focusOnCollabNameInput = focusOnCollabNameInput
+        vm.focusOnTrackNameInput = focusOnTrackNameInput;
+        vm.keydown = keydown;
+        vm.toggleMute = toggleMute;
+        vm.toggleSolo = toggleSolo;
+        vm.toggleTrackArmed = toggleTrackArmed;
+        vm.trackListUpdated = trackListUpdated;
+        vm.updateCollabName = updateCollabName;
+        vm.updateTrackName = updateTrackName;
+
+        //////////////////////////
+        // Variables
+        //////////////////////////
         vm.recording = false;
         vm.tracks = [];
         vm.armedTrack = 0;
         vm.selectedSound = {};
         vm.disableUserActions = false;
 
-        ////////////////
-        vm.toggleTrackArmed = toggleTrackArmed;
-        vm.addTrack = addTrack;
-        vm.addUser = addUserDialog;
-        vm.editTrackKeyDown = editTrackKeyDown;
-        vm.editCollabKeyDown  = editCollabKeyDown;
-        vm.focusOnTrackNameInput = focusOnTrackNameInput;
-        vm.focusOnCollabNameInput = focusOnCollabNameInput
-        vm.keydown = keydown;
-        vm.toggleMute = toggleMute;
-        vm.toggleSolo = toggleSolo;
-        vm.updateCollabName = updateCollabName;
-        vm.updateTrackName = updateTrackName;
-        vm.commit = commit;
-        vm.addUserToCollab = addUserToCollab;
-        vm.adjustTrackVolume = adjustTrackVolume;
-        vm.trackListUpdated = trackListUpdated;
-
-        ////////////////
-        getCollab();
-
+        //////////////////////////
+        // Key Codes
+        //////////////////////////
+        var DELETE = 8;
+        var LEFT_ARROW = 37;
+        var RIGHT_ARROW = 39;
+        var SPACE = 32;
+        
+        //////////////////////////
+        // Root Scope Listeners
+        //////////////////////////
         $rootScope.$on('onended', function() {
             vm.playing = false;
             $rootScope.$apply();
@@ -50,7 +62,13 @@
             gridClickEvent(args.$event);
         });
 
-        function getCollab() {
+
+        init();
+        //////////////////////////
+        // Initialization
+        //////////////////////////
+        function init() {
+            // collabId passed from home.controller.js
             vm.collabId = localStorageService.get('collabId');
 
             CollabFactory.getCollabById(vm.collabId).then(function(response) {
@@ -58,17 +76,14 @@
                 vm.tracks = MixFactory.initTracks(vm.collab);
 
             }, function(err) {
-                console.log(err);
                 if (err.status == 403) {
-                    // forbidden, not authorized, 
-                    // redirect to home
+                    // forbidden, not authorized, redirect to home
                     $window.location.href = "/home";
                 }
             });
 
             if (!Modernizr.hiddenscroll) {
                 var mixContainer = document.getElementById('mixBoard');
-                console.log("scrollbar!");
                 var height = mixContainer.offsetHeight;
                 height -= 17;
                 mixContainer.style.height = height + "px";
@@ -81,16 +96,32 @@
             }
         }
 
+        //////////////////////////
+        // Track Events
+        //////////////////////////
+        function addTrack() {
+            MixFactory.addTrack();
+        }
+
+        function adjustTrackVolume(track) {
+            MixFactory.adjustTrackVolume(track);
+        }
+
+        // set focus on the track name editing input field and place cursor at the end
+        function focusOnTrackNameInput($index, track) {
+            $timeout(function() {
+                var input = document.getElementById("track" + $index + "Input");
+                input.focus();
+                input.setSelectionRange(track.name.length, track.name.length);
+            }, 0, false);
+        }
+
         function toggleMute(trackNum) {
             MixFactory.toggleMute(trackNum);
         }
 
         function toggleSolo(trackNum) {
             MixFactory.toggleSolo(trackNum);
-        }
-
-        function adjustTrackVolume(track) {
-            MixFactory.adjustTrackVolume(track);
         }
 
         function toggleTrackArmed(trackNum) {
@@ -101,16 +132,28 @@
             }
         }
 
-        function addTrack() {
-            MixFactory.addTrack();
+        function trackListUpdated() {
+            // check to see if the grid marker height needs to be extended
+            var trackList = document.getElementById("grid");
+            var locationMarker = document.getElementById("locationMarker");
+            var mixContainer = document.getElementById("mixBoard");
+
+            if (trackList.offsetHeight > mixContainer.offsetHeight) {
+                locationMarker.style.height = trackList.offsetHeight + "px";
+            }
         }
 
-        function focusOnTrackNameInput($index, track) {
-            $timeout(function() {
-                var input = document.getElementById("track" + $index + "Input");
-                input.focus();
-                input.setSelectionRange(track.name.length, track.name.length);
-            }, 0, false);
+        function updateTrackName(track) {
+            TrackFactory.updateTrack(track);
+        }
+
+        //////////////////////////
+        // Keypress Events
+        //////////////////////////
+        function editCollabKeyDown($event) {
+            if($event.keyCode == 13) {
+                vm.editCollabName = false;
+            }
         }
 
         function editTrackKeyDown($event, track) {
@@ -119,35 +162,76 @@
             }
         }
 
-        function focusOnCollabNameInput() {
-            $timeout(function() {
-                var input = document.getElementById("collabHeaderInput");
-                input.focus();
-                input.setSelectionRange(vm.collab.name.length, vm.collab.name.length);
-            }, 0, false);
-        }
+        function keydown($event) {
+            // user actions are disabled, so get outta here
+            if(vm.disableUserActions) {
+                return;
+            }
 
-        function editCollabKeyDown($event) {
-            if($event.keyCode == 13) {
-                vm.editCollabName = false;
+            switch($event.keyCode) {
+                case DELETE:
+                    deleteKeypress($event);
+                    break;
+                case LEFT_ARROW:
+                case RIGHT_ARROW:
+                    arrowKeypress($event);
+                    break;
+                case SPACE:
+                    spaceKeypress($event);
+                    break;
+                default:
+                    break;
             }
         }
 
-        function trackListUpdated() {
-            /////////////////
-            // check to see if the grid marker
-            // needs to be extended
-            var trackList = document.getElementById("grid");
-            var locationMarker = document.getElementById("locationMarker");
-            var mixContainer = document.getElementById("mixBoard");
-
-            console.log(trackList.offsetHeight);
-
-            if (trackList.offsetHeight > mixContainer.offsetHeight) {
-                locationMarker.style.height = trackList.offsetHeight + "px";
+        function deleteKeypress($event) {
+            if (vm.selectedSound.sound != null) {
+                $event.preventDefault();
+                // remove from DB
+                SoundFactory.deleteSound(vm.selectedSound.sound);
+                // remove from mix
+                MixFactory.deleteSound(vm.selectedSound.sound);
+                // remove from grid ui
+                GridFactory.removeCanvas(vm.selectedSound.canvas);
+                // refresh playback
+                $rootScope.$broadcast("refreshPlay");
             }
         }
 
+        function arrowKeypress($event) {
+            if (vm.selectedSound.sound != null) {
+                $event.preventDefault();
+                var xDirection;
+                if ($event.keyCode == LEFT_ARROW) {
+                    xDirection = -1;
+                } else {
+                    xDirection = 1;
+                }
+
+                // update the location of the sound
+                var div = vm.selectedSound.canvas.parentNode;
+                var leftOffset = parseInt(div.style.left);
+                leftOffset += xDirection;
+                div.style.left = leftOffset + "px";
+                vm.selectedSound.sound.gridLocation += xDirection;
+
+                // refresh playback to reflect changes
+                $rootScope.$broadcast("refreshPlay");
+
+                // update sound in the DB
+                SoundFactory.updateSound(vm.selectedSound.sound);
+                MixFactory.updateEndMarker(vm.selectedSound.sound);
+            }
+        }
+
+        function spaceKeypress($event) {
+            $event.preventDefault();
+            $rootScope.$broadcast("togglePlay");
+        }
+
+        //////////////////////////
+        // Collab Events
+        //////////////////////////
         function addUserDialog() {
             // pause the music
             $rootScope.$broadcast("toggleIfPlaying");
@@ -163,18 +247,33 @@
             });
         }
 
-        function addUserToCollab() {
-            console.log("did it work");
+        // commit changes to the collaboration
+        function commit() {
+            $rootScope.$broadcast("toggleIfPlaying");
+            vm.disableUserActions = true;
+
+            CollabFactory.commitChanges(vm.collab).then(function(res) {
+                // redirect back to homepage
+                $window.location.href = "/home";
+            });
+        }
+
+        // set focus on the collab name editing input field and place cursor at the end
+        function focusOnCollabNameInput() {
+            $timeout(function() {
+                var input = document.getElementById("collabHeaderInput");
+                input.focus();
+                input.setSelectionRange(vm.collab.name.length, vm.collab.name.length);
+            }, 0, false);
         }
 
         function updateCollabName() {
             CollabFactory.updateCollab(vm.collab);
         }
-
-        function updateTrackName(track) {
-            TrackFactory.updateTrack(track);
-        }
-
+        
+        //////////////////////////
+        // Grid Events
+        //////////////////////////
         function gridClickEvent($event) {
             // user actions are disabled, so get outta here
             if(vm.disableUserActions) {
@@ -208,80 +307,6 @@
                 // add 'selected' class to selected sound canvas
                 vm.selectedSound.canvas.classList += " selected";
             }
-        }
-
-        function keydown($event) {
-            // user actions are disabled, so get outta here
-            if(vm.disableUserActions) {
-                return;
-            }
-
-            // handle delete keypress
-            if ($event.keyCode == 8) {
-                if (vm.selectedSound.sound != null) {
-                    // remove from DB
-                    SoundFactory.deleteSound(vm.selectedSound.sound);
-                    // remove from mix
-                    MixFactory.deleteSound(vm.selectedSound.sound);
-                    // remove from grid ui
-                    GridFactory.removeSound(vm.selectedSound.canvas);
-
-                    $rootScope.$broadcast("refreshPlay");
-                }
-            }
-
-            // handle left/right arrow keypresses
-            if ($event.keyCode == 37 || $event.keyCode == 39) {
-                if (vm.selectedSound.sound != null) {
-                    var xDirection;
-                    if ($event.keyCode == 37) {
-                        xDirection = -1;
-                    } else {
-                        xDirection = 1;
-                    }
-
-                    var div = vm.selectedSound.canvas.parentNode;
-                    var leftOffset = parseInt(div.style.left);
-                    leftOffset += xDirection;
-                    div.style.left = leftOffset + "px";
-                    vm.selectedSound.sound.gridLocation += xDirection;
-
-                    $rootScope.$broadcast("refreshPlay");
-                    // update sound in the DB
-
-                    // reconstruct the sound obj for the DB because we don't 
-                    // want to resend the audio buffer
-                    var soundToSave = {
-                        "_id": vm.selectedSound.sound._id,
-                        "trackId": vm.selectedSound.sound.trackId,
-                        "fps": vm.selectedSound.sound.fps,
-                        "gridLocation": vm.selectedSound.sound.gridLocation,
-                        "track": vm.selectedSound.sound.track,
-                        "filePath": vm.selectedSound.sound.filePath,
-                        "frameLength": vm.selectedSound.sound.frameLength
-                    }
-
-                    SoundFactory.updateSound(soundToSave);
-                    MixFactory.updateEndMarker(vm.selectedSound.sound);
-                }
-            }
-
-            // handle space keypress
-            if ($event.keyCode == 32) {
-                $rootScope.$broadcast("togglePlay");
-
-                $event.preventDefault();
-            }
-        }
-
-        function commit() {
-            $rootScope.$broadcast("toggleIfPlaying");
-            vm.disableUserActions = true;
-
-            CollabFactory.commitChanges(vm.collab).then(function(res) {
-                // redirect back to homepage
-                $window.location.href = "/home";
-            });
         }
 
     }

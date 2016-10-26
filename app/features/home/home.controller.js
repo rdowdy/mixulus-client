@@ -11,31 +11,32 @@
     function HomeController($window, localStorageService, CollabFactory) {
         var vm = this;
         
+        /////////////////////
+        // Functions
+        /////////////////////
         vm.goToWorkspace = goToWorkspace;
         vm.newCollab = newCollab;
         vm.refresh = getCollabs;
 
-        /////////////////////
         init();
         /////////////////////
-
+        // Function Definitions
+        /////////////////////
         function init() {
-            // get user id
             vm.userId = localStorageService.get('userId');
             getCollabs();
         }
 
+        // get the list of collaborations that are available to this user
         function getCollabs() {
-            // get collabs and check which ones
-            // are available to make changes
+            // get collabs and check which ones are available to make changes
             CollabFactory.getAllCollabs().then(function(response) {
                 vm.collabs = response.data;
 
-                var collab;
                 for(var i = 0; i < vm.collabs.length; i++) {
-                    collab = vm.collabs[i];
-                    //console.log(collab);
+                    var collab = vm.collabs[i];
 
+                    // check which are available to make changes
                     if(collab.userIds[collab.currentUserIndex]._id == vm.userId) {
                         collab.waiting = false;
                     } else {
@@ -45,6 +46,15 @@
             });
         }
 
+        // redirect to the workspace page for a collaboration
+        function goToWorkspace(collab) {
+            if(!collab.waiting) {
+                localStorageService.set('collabId', collab._id);
+                $window.location.href = "/workspace";
+            }
+        }
+
+        // start a new collaboration
         function newCollab() {
             var newCollab = {
                 name: "New Collab", 
@@ -52,17 +62,9 @@
             }
 
             CollabFactory.addCollab(newCollab).then(function(res) {
-                console.log(res.data);
                 res.data.waiting = false;
                 goToWorkspace(res.data);
             });
-        }
-
-        function goToWorkspace(collab) {
-            if(!collab.waiting) {
-                localStorageService.set('collabId', collab._id);
-                $window.location.href = "/workspace";
-            }
         }
     }
 })();

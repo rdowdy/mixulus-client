@@ -16,6 +16,8 @@
 
         ////////////////
 
+        // this function will append the JWT to all request headers
+        // that are sent out from Angulars $http
         function request(config) {            
             config.headers = config.headers || {};
             var token = localStorageService.get('token');
