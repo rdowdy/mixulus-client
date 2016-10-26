@@ -54,25 +54,25 @@
         </table>
     </div>
     <div class="bottomNav" id="bottomNav">
-        <div class="locationDisplay">
+        <!-- <div class="locationDisplay">
             01:04:45
-        </div>
+        </div> -->
         <div class="button-group" ng-controller="ControlsController as controls">
-            <button class="button">
+            <!-- <button class="button">
                 <i class="fa fa-money" aria-hidden="true"></i>
-            </button>
-            <button class="button" ng-click="workspace.recording = !workspace.recording; controls.toggleRecord(workspace.recording, workspace.armedTrack)">
+            </button> -->
+            <button class="button" ng-class="{'recording': workspace.recording == true}" ng-click="workspace.recording = !workspace.recording; workspace.disableUserActions = !workspace.disableUserActions; controls.toggleRecord(workspace.recording, workspace.armedTrack)">
                 <i class="fa fa-circle" aria-hidden="true" ng-show="!workspace.recording"></i>
                 <i class="fa fa-square" aria-hidden="true" ng-show="workspace.recording"></i>
             </button>
-            <button class="button" id="save" ng-click="controls.togglePlay(); controls.playing = !controls.playing">
+            <button class="button" id="save" ng-click="if(!workspace.disableUserActions) { controls.togglePlay(); controls.playing = !controls.playing }">
                 <i class="fa fa-play" aria-hidden="true" ng-show="!controls.playing"></i>
                 <i class="fa fa-pause" aria-hidden="true" ng-show="controls.playing"></i>
             </button>
-            <button class="button" ng-click="controls.skipHome()">
+            <button class="button" ng-click="if(!workspace.disableUserActions) { controls.skipHome() }">
                 <i class="fa fa-fast-backward" aria-hidden="true"></i>
             </button>
-            <button class="button" ng-click="controls.skipEnd()">
+            <button class="button" ng-click="if(!workspace.disableUserActions) { controls.skipEnd() }">
                 <i class="fa fa-fast-forward" aria-hidden="true"></i>
             </button>
         </div>

@@ -382,3 +382,8 @@ table.grid tr td:nth-child(2) {
 	width: 50px;
 	height: 43px;
 }
+
+.bottomNav .recording {
+	color: white;
+	background: #cc0000;
+}
