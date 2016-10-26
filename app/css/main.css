@@ -108,6 +108,7 @@ background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
     margin: 10px 0;
     background: none;
     border: 2px solid black;
+    cursor: pointer;
 }
 
 .button:hover {
