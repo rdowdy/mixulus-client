@@ -88,7 +88,7 @@ button:focus {
 
 .banner div h1,
 .banner div i {
-background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
+    background: radial-gradient(circle at 50% 50%, #DD4E02, #670000);  /*#A83279,*/
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -109,17 +109,19 @@ background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
     width: 100%;
     height: 100%;
     padding: 0 10%;
+    background: white;
 }
 
 .authForms .button {
-    background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
+    background: radial-gradient(circle at 50% 50%, #DD4E02, #670000);  /*#A83279,*/
     font-family: 'Oswald';
+    border-width: 1px;
 }
 
 .authForms .button:hover,
 .authForms .button:focus {
     cursor: pointer;
-    background: radial-gradient(circle at top right, #ffc500, #D38312, #870000 90%);
+    background: radial-gradient(circle at 50% 50%, #DD4E02, #670000);  /*#A83279,*/
 }
 
 /************************/
